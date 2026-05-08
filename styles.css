@@ -69,6 +69,17 @@ a {
   text-decoration: none;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 #calendar,
 #events,
 #tools,
@@ -365,8 +376,8 @@ a {
 
 .page.section-focus,
 .app-section.section-focus {
-  border-color: rgba(0, 122, 255, 0.34);
-  box-shadow: 0 18px 56px rgba(29, 29, 31, 0.095), 0 0 0 4px rgba(0, 122, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-lg);
 }
 
 .hero-strip {
@@ -772,6 +783,73 @@ textarea:focus {
   font-weight: 600;
 }
 
+.saved-notes-list,
+.freshness-grid {
+  display: grid;
+  gap: 9px;
+}
+
+.saved-note-row,
+.freshness-item {
+  width: 100%;
+  display: grid;
+  gap: 4px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.66);
+  text-align: left;
+}
+
+.saved-note-row {
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.saved-note-row:hover {
+  transform: translateY(-1px);
+  border-color: rgba(0, 122, 255, 0.18);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.saved-note-row strong,
+.freshness-item strong {
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.saved-note-row span,
+.freshness-item span,
+.refresh-status,
+.empty-state {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.saved-note-row span {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.freshness-item {
+  grid-template-columns: 76px minmax(0, 1fr);
+  align-items: center;
+}
+
+.freshness-item strong {
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+
+.refresh-status {
+  margin-top: 10px;
+  font-weight: 650;
+}
+
 .rate-list,
 .tool-list,
 .event-list {
@@ -996,6 +1074,31 @@ textarea:focus {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
+}
+
+.market-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+#marketSearch {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.wide-empty {
+  grid-column: 1 / -1;
+  min-height: 116px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--line-strong);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.52);
 }
 
 .market-card,

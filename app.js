@@ -614,6 +614,7 @@ const storedCalendarMode = localStorage.getItem("nepalPatro:calendarMode");
 let activeMonthIndex = 0;
 let activeDay = null;
 let activeRashi = "meen";
+let marketSearchQuery = "";
 let appLanguage = ["en", "ne"].includes(storedLanguage) ? storedLanguage : "en";
 let calendarMode = ["bs", "ad"].includes(storedCalendarMode) ? storedCalendarMode : "bs";
 
@@ -656,8 +657,25 @@ const translations = {
     todayInNepal: "Today in Nepal",
     weatherSummary: "Kathmandu · Clear",
     nextEvent: "Next event",
+    quickView: "Quick view",
+    bsAdShort: "BS ⇄ AD",
     twoDaysAway: "2 days away",
     shubhaSait: "Shubha sait",
+    planner: "Planner",
+    savedNotes: "Saved notes",
+    noSavedNotes: "No saved notes yet",
+    liveData: "Live data",
+    freshness: "Freshness",
+    freshToday: "Fresh today",
+    cachedToday: "Cached today",
+    fallbackData: "Fallback data",
+    exportCalendar: "Export calendar",
+    exported: "Exported",
+    searchMarket: "Search market rates",
+    searchMarketPlaceholder: "Search vegetables, fruits, spices...",
+    noMarketMatches: "No matching market rates",
+    refreshed: "Updated just now",
+    refreshFailed: "Refresh failed. Showing saved data.",
     bestWindow: "Best window starts",
     gold: "Gold",
     fineGold: "Fine gold per tola",
@@ -740,8 +758,25 @@ const translations = {
     todayInNepal: "आज नेपालमा",
     weatherSummary: "काठमाडौं · सफा",
     nextEvent: "आउँदो दिन",
+    quickView: "छिटो दृश्य",
+    bsAdShort: "वि.सं. ⇄ ई.सं.",
     twoDaysAway: "२ दिन बाँकी",
     shubhaSait: "शुभ साइत",
+    planner: "योजना",
+    savedNotes: "सेभ गरिएका नोट",
+    noSavedNotes: "अहिलेसम्म नोट छैन",
+    liveData: "लाइभ डाटा",
+    freshness: "ताजापन",
+    freshToday: "आजको ताजा",
+    cachedToday: "आजको क्यास",
+    fallbackData: "बैकल्पिक डाटा",
+    exportCalendar: "क्यालेन्डर एक्सपोर्ट",
+    exported: "एक्सपोर्ट भयो",
+    searchMarket: "बजार दर खोज्नुहोस्",
+    searchMarketPlaceholder: "तरकारी, फलफूल, मसला खोज्नुहोस्...",
+    noMarketMatches: "मिल्दो बजार दर भेटिएन",
+    refreshed: "अहिले अद्यावधिक भयो",
+    refreshFailed: "रिफ्रेस असफल भयो। सेभ डाटा देखाइयो।",
     bestWindow: "उत्तम समय सुरु",
     gold: "सुन",
     fineGold: "प्रतितोला छापावाल",
@@ -1367,8 +1402,10 @@ async function forceRefreshDailyData() {
       }
     }
     renderAll();
+    document.querySelector("#refreshStatus").textContent = t("refreshed");
   } catch (error) {
     console.warn(error);
+    document.querySelector("#refreshStatus").textContent = t("refreshFailed");
   }
 }
 
@@ -1539,6 +1576,94 @@ function getCurrentCalendarDay() {
     }
   }
   return { monthIndex: 0, day: 22 };
+}
+
+function getUpcomingEvents(limit = 8) {
+  const todayKey = getNepalDateKey();
+  return months.flatMap((month, monthIndex) => Object.entries(month.events).map(([day, title]) => {
+    const eventDate = formatEnglishDate(month, Number(day));
+    return {
+      month,
+      monthIndex,
+      day: Number(day),
+      title,
+      date: eventDate,
+      dateKey: formatDateKey(eventDate)
+    };
+  }))
+    .filter((item) => item.dateKey >= todayKey)
+    .sort((a, b) => a.date - b.date)
+    .slice(0, limit);
+}
+
+function getDaysUntil(date) {
+  const today = new Date(`${getNepalDateKey()}T00:00:00`);
+  return Math.max(0, Math.round((date - today) / (24 * 60 * 60 * 1000)));
+}
+
+function formatCountdown(days) {
+  if (days === 0) return appLanguage === "ne" ? "आज" : "Today";
+  if (days === 1) return appLanguage === "ne" ? "१ दिन बाँकी" : "1 day away";
+  return appLanguage === "ne" ? `${formatBsNumber(days)} दिन बाँकी` : `${days} days away`;
+}
+
+function getSavedNotes() {
+  return Object.keys(localStorage)
+    .filter((key) => key.startsWith("note:") && localStorage.getItem(key)?.trim())
+    .map((key) => {
+      const [, year, monthName, day] = key.match(/^note:(\d+)-(.+)-(\d+)$/) || [];
+      const month = months.find((item) => String(item.year) === year && item.name === monthName);
+      if (!month) return null;
+      const date = formatEnglishDate(month, Number(day));
+      return {
+        key,
+        month,
+        day: Number(day),
+        date,
+        dateKey: formatDateKey(date),
+        note: localStorage.getItem(key).trim()
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.date - b.date);
+}
+
+function downloadTextFile(filename, text, type = "text/plain") {
+  const blob = new Blob([text], { type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function toIcsDate(date) {
+  return `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`;
+}
+
+function escapeIcsText(value) {
+  return String(value).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
+}
+
+function exportUpcomingEvents() {
+  const events = getUpcomingEvents(16);
+  const body = events.map((item) => {
+    const end = addDays(item.date, 1);
+    return [
+      "BEGIN:VEVENT",
+      `UID:nepal-patro-${item.month.year}-${item.month.name}-${item.day}@bugwhisperer`,
+      `DTSTAMP:${toIcsDate(new Date())}T000000Z`,
+      `DTSTART;VALUE=DATE:${toIcsDate(item.date)}`,
+      `DTEND;VALUE=DATE:${toIcsDate(end)}`,
+      `SUMMARY:${escapeIcsText(localizeEvent(item.title))}`,
+      `DESCRIPTION:${escapeIcsText(`${formatBsDate(item.month, item.day)} · ${formatReadableDate(item.date)}`)}`,
+      "END:VEVENT"
+    ].join("\r\n");
+  }).join("\r\n");
+  downloadTextFile("nepal-patro-upcoming-events.ics", `BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BugWhisperer//Nepal Patro//EN\r\nCALSCALE:GREGORIAN\r\n${body}\r\nEND:VCALENDAR\r\n`, "text/calendar");
 }
 
 function getDayData(month, day) {
@@ -1788,7 +1913,16 @@ function renderMarket() {
   const container = document.querySelector("#marketRows");
   clearNode(container);
   document.querySelector("#marketUpdatedText").textContent = `${localizeToolText("Last updated")}: ${localizeMarketValue(marketUpdatedAt, "Published")}`;
-  marketRows.filter(([label]) => label !== "Published").forEach(([label, value]) => {
+  const query = marketSearchQuery.trim().toLowerCase();
+  const rows = marketRows
+    .filter(([label]) => label !== "Published")
+    .filter(([label, value]) => !query || `${label} ${localizeMarketLabel(label)} ${value}`.toLowerCase().includes(query));
+  document.querySelector("#marketCountBadge").textContent = appLanguage === "ne" ? `${formatBsNumber(rows.length)} वस्तु` : `${rows.length} items`;
+  if (!rows.length) {
+    container.append(makeElement("p", "empty-state wide-empty", t("noMarketMatches")));
+    return;
+  }
+  rows.forEach(([label, value]) => {
     const card = makeElement("article", "market-card");
     const title = makeElement("span", "market-name");
     appendProduceIcon(title, label);
@@ -1811,6 +1945,55 @@ function renderFuel() {
     card.append(makeElement("small", "", area || "Kathmandu, Pokhara, Dipayal"));
     container.append(card);
   });
+}
+
+function renderDailyOverview() {
+  const [nextEvent] = getUpcomingEvents(1);
+  if (!nextEvent) return;
+  document.querySelector("#nextEventTitle").textContent = localizeEvent(nextEvent.title);
+  document.querySelector("#nextEventTitle").nextElementSibling.textContent = formatCountdown(getDaysUntil(nextEvent.date));
+}
+
+function renderSavedNotes() {
+  const container = document.querySelector("#savedNotesList");
+  clearNode(container);
+  const notes = getSavedNotes().slice(0, 3);
+  if (!notes.length) {
+    container.append(makeElement("p", "empty-state", t("noSavedNotes")));
+    return;
+  }
+  notes.forEach((item) => {
+    const button = makeElement("button", "saved-note-row");
+    button.type = "button";
+    button.append(makeElement("strong", "", calendarMode === "ad" ? formatCompactAdDate(item.date) : formatBsDate(item.month, item.day)));
+    button.append(makeElement("span", "", item.note));
+    button.addEventListener("click", () => {
+      syncMonthView(months.indexOf(item.month));
+      openDayModal(item.month, getDayData(item.month, item.day));
+    });
+    container.append(button);
+  });
+}
+
+function renderFreshness() {
+  const container = document.querySelector("#freshnessGrid");
+  clearNode(container);
+  const source = localStorage.getItem(dataSourceStatusKey) || "embedded";
+  const today = localStorage.getItem(dailyDataKey) === getTodayKey();
+  const rows = [
+    ["Forex", document.querySelector("#forexUpdatedBadge")?.textContent || dailyDataSnapshot?.forex?.updatedAt || dailyDataSnapshot?.updatedAt || ""],
+    ["Gold", goldUpdatedAt],
+    ["Market", marketUpdatedAt],
+    ["Fuel", fuelUpdatedAt]
+  ];
+  rows.forEach(([label, value]) => {
+    const item = makeElement("div", "freshness-item");
+    item.append(makeElement("span", "", localizeToolText(label)));
+    item.append(makeElement("strong", "", value ? localizeToolPreviewValue(value) : today ? t("cachedToday") : t("fallbackData")));
+    container.append(item);
+  });
+  const status = source.includes("api") || source === "live-api" ? t("freshToday") : today ? t("cachedToday") : t("fallbackData");
+  document.querySelector("#refreshStatus").textContent = status;
 }
 
 function renderHoroscope() {
@@ -1892,30 +2075,28 @@ function renderShubhaSait() {
 }
 
 function renderEvents() {
-  const month = months[activeMonthIndex];
   const eventList = document.querySelector("#eventList");
-  const upcoming = Object.entries(month.events)
-    .map(([day, title]) => ({ day: Number(day), title }))
-    .filter((item) => activeMonthIndex !== 0 || item.day >= 22)
-    .slice(0, 5);
+  const upcoming = getUpcomingEvents(12);
 
   document.querySelector("#eventCountBadge").textContent = String(upcoming.length);
   clearNode(eventList);
   upcoming.forEach((item) => {
-    const data = getDayData(month, item.day);
+    const data = getDayData(item.month, item.day);
     const button = makeElement("button", "event-row");
     button.type = "button";
+    button.dataset.eventMonth = String(item.monthIndex);
     button.dataset.eventDay = String(item.day);
     const textWrap = document.createElement("span");
     textWrap.append(makeElement("strong", "", localizeEvent(item.title)));
-    textWrap.append(makeElement("span", "", data.englishDate));
+    textWrap.append(makeElement("span", "", `${data.englishDate} · ${formatCountdown(getDaysUntil(item.date))}`));
     button.append(textWrap);
-    button.append(makeElement("span", "event-date", calendarMode === "ad" ? formatCompactAdDate(formatEnglishDate(month, item.day)) : formatBsNumber(item.day)));
+    button.append(makeElement("span", "event-date", calendarMode === "ad" ? formatCompactAdDate(formatEnglishDate(item.month, item.day)) : formatBsDate(item.month, item.day)));
     eventList.append(button);
   });
 
   eventList.querySelectorAll(".event-row").forEach((button) => {
     const day = Number(button.dataset.eventDay);
+    const month = months[Number(button.dataset.eventMonth)];
     button.addEventListener("click", () => openDayModal(month, getDayData(month, day)));
   });
 }
@@ -2089,6 +2270,9 @@ function renderAll() {
   renderGoldSilver();
   renderMarket();
   renderFuel();
+  renderDailyOverview();
+  renderSavedNotes();
+  renderFreshness();
   renderHoroscope();
   renderHoroscopeDetail();
   renderPanchangDetails();
@@ -2237,6 +2421,19 @@ document.querySelector("#bsMonthInput").addEventListener("change", runBsToAdConv
 document.querySelector("#bsDayInput").addEventListener("input", runBsToAdConversion);
 document.querySelector("#adDateInput").addEventListener("input", runAdToBsConversion);
 document.querySelector("#backToHoroscope").addEventListener("click", () => navigateToSection("horoscope"));
+document.querySelector("#marketSearch").addEventListener("input", (event) => {
+  marketSearchQuery = event.target.value;
+  renderMarket();
+});
+document.querySelector("#exportEventsButton").addEventListener("click", () => {
+  exportUpcomingEvents();
+  const button = document.querySelector("#exportEventsButton");
+  const original = button.textContent;
+  button.textContent = t("exported");
+  setTimeout(() => {
+    button.textContent = original;
+  }, 1400);
+});
 document.querySelectorAll("[data-refresh-button]").forEach((button) => {
   button.addEventListener("click", async () => {
     const original = button.textContent;

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nepal-patro.vercel.app https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
     <title>Nepal Patro</title>
-    <link rel="stylesheet" href="styles.css?v=21">
+    <link rel="stylesheet" href="styles.css?v=23">
   </head>
   <body>
     <div class="app-shell">
@@ -100,7 +100,7 @@
               <section class="side-section daily-overview-card">
                 <div class="section-title">
                   <p class="eyebrow" data-i18n="todayInNepal">Today in Nepal</p>
-                  <h2>Quick view</h2>
+                  <h2 data-i18n="quickView">Quick view</h2>
                 </div>
                 <div class="insight-grid" aria-label="Daily overview">
                   <article class="insight-card">
@@ -126,10 +126,27 @@
                 </div>
               </section>
 
+              <section class="side-section planner-card">
+                <div class="section-title">
+                  <p class="eyebrow" data-i18n="planner">Planner</p>
+                  <h2 data-i18n="savedNotes">Saved notes</h2>
+                </div>
+                <div class="saved-notes-list" id="savedNotesList"></div>
+              </section>
+
+              <section class="side-section data-health-card">
+                <div class="section-title">
+                  <p class="eyebrow" data-i18n="liveData">Live data</p>
+                  <h2 data-i18n="freshness">Freshness</h2>
+                </div>
+                <div class="freshness-grid" id="freshnessGrid"></div>
+                <p class="refresh-status" id="refreshStatus" role="status"></p>
+              </section>
+
               <section class="side-section converter-card">
                 <div class="section-title">
                   <p class="eyebrow" data-i18n="dateConverter">Date converter</p>
-                  <h2>BS ⇄ AD</h2>
+                  <h2 data-i18n="bsAdShort">BS ⇄ AD</h2>
                 </div>
                 <div class="converter-form">
                   <input id="converterInput" type="number" min="1" max="32" value="22" aria-label="Nepali day">
@@ -148,6 +165,7 @@
               <h1 data-i18n="nextDates">Next dates</h1>
             </div>
             <span class="section-badge" id="eventCountBadge">5</span>
+            <button class="secondary-button" type="button" id="exportEventsButton" data-i18n="exportCalendar">Export calendar</button>
           </div>
           <div class="event-list page-list" id="eventList"></div>
         </section>
@@ -224,6 +242,11 @@
               <p class="last-updated" id="marketUpdatedText">Last updated: Baisakh 24, 2083</p>
             </div>
             <button class="secondary-button" type="button" data-refresh-button data-i18n="refreshData">Refresh</button>
+          </div>
+          <div class="market-toolbar">
+            <label class="visually-hidden" for="marketSearch" data-i18n="searchMarket">Search market rates</label>
+            <input id="marketSearch" type="search" autocomplete="off" placeholder="Search vegetables, fruits, spices..." data-i18n-placeholder="searchMarketPlaceholder">
+            <span class="section-badge" id="marketCountBadge">0</span>
           </div>
           <div class="market-page-grid" id="marketRows"></div>
         </section>
@@ -444,6 +467,6 @@
     </div>
 
     <script src="data/daily-data.js?v=21"></script>
-    <script src="app.js?v=22"></script>
+    <script src="app.js?v=23"></script>
   </body>
 </html>
