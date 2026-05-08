@@ -65,16 +65,16 @@ function cleanText(value) {
 function parseForex(text) {
   const normalized = cleanText(text);
   const rows = currencyOrder.map((code) => {
-    const pattern = new RegExp(`${code}[\\s\\S]{0,120}?(\\d+(?:\\.\\d+)?)\\s+(\\d+(?:\\.\\d+)?)`, "i");
+    const pattern = new RegExp(`${code}[\\s\\S]{0,160}?(\\d+)\\s+(\\d+(?:\\.\\d+)?)\\s+(\\d+(?:\\.\\d+)?)`, "i");
     const match = normalized.match(pattern);
     const fallbackRow = fallback.forex.rates.find(([fallbackCode]) => fallbackCode === code);
     const unit = code === "JPY" ? "10" : "1";
     return [
       code,
       currencyLabels[code],
-      fallbackRow?.[2] || unit,
-      match?.[1] || fallbackRow?.[3] || "",
-      match?.[2] || fallbackRow?.[4] || ""
+      match?.[1] || fallbackRow?.[2] || unit,
+      match?.[2] || fallbackRow?.[3] || "",
+      match?.[3] || fallbackRow?.[4] || ""
     ];
   });
 
