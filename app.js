@@ -214,6 +214,17 @@ function formatDateKey(date) {
   return `${year}-${month}-${day}`;
 }
 
+function getNepalDateKey(date = new Date()) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kathmandu",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(date);
+  const lookup = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${lookup.year}-${lookup.month}-${lookup.day}`;
+}
+
 function buildMonths(seed) {
   let start = new Date(`${seed[0].englishStart}T00:00:00`);
   return seed.map((month) => {
@@ -236,12 +247,14 @@ const months = buildMonths(monthSeed);
 const tools = [
   {
     icon: "⇄",
+    iconKey: "converter",
     title: "Nepali <> English Date Converter",
     description: "Quickly convert BS and AD dates",
     preview: [["BS date", "वैशाख २२, २०८३"], ["AD date", "May 5, 2026"], ["Mode", "Approximate local seed"]]
   },
   {
     icon: "Au",
+    iconKey: "gold",
     title: "Gold & Silver Rate",
     description: "Daily bullion market snapshot",
     preview: [
@@ -255,24 +268,28 @@ const tools = [
   },
   {
     icon: "ॐ",
+    iconKey: "sait",
     title: "Shubha Sait",
     description: "Auspicious time finder",
     preview: [["Good window", "11:42 AM - 1:18 PM"], ["Rahu kaal", "3:10 PM - 4:45 PM"], ["Direction", "पूर्व"]]
   },
   {
     icon: "प",
+    iconKey: "panchang",
     title: "Nepali Panchang",
     description: "Tithi, nakshatra, yoga and karana",
     preview: [["Tithi", "कृष्ण चतुर्थी"], ["Nakshatra", "अनुराधा"], ["Yoga", "परिधि"]]
   },
   {
     icon: "♈",
+    iconKey: "horoscope",
     title: "Nepali Horoscope for the month",
     description: "Monthly rashi overview",
     preview: [["Rashi", "मेष"], ["Lucky color", "Crimson"], ["Focus", "Work and decisions"]]
   },
   {
     icon: "₨",
+    iconKey: "market",
     title: "Vegetable and Fruit wholesale rates",
     description: "Kalimati daily wholesale snapshot",
     market: true,
@@ -372,6 +389,7 @@ const tools = [
   },
   {
     icon: "⛽",
+    iconKey: "fuel",
     title: "Fuel Prices",
     description: "Petrol, diesel and LP gas rates",
     preview: [["Petrol", "NRs 217.0/L"], ["Applies to", "Kathmandu, Pokhara, Dipayal"], ["Updated", "2026-05-02"]]
@@ -399,20 +417,153 @@ let marketRows = tools.find((tool) => tool.market)?.preview || [];
 let marketUpdatedAt = window.NEPAL_PATRO_DAILY_DATA?.market?.updatedAt || "बैशाख २४, २०८३";
 const goldHistory = [314000, 318000, 316000, 322000, 315000, 311000, 309000, 296000, 286000, 294000, 290000, 298600];
 const silverHistory = [4860, 4920, 5010, 4980, 5060, 5120, 5080, 5155, 5090, 5180, 5115, 5155];
+const bullionHistoryDates = ["Apr 27", "Apr 28", "Apr 29", "Apr 30", "May 1", "May 2", "May 3", "May 4", "May 5", "May 6", "May 7", "May 8"];
 
 const horoscopeData = {
-  mesh: ["मेष", "Mesh", "Career improves with steady follow-through. Income can stabilize, but avoid impulsive spending. Good for clearing pending work and reconnecting with seniors.", "Work, income, confidence", "Orange", "2"],
-  brish: ["वृष", "Brish", "A balanced month for family and finances. Routine discipline helps more than big risks. Take care of sleep and digestion.", "Family, savings, health", "White", "6"],
-  mithun: ["मिथुन", "Mithun", "New contacts and learning bring momentum. Keep paperwork clean and avoid scattered decisions in business.", "Networking, study, trade", "Green", "5"],
-  karkat: ["कर्कट", "Karkat", "Expenses may rise, but the second half can bring relief. Keep communication gentle in home and married life.", "Budgeting, home, patience", "Cream", "7"],
-  singha: ["सिंह", "Singha", "Leadership improves when you delegate. Good for visibility, interviews and public-facing work.", "Reputation, leadership, work", "Gold", "1"],
-  kanya: ["कन्या", "Kanya", "Practical planning wins this month. Health routines, study and accounts need small daily attention.", "Planning, health, accounts", "Navy", "4"],
-  tula: ["तुला", "Tula", "Partnerships need fairness and clear boundaries. Creative and relationship matters improve with patience.", "Partnership, design, romance", "Pink", "6"],
-  brischik: ["वृश्चिक", "Brischik", "Avoid overthinking and hidden conflict. Good for research, repayment plans and quiet focused work.", "Research, debts, discipline", "Maroon", "9"],
-  dhanu: ["धनु", "Dhanu", "Travel, learning and advisory work look promising. Keep promises realistic and expenses measured.", "Travel, learning, advice", "Yellow", "3"],
-  makar: ["मकर", "Makar", "Career progress is possible through senior support and strategy. Be calm with coworkers and keep health steady.", "Career, strategy, discipline", "Blue", "8"],
-  kumbha: ["कुम्भ", "Kumbha", "Ideas feel fresh, but execution needs structure. Friends and groups can open useful doors.", "Ideas, friends, systems", "Sky blue", "4"],
-  meen: ["मीन", "Meen", "A reflective but useful month. Trust intuition, protect energy and choose steady financial decisions over quick gains.", "Intuition, finance, rest", "Sea green", "7"]
+  mesh: {
+    ne: "मेष", en: "Mesh", icon: "♈", color: "Orange", number: "2", mantra: "ॐ हनुमते नमः", dasha: "Mars discipline",
+    briefEn: "Career improves with steady follow-through and courageous decisions.",
+    briefNe: "निरन्तरता र साहसी निर्णयले करियरमा सुधार ल्याउँछ।",
+    monthlyEn: "This month favors decisive work, pending approvals and direct conversations. Avoid reacting too fast in family matters. Money improves through practical follow-up, not speculation.",
+    monthlyNe: "यो महिना निर्णायक काम, अड्किएका स्वीकृति र स्पष्ट संवादका लागि उपयोगी छ। पारिवारिक विषयमा हतारो प्रतिक्रिया नगर्नुहोस्। अनुमानभन्दा व्यवहारिक फलोअपले पैसा सुधार्छ।",
+    yearlyEn: "A year for building authority. Study, leadership and land or vehicle planning can move forward if anger and impatience are controlled.",
+    yearlyNe: "अधिकार र प्रतिष्ठा बनाउने वर्ष। रिस र अधैर्य नियन्त्रण भए अध्ययन, नेतृत्व, जग्गा वा सवारी योजना अघि बढ्न सक्छ।",
+    focusEn: "Leadership, debt cleanup, physical stamina", focusNe: "नेतृत्व, ऋण व्यवस्थापन, शारीरिक ऊर्जा",
+    remedyEn: "Offer red flowers on Tuesday, keep a consistent exercise rhythm, and avoid harsh words after sunset.",
+    remedyNe: "मंगलबार रातो फूल चढाउनुहोस्, व्यायाम नियमित राख्नुहोस् र सूर्यास्तपछि कठोर बोलीबाट बच्नुहोस्।"
+  },
+  brish: {
+    ne: "वृष", en: "Brish", icon: "♉", color: "White", number: "6", mantra: "ॐ शुक्राय नमः", dasha: "Venus stability",
+    briefEn: "Family, savings and comfort improve through steady routines.",
+    briefNe: "परिवार, बचत र आराम स्थिर दिनचर्याले सुधार्छ।",
+    monthlyEn: "Finance and home matters are central. Choose quality over show. Good for food, design, clothing, land and family discussions. Watch throat, sugar and sleep.",
+    monthlyNe: "आर्थिक र घरायसी विषय प्रमुख छन्। देखावाभन्दा गुणस्तर रोज्नुहोस्। खाना, डिजाइन, कपडा, जग्गा र पारिवारिक छलफलका लागि राम्रो। घाँटी, चिनी र निद्रामा ध्यान दिनुहोस्।",
+    yearlyEn: "A practical year for assets and skill growth. Slow gains compound strongly if you avoid stubborn decisions.",
+    yearlyNe: "सम्पत्ति र सीप वृद्धिका लागि व्यवहारिक वर्ष। जिद्दी निर्णयबाट बच्दा बिस्तारै आएको लाभ मजबुत हुन्छ।",
+    focusEn: "Savings, family peace, skill monetization", focusNe: "बचत, पारिवारिक शान्ति, सीपबाट आम्दानी",
+    remedyEn: "Donate white food on Friday and keep your bedroom and wallet clutter-free.",
+    remedyNe: "शुक्रबार सेतो खानेकुरा दान गर्नुहोस् र शयनकक्ष तथा पर्स सफा राख्नुहोस्।"
+  },
+  mithun: {
+    ne: "मिथुन", en: "Mithun", icon: "♊", color: "Green", number: "5", mantra: "ॐ बुधाय नमः", dasha: "Mercury clarity",
+    briefEn: "Learning, writing and networking bring momentum.",
+    briefNe: "अध्ययन, लेखन र नेटवर्किङले गति दिन्छ।",
+    monthlyEn: "Calls, short trips, trade and study are highlighted. Keep records clean and confirm details twice. A sibling or close friend can be useful.",
+    monthlyNe: "फोन, छोटो यात्रा, व्यापार र अध्ययन सक्रिय रहन्छ। कागजपत्र सफा राख्नुहोस् र विवरण दुई पटक पुष्टि गर्नुहोस्। दाजुभाइ/दिदीबहिनी वा नजिकका साथी उपयोगी हुन सक्छन्।",
+    yearlyEn: "A year to build communication authority. Digital work, exams, teaching and sales benefit from consistency.",
+    yearlyNe: "सञ्चारमा अधिकार बनाउने वर्ष। डिजिटल काम, परीक्षा, अध्यापन र बिक्रीमा निरन्तरताले लाभ दिन्छ।",
+    focusEn: "Communication, learning, documentation", focusNe: "सञ्चार, अध्ययन, कागजपत्र",
+    remedyEn: "Read or write before noon on Wednesday and avoid gossip.",
+    remedyNe: "बुधबार दिउँसोअघि पढ्ने/लेख्ने गर्नुहोस् र गफगाफ/निन्दाबाट बच्नुहोस्।"
+  },
+  karkat: {
+    ne: "कर्कट", en: "Karkat", icon: "♋", color: "Cream", number: "7", mantra: "ॐ सोमाय नमः", dasha: "Moon balance",
+    briefEn: "Emotional balance protects money and relationships.",
+    briefNe: "भावनात्मक सन्तुलनले पैसा र सम्बन्ध जोगाउँछ।",
+    monthlyEn: "Expenses may rise, especially for home or health. Speak gently and sleep on time. Good for caring roles, food, property and family healing.",
+    monthlyNe: "घर वा स्वास्थ्यका कारण खर्च बढ्न सक्छ। नरम बोली र समयमा निद्रा आवश्यक। सेवा, खाना, सम्पत्ति र पारिवारिक मिलापका लागि राम्रो।",
+    yearlyEn: "A year of emotional maturity. Property, education and family decisions stabilize after careful planning.",
+    yearlyNe: "भावनात्मक परिपक्वताको वर्ष। योजना बनाएपछि सम्पत्ति, शिक्षा र पारिवारिक निर्णय स्थिर हुन्छन्।",
+    focusEn: "Home, health, emotional discipline", focusNe: "घर, स्वास्थ्य, भावनात्मक अनुशासन",
+    remedyEn: "Offer water to Shiva on Monday and reduce late-night screen use.",
+    remedyNe: "सोमबार शिवलाई जल अर्पण गर्नुहोस् र राति ढिलो स्क्रीन प्रयोग घटाउनुहोस्।"
+  },
+  singha: {
+    ne: "सिंह", en: "Singha", icon: "♌", color: "Gold", number: "1", mantra: "ॐ सूर्याय नमः", dasha: "Sun authority",
+    briefEn: "Visibility rises when ego becomes service.",
+    briefNe: "अहंकार सेवा बनेपछि प्रतिष्ठा बढ्छ।",
+    monthlyEn: "Leadership, interviews and public work are favorable. Delegate instead of controlling everything. Father, seniors or government matters need respectful handling.",
+    monthlyNe: "नेतृत्व, अन्तर्वार्ता र सार्वजनिक काम अनुकूल। सबै नियन्त्रण गर्नुभन्दा जिम्मेवारी बाँड्नुहोस्। पिता, वरिष्ठ वा सरकारी विषयमा सम्मानपूर्ण व्यवहार गर्नुहोस्।",
+    yearlyEn: "A year to strengthen reputation. Good for promotion, entrepreneurship and authority if humility remains.",
+    yearlyNe: "प्रतिष्ठा मजबुत बनाउने वर्ष। नम्रता रहे पदोन्नति, उद्यम र अधिकारमा लाभ।",
+    focusEn: "Recognition, leadership, public trust", focusNe: "पहिचान, नेतृत्व, सार्वजनिक भरोसा",
+    remedyEn: "Offer water to the rising sun and keep promises precise.",
+    remedyNe: "उदयमान सूर्यलाई जल चढाउनुहोस् र वाचा स्पष्ट तथा सीमित राख्नुहोस्।"
+  },
+  kanya: {
+    ne: "कन्या", en: "Kanya", icon: "♍", color: "Navy", number: "4", mantra: "ॐ बुधाय नमः", dasha: "Mercury refinement",
+    briefEn: "Systems, health and accounts need small daily care.",
+    briefNe: "प्रणाली, स्वास्थ्य र हिसाबकिताबमा दैनिक सानो ध्यान चाहिन्छ।",
+    monthlyEn: "Excellent for planning, editing, audits and health routines. Do not over-criticize loved ones. Clean data and clear schedules are your luck.",
+    monthlyNe: "योजना, सम्पादन, लेखापरीक्षण र स्वास्थ्य दिनचर्याका लागि उत्कृष्ट। आफन्तलाई अत्यधिक आलोचना नगर्नुहोस्। सफा डाटा र स्पष्ट तालिका नै भाग्य हो।",
+    yearlyEn: "A year of craft and correction. Certifications, service work and operations improve strongly.",
+    yearlyNe: "सीप र सुधारको वर्ष। प्रमाणपत्र, सेवा र व्यवस्थापनमा राम्रो वृद्धि।",
+    focusEn: "Health, operations, precision", focusNe: "स्वास्थ्य, व्यवस्थापन, सूक्ष्मता",
+    remedyEn: "Donate green vegetables on Wednesday and simplify your to-do list.",
+    remedyNe: "बुधबार हरियो तरकारी दान गर्नुहोस् र कामको सूची सरल बनाउनुहोस्।"
+  },
+  tula: {
+    ne: "तुला", en: "Tula", icon: "♎", color: "Pink", number: "6", mantra: "ॐ शुक्राय नमः", dasha: "Venus harmony",
+    briefEn: "Partnerships improve through fairness and boundaries.",
+    briefNe: "न्याय र सीमा राख्दा साझेदारी सुधार्छ।",
+    monthlyEn: "Relationships, contracts and design work are highlighted. Avoid pleasing everyone. Good month to renegotiate terms and restore balance.",
+    monthlyNe: "सम्बन्ध, सम्झौता र डिजाइन काम प्रमुख। सबैलाई खुसी पार्ने प्रयास नगर्नुहोस्। शर्त पुनः छलफल र सन्तुलन फर्काउन राम्रो महिना।",
+    yearlyEn: "A relationship-defining year. Marriage, business partnership and public image need conscious choices.",
+    yearlyNe: "सम्बन्ध परिभाषित गर्ने वर्ष। विवाह, व्यापार साझेदारी र सार्वजनिक छविमा सचेत निर्णय चाहिन्छ।",
+    focusEn: "Partnership, balance, aesthetics", focusNe: "साझेदारी, सन्तुलन, सौन्दर्य",
+    remedyEn: "Light a fragrant diya on Friday and keep agreements written.",
+    remedyNe: "शुक्रबार सुगन्धित बत्ती बाल्नुहोस् र सम्झौता लिखित राख्नुहोस्।"
+  },
+  brischik: {
+    ne: "वृश्चिक", en: "Brischik", icon: "♏", color: "Maroon", number: "9", mantra: "ॐ केतवे नमः", dasha: "Ketu depth",
+    briefEn: "Quiet strategy works better than force.",
+    briefNe: "बलभन्दा शान्त रणनीतिले राम्रो काम गर्छ।",
+    monthlyEn: "Research, repayment, hidden matters and healing are active. Do not test people emotionally. Excellent for deep work and financial cleanup.",
+    monthlyNe: "अनुसन्धान, ऋण तिर्ने योजना, गोप्य विषय र उपचार सक्रिय। भावनात्मक रूपमा मानिसलाई परीक्षण नगर्नुहोस्। गहिरो काम र आर्थिक सफाइका लागि उत्कृष्ट।",
+    yearlyEn: "A transformation year. Let old fears, debt patterns and unhealthy attachments end.",
+    yearlyNe: "रूपान्तरणको वर्ष। पुराना डर, ऋणको ढाँचा र अस्वस्थ आसक्ति छोड्नुहोस्।",
+    focusEn: "Research, healing, financial detox", focusNe: "अनुसन्धान, उपचार, आर्थिक सफाइ",
+    remedyEn: "Meditate on Tuesday evening and avoid secrecy in close relationships.",
+    remedyNe: "मंगलबार साँझ ध्यान गर्नुहोस् र नजिकका सम्बन्धमा अनावश्यक गोप्यता नराख्नुहोस्।"
+  },
+  dhanu: {
+    ne: "धनु", en: "Dhanu", icon: "♐", color: "Yellow", number: "3", mantra: "ॐ बृहस्पतये नमः", dasha: "Jupiter expansion",
+    briefEn: "Study, travel and advice open doors.",
+    briefNe: "अध्ययन, यात्रा र सल्लाहले ढोका खोल्छ।",
+    monthlyEn: "Teachers, mentors, legal papers and travel plans are favorable. Avoid preaching. Good for exams, publishing and spiritual commitments.",
+    monthlyNe: "गुरु, सल्लाहकार, कानुनी कागज र यात्रा योजना अनुकूल। उपदेश दिने शैली घटाउनुहोस्। परीक्षा, प्रकाशन र आध्यात्मिक संकल्पका लागि राम्रो।",
+    yearlyEn: "A growth year through dharma, education and long-distance connections.",
+    yearlyNe: "धर्म, शिक्षा र टाढाका सम्बन्धबाट वृद्धि हुने वर्ष।",
+    focusEn: "Education, travel, ethics", focusNe: "शिक्षा, यात्रा, नीति",
+    remedyEn: "Offer yellow food on Thursday and keep one learning promise.",
+    remedyNe: "बिहीबार पहेंलो खानेकुरा चढाउनुहोस् र एउटा अध्ययन वाचा पूरा गर्नुहोस्।"
+  },
+  makar: {
+    ne: "मकर", en: "Makar", icon: "♑", color: "Blue", number: "8", mantra: "ॐ शनैश्चराय नमः", dasha: "Saturn structure",
+    briefEn: "Career rewards patience, process and senior support.",
+    briefNe: "धैर्य, प्रक्रिया र वरिष्ठ सहयोगले करियरमा फल दिन्छ।",
+    monthlyEn: "Workload grows, but so does authority. Keep knees, bones and rest in balance. Good for promotion files and long-term planning.",
+    monthlyNe: "कामको भार बढ्छ तर अधिकार पनि बढ्छ। घुँडा, हड्डी र आराममा सन्तुलन राख्नुहोस्। पदोन्नति कागज र दीर्घकालीन योजनाका लागि राम्रो।",
+    yearlyEn: "A career-building year. Slow commitments become permanent assets.",
+    yearlyNe: "करियर बनाउने वर्ष। बिस्तारै गरिएको प्रतिबद्धता स्थायी सम्पत्ति बन्छ।",
+    focusEn: "Career, structure, responsibility", focusNe: "करियर, संरचना, जिम्मेवारी",
+    remedyEn: "Serve elders on Saturday and do not delay essential paperwork.",
+    remedyNe: "शनिबार वृद्धजनको सेवा गर्नुहोस् र आवश्यक कागजपत्र ढिला नगर्नुहोस्।"
+  },
+  kumbha: {
+    ne: "कुम्भ", en: "Kumbha", icon: "♒", color: "Sky blue", number: "4", mantra: "ॐ शनैश्चराय नमः", dasha: "Saturn innovation",
+    briefEn: "Ideas need structure before they become luck.",
+    briefNe: "विचार भाग्य बन्नुअघि संरचना चाहिन्छ।",
+    monthlyEn: "Friends, networks, technology and community work are active. Keep unusual ideas practical. Good for systems, apps and social causes.",
+    monthlyNe: "साथी, नेटवर्क, प्रविधि र समुदायका काम सक्रिय। असामान्य विचारलाई व्यवहारिक बनाउनुहोस्। प्रणाली, एप र सामाजिक कामका लागि राम्रो।",
+    yearlyEn: "A year for innovation with discipline. Groups and long-term income streams matter.",
+    yearlyNe: "अनुशासनसहित नवप्रवर्तनको वर्ष। समूह र दीर्घकालीन आम्दानी स्रोत महत्वपूर्ण।",
+    focusEn: "Networks, systems, innovation", focusNe: "नेटवर्क, प्रणाली, नवप्रवर्तन",
+    remedyEn: "Donate black sesame on Saturday and keep digital boundaries healthy.",
+    remedyNe: "शनिबार कालो तिल दान गर्नुहोस् र डिजिटल सीमा स्वस्थ राख्नुहोस्।"
+  },
+  meen: {
+    ne: "मीन", en: "Meen", icon: "♓", color: "Sea green", number: "7", mantra: "ॐ नमो भगवते वासुदेवाय", dasha: "Jupiter intuition",
+    briefEn: "Intuition is strong; protect energy and choose steady gains.",
+    briefNe: "अन्तर्ज्ञान बलियो छ; ऊर्जा जोगाएर स्थिर लाभ रोज्नुहोस्।",
+    monthlyEn: "This is a reflective but useful month. Spiritual practice, creative work and quiet planning bring the best results. Avoid emotional spending and unclear promises. Sleep, water intake and boundaries are your medicine.",
+    monthlyNe: "यो आत्मचिन्तनशील तर उपयोगी महिना हो। आध्यात्मिक अभ्यास, सिर्जनात्मक काम र शान्त योजना सबैभन्दा फलदायी। भावनात्मक खर्च र अस्पष्ट वाचा नगर्नुहोस्। निद्रा, पानी र सीमा नै औषधि हुन्।",
+    yearlyEn: "A year of inner strengthening and financial maturity. Education, healing, foreign links and devotional practice can bring meaningful progress.",
+    yearlyNe: "आन्तरिक मजबुती र आर्थिक परिपक्वताको वर्ष। शिक्षा, उपचार, विदेश सम्बन्ध र भक्तिपूर्ण अभ्यासले अर्थपूर्ण प्रगति ल्याउन सक्छ।",
+    focusEn: "Spirituality, finance, rest, creativity", focusNe: "आध्यात्म, पैसा, आराम, सिर्जना",
+    remedyEn: "Chant Vishnu mantra on Thursday, donate yellow lentils, and keep one day weekly for quiet reset.",
+    remedyNe: "बिहीबार विष्णु मन्त्र जप्नुहोस्, पहेंलो दाल दान गर्नुहोस् र हप्तामा एक दिन शान्त पुनर्स्थापनाका लागि राख्नुहोस्।"
+  }
 };
 
 const panchangGuidance = [
@@ -462,6 +613,7 @@ const storedCalendarMode = localStorage.getItem("nepalPatro:calendarMode");
 
 let activeMonthIndex = 0;
 let activeDay = null;
+let activeRashi = "meen";
 let appLanguage = ["en", "ne"].includes(storedLanguage) ? storedLanguage : "en";
 let calendarMode = ["bs", "ad"].includes(storedCalendarMode) ? storedCalendarMode : "bs";
 
@@ -477,7 +629,7 @@ const sectionLinks = document.querySelectorAll("[data-section-link]");
 const appSections = document.querySelectorAll(".page");
 const languageButtons = document.querySelectorAll("[data-language]");
 const calendarModeButtons = document.querySelectorAll("[data-calendar-mode]");
-const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "market", "fuel", "horoscope", "date-converter", "panchang", "shubha-sait"];
+const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "market", "fuel", "horoscope", "horoscope-detail", "date-converter", "panchang", "shubha-sait"];
 const dailyDataKey = "nepalPatro:dailyDataCheckedAt";
 const dailyDataVersionKey = "nepalPatro:dailyDataVersion";
 const dailyDataCacheKey = "nepalPatro:dailyDataCache";
@@ -485,6 +637,7 @@ const dataSourceStatusKey = "nepalPatro:dailyDataSource";
 let dailyDataSnapshot = window.NEPAL_PATRO_DAILY_DATA || null;
 let goldSilverRows = window.NEPAL_PATRO_DAILY_DATA?.gold?.preview || tools[1].preview;
 let goldUpdatedAt = window.NEPAL_PATRO_DAILY_DATA?.gold?.updatedAt || "Thursday, May 07, 2026 - 10:45 AM";
+const liveDataUrl = "https://nepal-patro.vercel.app/api/daily-data";
 
 const translations = {
   en: {
@@ -499,6 +652,7 @@ const translations = {
     navDateConverter: "Date Converter",
     navPanchang: "Panchang",
     navShubhaSait: "Shubha Sait",
+    allRashi: "All rashi",
     todayInNepal: "Today in Nepal",
     weatherSummary: "Kathmandu · Clear",
     nextEvent: "Next event",
@@ -582,6 +736,7 @@ const translations = {
     navDateConverter: "मिति परिवर्तन",
     navPanchang: "पञ्चाङ्ग",
     navShubhaSait: "शुभ साइत",
+    allRashi: "सबै राशि",
     todayInNepal: "आज नेपालमा",
     weatherSummary: "काठमाडौं · सफा",
     nextEvent: "आउँदो दिन",
@@ -1073,8 +1228,7 @@ function appendProduceIcon(parent, label) {
 }
 
 function getTodayKey() {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  return getNepalDateKey();
 }
 
 function updateToolPreview(title, preview) {
@@ -1163,17 +1317,27 @@ function applyDailyData(data) {
   }
 }
 
-async function getDailyData() {
-  if (isSameDayCacheUsable()) {
+async function getDailyData(options = {}) {
+  const force = Boolean(options.force);
+  if (!force && isSameDayCacheUsable()) {
     return getCachedDailyData();
   }
 
   if (window.location.protocol === "file:") {
+    try {
+      const liveResponse = await fetch(`${liveDataUrl}${force ? `?refresh=${Date.now()}` : ""}`, { cache: "no-store" });
+      if (liveResponse.ok) {
+        localStorage.setItem(dataSourceStatusKey, "live-api");
+        return liveResponse.json();
+      }
+    } catch {
+      localStorage.setItem(dataSourceStatusKey, "embedded-fallback");
+    }
     return window.NEPAL_PATRO_DAILY_DATA || null;
   }
 
   try {
-    const apiResponse = await fetch("/api/daily-data", { cache: "no-store" });
+    const apiResponse = await fetch(`/api/daily-data${force ? `?refresh=${Date.now()}` : ""}`, { cache: "no-store" });
     if (apiResponse.ok) {
       localStorage.setItem(dataSourceStatusKey, "api");
       return apiResponse.json();
@@ -1193,7 +1357,7 @@ async function forceRefreshDailyData() {
   localStorage.removeItem(dailyDataKey);
   localStorage.removeItem(dailyDataCacheKey);
   try {
-    const data = await getDailyData();
+    const data = await getDailyData({ force: true });
     applyDailyData(data);
     if (data) {
       setCachedDailyData(data);
@@ -1363,6 +1527,20 @@ function formatConverterBsDate(year, month, day) {
   return `${name} ${formatBsNumber(day)}, ${formatBsNumber(year)}`;
 }
 
+function getCurrentCalendarDay() {
+  const todayKey = getNepalDateKey();
+  for (let index = 0; index < months.length; index += 1) {
+    const month = months[index];
+    const start = new Date(`${month.englishStart}T00:00:00`);
+    const end = addDays(start, month.days - 1);
+    if (todayKey >= formatDateKey(start) && todayKey <= formatDateKey(end)) {
+      const day = Math.round((new Date(`${todayKey}T00:00:00`) - start) / (24 * 60 * 60 * 1000)) + 1;
+      return { monthIndex: index, day };
+    }
+  }
+  return { monthIndex: 0, day: 22 };
+}
+
 function getDayData(month, day) {
   const date = formatEnglishDate(month, day);
   const lunarPending = month.year >= 2084;
@@ -1385,6 +1563,7 @@ function getDayData(month, day) {
 
 function renderCalendar() {
   const month = months[activeMonthIndex];
+  const current = getCurrentCalendarDay();
   monthLabel.textContent = calendarMode === "ad"
     ? `${month.englishRange} (${formatBsMonthYear(month)})`
     : `${formatBsMonthYear(month)} (${month.englishRange})`;
@@ -1415,7 +1594,7 @@ function renderCalendar() {
     button.setAttribute("role", "gridcell");
     button.setAttribute("aria-label", `${formatBsDate(month, day)}, ${data.englishDate}`);
 
-    if (activeMonthIndex === 0 && day === 22) {
+    if (activeMonthIndex === current.monthIndex && day === current.day) {
       button.classList.add("today");
     }
 
@@ -1465,7 +1644,7 @@ function renderTools() {
     button.type = "button";
     button.dataset.toolIndex = String(index);
     button.setAttribute("aria-label", localizeToolText(tool.title));
-    const icon = makeElement("span", "tool-icon", tool.icon);
+    const icon = makeElement("span", `tool-icon tool-${tool.iconKey || "default"}`);
     icon.setAttribute("aria-hidden", "true");
     const textWrap = document.createElement("span");
     textWrap.append(makeElement("strong", "", localizeToolText(tool.title)));
@@ -1514,7 +1693,7 @@ function renderRates() {
   });
 }
 
-function drawLineChart(svg, values, color, unitPrefix = "") {
+function drawLineChart(svg, values, color, unitPrefix = "", labels = []) {
   clearNode(svg);
   const width = 520;
   const height = 220;
@@ -1548,15 +1727,38 @@ function drawLineChart(svg, values, color, unitPrefix = "") {
   path.setAttribute("class", "chart-line");
   path.setAttribute("stroke", color);
   svg.append(path);
-  points.forEach(([x, y]) => {
+  points.forEach(([x, y, value], index) => {
     const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     circle.setAttribute("cx", String(x));
     circle.setAttribute("cy", String(y));
     circle.setAttribute("r", "4.5");
     circle.setAttribute("class", "chart-dot");
     circle.setAttribute("fill", color);
+    circle.tabIndex = 0;
+    circle.style.cursor = "pointer";
+    circle.addEventListener("click", () => showChartTooltip(svg, x, y, labels[index] || `Day ${index + 1}`, `${unitPrefix}${value.toLocaleString("en-US")}`));
+    circle.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        showChartTooltip(svg, x, y, labels[index] || `Day ${index + 1}`, `${unitPrefix}${value.toLocaleString("en-US")}`);
+      }
+    });
     svg.append(circle);
   });
+}
+
+function showChartTooltip(svg, x, y, date, price) {
+  const host = svg.closest(".price-chart");
+  let tooltip = host.querySelector(".chart-tooltip");
+  if (!tooltip) {
+    tooltip = makeElement("div", "chart-tooltip");
+    host.append(tooltip);
+  }
+  tooltip.textContent = `${date} · ${price}`;
+  tooltip.style.left = `${Math.min(82, Math.max(12, (x / 520) * 100))}%`;
+  tooltip.style.top = `${Math.min(78, Math.max(16, (y / 220) * 100))}%`;
+  tooltip.classList.add("show");
+  setTimeout(() => tooltip.classList.remove("show"), 2800);
 }
 
 function renderGoldSilver() {
@@ -1578,8 +1780,8 @@ function renderGoldSilver() {
   document.querySelector("#goldUpdatedText").textContent = `${localizeToolText("Last updated")}: ${localizeToolPreviewValue(goldUpdatedAt)}`;
   document.querySelector("#goldChartValue").textContent = localizeToolPreviewValue(firstPrice);
   document.querySelector("#silverChartValue").textContent = localizeToolPreviewValue(silverPrice);
-  drawLineChart(document.querySelector("#goldLineChart"), goldHistory, "#315f9f", "Rs ");
-  drawLineChart(document.querySelector("#silverLineChart"), silverHistory, "#767a86", "Rs ");
+  drawLineChart(document.querySelector("#goldLineChart"), goldHistory, "#315f9f", "Rs ", bullionHistoryDates);
+  drawLineChart(document.querySelector("#silverLineChart"), silverHistory, "#767a86", "Rs ", bullionHistoryDates);
 }
 
 function renderMarket() {
@@ -1611,36 +1813,52 @@ function renderFuel() {
   });
 }
 
-function renderHoroscopeOptions() {
-  const select = document.querySelector("#rashiSelect");
-  const current = select.value || "meen";
-  clearNode(select);
-  Object.entries(horoscopeData).forEach(([key, value]) => {
-    const option = document.createElement("option");
-    option.value = key;
-    option.textContent = appLanguage === "ne" ? value[0] : value[1];
-    select.append(option);
+function renderHoroscope() {
+  const grid = document.querySelector("#horoscopeGrid");
+  clearNode(grid);
+  Object.entries(horoscopeData).forEach(([key, data]) => {
+    const card = makeElement("button", "rashi-card");
+    card.type = "button";
+    card.dataset.rashi = key;
+    card.append(makeElement("span", "rashi-icon", data.icon));
+    card.append(makeElement("strong", "", appLanguage === "ne" ? `${data.ne} राशि` : `${data.en} Rashi`));
+    card.append(makeElement("p", "", appLanguage === "ne" ? data.briefNe : data.briefEn));
+    card.addEventListener("click", () => {
+      activeRashi = key;
+      navigateToSection("horoscope-detail");
+      renderHoroscopeDetail();
+    });
+    grid.append(card);
   });
-  select.value = current;
 }
 
-function renderHoroscope() {
-  renderHoroscopeOptions();
-  const key = document.querySelector("#rashiSelect").value || "meen";
-  const data = horoscopeData[key] || horoscopeData.meen;
-  const card = document.querySelector("#horoscopeCard");
-  clearNode(card);
-  card.append(makeElement("p", "eyebrow", appLanguage === "ne" ? data[0] : data[1]));
-  card.append(makeElement("h2", "", appLanguage === "ne" ? `${data[0]} राशि` : `${data[1]} Rashi`));
-  card.append(makeElement("p", "", data[2]));
-  const meta = makeElement("div", "horoscope-meta");
-  [["Focus", data[3]], ["Lucky color", data[4]], ["Lucky number", data[5]]].forEach(([label, value]) => {
+function renderHoroscopeDetail() {
+  const data = horoscopeData[activeRashi] || horoscopeData.meen;
+  document.querySelector("#horoscopeDetailTitle").textContent = appLanguage === "ne" ? `${data.ne} राशि` : `${data.en} Rashi`;
+  document.querySelector("#horoscopeDetailSubtitle").textContent = appLanguage === "ne" ? "मासिक र वार्षिक मार्गदर्शन" : "Monthly and yearly guidance";
+  const detail = document.querySelector("#horoscopeDetail");
+  clearNode(detail);
+  [
+    [appLanguage === "ne" ? "मासिक फल" : "Monthly outlook", appLanguage === "ne" ? data.monthlyNe : data.monthlyEn],
+    [appLanguage === "ne" ? "वार्षिक फल" : "Yearly outlook", appLanguage === "ne" ? data.yearlyNe : data.yearlyEn],
+    [appLanguage === "ne" ? "दशा / ग्रह संकेत" : "Dasha / planetary cue", data.dasha],
+    [appLanguage === "ne" ? "अधिक लाभका लागि फोकस" : "Focus for maximum benefit", appLanguage === "ne" ? data.focusNe : data.focusEn],
+    [appLanguage === "ne" ? "उपाय र सिफारिस" : "Remedy and recommendation", appLanguage === "ne" ? data.remedyNe : data.remedyEn],
+    [appLanguage === "ne" ? "मन्त्र" : "Mantra", data.mantra]
+  ].forEach(([title, body]) => {
+    const card = makeElement("article", "horoscope-card");
+    card.append(makeElement("span", "eyebrow", title));
+    card.append(makeElement("p", "", body));
+    detail.append(card);
+  });
+  const meta = makeElement("article", "horoscope-card horoscope-meta-card");
+  [["Lucky color", data.color], ["Lucky number", data.number], [appLanguage === "ne" ? "चिन्ह" : "Icon", data.icon]].forEach(([label, value]) => {
     const item = makeElement("span", "");
     item.append(makeElement("small", "", localizeToolText(label)));
     item.append(makeElement("strong", "", value));
     meta.append(item);
   });
-  card.append(meta);
+  detail.prepend(meta);
 }
 
 function renderMiniList(targetId, rows) {
@@ -1735,7 +1953,7 @@ function runBsToAdConversion() {
 
 function runAdToBsConversion() {
   const input = document.querySelector("#adDateInput");
-  const date = input.value ? new Date(`${input.value}T00:00:00`) : new Date("2026-05-05T00:00:00");
+  const date = input.value ? new Date(`${input.value}T00:00:00`) : new Date();
   const converted = convertAdToBs(date);
   document.querySelector("#adToBsResult").textContent = `${formatFullAdDate(date)} = ${formatConverterBsDate(converted.year, converted.month, converted.day)}`;
 }
@@ -1807,10 +2025,11 @@ function syncMonthView(index) {
 }
 
 function renderHero() {
-  const month = months[0];
-  const data = getDayData(month, 22);
+  const current = getCurrentCalendarDay();
+  const month = months[current.monthIndex];
+  const data = getDayData(month, current.day);
   document.querySelector("#calendarTitle").textContent = calendarMode === "ad"
-    ? formatFullAdDate(formatEnglishDate(month, 22))
+    ? formatFullAdDate(formatEnglishDate(month, current.day))
     : `${formatBsNumber(data.day)} ${localizeMonthName(month.name)} ${formatBsNumber(month.year)}`;
   document.querySelector(".hero-copy").textContent = calendarMode === "ad"
     ? `${formatBsDate(month, data.day)} · ${localizeTerm(data.tithi)}`
@@ -1871,6 +2090,7 @@ function renderAll() {
   renderMarket();
   renderFuel();
   renderHoroscope();
+  renderHoroscopeDetail();
   renderPanchangDetails();
   renderShubhaSait();
   renderDateConverterPage();
@@ -1953,7 +2173,8 @@ calendarModeButtons.forEach((button) => {
 });
 
 document.querySelector("#todayButton").addEventListener("click", () => {
-  syncMonthView(0);
+  const current = getCurrentCalendarDay();
+  syncMonthView(current.monthIndex);
   const today = document.querySelector(".day-cell.today");
   today?.scrollIntoView({ behavior: "smooth", block: "center" });
 });
@@ -2015,7 +2236,7 @@ document.querySelector("#bsYearInput").addEventListener("input", runBsToAdConver
 document.querySelector("#bsMonthInput").addEventListener("change", runBsToAdConversion);
 document.querySelector("#bsDayInput").addEventListener("input", runBsToAdConversion);
 document.querySelector("#adDateInput").addEventListener("input", runAdToBsConversion);
-document.querySelector("#rashiSelect").addEventListener("change", renderHoroscope);
+document.querySelector("#backToHoroscope").addEventListener("click", () => navigateToSection("horoscope"));
 document.querySelectorAll("[data-refresh-button]").forEach((button) => {
   button.addEventListener("click", async () => {
     const original = button.textContent;
@@ -2038,5 +2259,6 @@ window.addEventListener("load", () => {
   }
 });
 
+activeMonthIndex = getCurrentCalendarDay().monthIndex;
 renderAll();
 refreshDailyDataOncePerDay();

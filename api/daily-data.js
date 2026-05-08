@@ -136,11 +136,40 @@ function parseFuel(text) {
   };
 }
 
+function parseMarket(text) {
+  const normalized = cleanText(text);
+  const updatedAt = normalized.match(/संकलित दैनिक थोक मूल्य बारे जानकारी\s*-\s*वि\.सं\.\s*([^क]+?)\s*कृषि उपज/i)?.[1]?.trim()
+    || fallback.market.updatedAt
+    || todayInNepal();
+  const section = normalized.match(/कृषि उपज ईकाइ न्यूनतम अधिकतम औसत([\s\S]*?)(?:कालीमाटी फलफूल|गणेशमान सिंह|द्रुत लिङ्कहरू)/)?.[1] || "";
+  const rows = [["Published", updatedAt]];
+  const rowPattern = /(.+?)(के\.?जी\.?|केजी|के जी|दर्जन|प्रति गोटा)\s*रू\s*([०-९\d,.]+)\s*रू\s*([०-९\d,.]+)\s*रू\s*([०-९\d,.]+)/g;
+  let match;
+
+  while ((match = rowPattern.exec(section)) && rows.length < 140) {
+    const label = match[1].trim();
+    const unit = match[2].replace(/\s+/g, " ").trim();
+    const low = match[3].trim();
+    const high = match[4].trim();
+    const avg = match[5].trim();
+    if (label && !/मूल्य|विवरण|ईकाइ/.test(label)) {
+      rows.push([label, `${unit} · रू ${low} - ${high} · औसत रू ${avg}`]);
+    }
+  }
+
+  return {
+    updatedAt,
+    source: "https://kalimatimarket.gov.np/price",
+    preview: rows.length > 1 ? rows : fallback.market.preview || []
+  };
+}
+
 async function buildDailyData() {
-  const [forexHtml, goldHtml, fuelHtml] = await Promise.allSettled([
+  const [forexHtml, goldHtml, fuelHtml, marketHtml] = await Promise.allSettled([
     safeFetch("https://www.nrb.org.np/forex/"),
     safeFetch("https://www.hamropatro.com/gold"),
-    safeFetch("https://noc.org.np/petrol")
+    safeFetch("https://noc.org.np/petrol"),
+    safeFetch("https://kalimatimarket.gov.np/price")
   ]);
 
   return {
@@ -150,18 +179,23 @@ async function buildDailyData() {
     forex: forexHtml.status === "fulfilled" ? parseForex(forexHtml.value) : fallback.forex,
     gold: goldHtml.status === "fulfilled" ? parseGold(goldHtml.value) : fallback.gold,
     fuel: fuelHtml.status === "fulfilled" ? parseFuel(fuelHtml.value) : fallback.fuel,
+    market: marketHtml.status === "fulfilled" ? parseMarket(marketHtml.value) : fallback.market,
     horoscope: fallback.horoscope
   };
 }
 
-module.exports = async function handler(_request, response) {
+module.exports = async function handler(request, response) {
+  const isManualRefresh = Boolean(request?.query?.refresh)
+    || new URL(request?.url || "/", "https://nepal-patro.vercel.app").searchParams.has("refresh");
   try {
     const data = await buildDailyData();
-    response.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=43200");
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Cache-Control", isManualRefresh ? "no-store" : "public, s-maxage=86400, stale-while-revalidate=43200");
     response.setHeader("Content-Type", "application/json; charset=utf-8");
     response.status(200).json(data);
   } catch {
-    response.setHeader("Cache-Control", "public, s-maxage=3600");
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Cache-Control", isManualRefresh ? "no-store" : "public, s-maxage=3600");
     response.status(200).json({
       ...fallback,
       updatedAt: fallback.updatedAt,

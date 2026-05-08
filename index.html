@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nepal-patro.vercel.app https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
     <title>Nepal Patro</title>
-    <link rel="stylesheet" href="styles.css?v=19">
+    <link rel="stylesheet" href="styles.css?v=21">
   </head>
   <body>
     <div class="app-shell">
@@ -249,11 +249,19 @@
             </div>
             <button class="secondary-button" type="button" data-refresh-button data-i18n="refreshData">Refresh</button>
           </div>
-          <div class="horoscope-toolbar">
-            <label for="rashiSelect" data-i18n="selectRashi">Select rashi</label>
-            <select id="rashiSelect"></select>
+          <div class="horoscope-grid" id="horoscopeGrid"></div>
+        </section>
+
+        <section class="page page-panel" id="horoscope-detail" data-page="horoscope-detail" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="monthlyRashifal">Monthly Rashifal</p>
+              <h1 id="horoscopeDetailTitle">Meen Rashi</h1>
+              <p class="last-updated" id="horoscopeDetailSubtitle">Monthly and yearly guidance</p>
+            </div>
+            <button class="secondary-button" type="button" id="backToHoroscope" data-i18n="allRashi">All rashi</button>
           </div>
-          <div class="horoscope-card" id="horoscopeCard"></div>
+          <div class="horoscope-detail-grid" id="horoscopeDetail"></div>
         </section>
 
         <section class="page page-panel" id="date-converter" data-page="date-converter" tabindex="-1">
@@ -435,7 +443,7 @@
       </article>
     </div>
 
-    <script src="data/daily-data.js?v=20"></script>
-    <script src="app.js?v=20"></script>
+    <script src="data/daily-data.js?v=21"></script>
+    <script src="app.js?v=22"></script>
   </body>
 </html>
