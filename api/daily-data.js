@@ -112,13 +112,26 @@ function parseGold(text) {
 
 function parseFuel(text) {
   const normalized = cleanText(text);
-  const petrol = normalized.match(/Petrol[\s\S]{0,100}?(\d+(?:\.\d+)?)/i)?.[1];
+  const section = normalized.match(/Kathmandu,\s*Pokhara,\s*Dipayal[\s\S]{0,420}?(?:Price applicable|Petrol Prices)/i)?.[0] || normalized;
+  const petrol = section.match(/Petrol\(MS\):\s*NRs\s*(\d+(?:\.\d+)?)/i)?.[1];
+  const diesel = section.match(/Diesel\(HSD\):\s*NRs\s*(\d+(?:\.\d+)?)/i)?.[1];
+  const lpg = section.match(/LP Gas:\s*NRs\s*(\d+(?:\.\d+)?)/i)?.[1];
+  const updated = normalized.match(/Kathmandu,\s*Pokhara,\s*Dipayal[\s\S]{0,900}?(\d{4}-\d{2}-\d{2})/i)?.[1] || todayInNepal();
+  const rows = [
+    ["Petrol", petrol ? `NRs ${petrol}/L` : fallback.fuel.rows?.[0]?.[1] || fallback.fuel.preview[0][1], "Kathmandu, Pokhara, Dipayal"],
+    ["Diesel", diesel ? `NRs ${diesel}/L` : fallback.fuel.rows?.[1]?.[1] || "NRs 225.0/L", "Kathmandu, Pokhara, Dipayal"],
+    ["LP Gas", lpg ? `NRs ${lpg}/cyl` : fallback.fuel.rows?.[2]?.[1] || "NRs 2160.0/cyl", "Nationwide domestic cylinder"]
+  ];
   return {
-    insight: petrol ? `Rs. ${petrol}` : fallback.fuel.insight,
+    insight: rows[0][1].replace("NRs ", "Rs. ").replace("/L", ""),
+    updatedAt: updated,
+    rows,
     preview: [
-      ["Petrol", petrol ? `NRs ${petrol}/L` : fallback.fuel.preview[0][1]],
+      ["Petrol", rows[0][1]],
+      ["Diesel", rows[1][1]],
+      ["LP Gas", rows[2][1]],
       ["Applies to", "Kathmandu, Pokhara, Dipayal"],
-      ["Updated", todayInNepal()]
+      ["Updated", updated]
     ]
   };
 }
@@ -136,7 +149,8 @@ async function buildDailyData() {
     sourceNote: "Daily snapshot from allowlisted NRB, Hamro Patro, NOC, and Kalimati sources.",
     forex: forexHtml.status === "fulfilled" ? parseForex(forexHtml.value) : fallback.forex,
     gold: goldHtml.status === "fulfilled" ? parseGold(goldHtml.value) : fallback.gold,
-    fuel: fuelHtml.status === "fulfilled" ? parseFuel(fuelHtml.value) : fallback.fuel
+    fuel: fuelHtml.status === "fulfilled" ? parseFuel(fuelHtml.value) : fallback.fuel,
+    horoscope: fallback.horoscope
   };
 }
 

@@ -380,12 +380,62 @@ const tools = [
 
 let exchangeRates = [
   ["USD", "U.S. Dollar", "1", "150.51", "151.11"],
+  ["CNY", "Chinese Yuan", "1", "22.13", "22.22"],
   ["EUR", "European Euro", "1", "177.07", "177.77"],
   ["GBP", "UK Pound Sterling", "1", "204.87", "205.68"],
-  ["CNY", "Chinese Yuan", "1", "22.13", "22.22"],
   ["JPY", "Japanese Yen", "10", "9.63", "9.66"],
   ["AUD", "Australian Dollar", "1", "109.21", "109.65"],
   ["CAD", "Canadian Dollar", "1", "110.45", "110.89"]
+];
+
+let fuelRows = [
+  ["Petrol", "NRs 217.0/L", "Kathmandu, Pokhara, Dipayal"],
+  ["Diesel", "NRs 225.0/L", "Kathmandu, Pokhara, Dipayal"],
+  ["LP Gas", "NRs 2160.0/cyl", "Nationwide domestic cylinder"]
+];
+
+let fuelUpdatedAt = window.NEPAL_PATRO_DAILY_DATA?.fuel?.updatedAt || "2026-05-08";
+let marketRows = tools.find((tool) => tool.market)?.preview || [];
+let marketUpdatedAt = window.NEPAL_PATRO_DAILY_DATA?.market?.updatedAt || "बैशाख २४, २०८३";
+const goldHistory = [314000, 318000, 316000, 322000, 315000, 311000, 309000, 296000, 286000, 294000, 290000, 298600];
+const silverHistory = [4860, 4920, 5010, 4980, 5060, 5120, 5080, 5155, 5090, 5180, 5115, 5155];
+
+const horoscopeData = {
+  mesh: ["मेष", "Mesh", "Career improves with steady follow-through. Income can stabilize, but avoid impulsive spending. Good for clearing pending work and reconnecting with seniors.", "Work, income, confidence", "Orange", "2"],
+  brish: ["वृष", "Brish", "A balanced month for family and finances. Routine discipline helps more than big risks. Take care of sleep and digestion.", "Family, savings, health", "White", "6"],
+  mithun: ["मिथुन", "Mithun", "New contacts and learning bring momentum. Keep paperwork clean and avoid scattered decisions in business.", "Networking, study, trade", "Green", "5"],
+  karkat: ["कर्कट", "Karkat", "Expenses may rise, but the second half can bring relief. Keep communication gentle in home and married life.", "Budgeting, home, patience", "Cream", "7"],
+  singha: ["सिंह", "Singha", "Leadership improves when you delegate. Good for visibility, interviews and public-facing work.", "Reputation, leadership, work", "Gold", "1"],
+  kanya: ["कन्या", "Kanya", "Practical planning wins this month. Health routines, study and accounts need small daily attention.", "Planning, health, accounts", "Navy", "4"],
+  tula: ["तुला", "Tula", "Partnerships need fairness and clear boundaries. Creative and relationship matters improve with patience.", "Partnership, design, romance", "Pink", "6"],
+  brischik: ["वृश्चिक", "Brischik", "Avoid overthinking and hidden conflict. Good for research, repayment plans and quiet focused work.", "Research, debts, discipline", "Maroon", "9"],
+  dhanu: ["धनु", "Dhanu", "Travel, learning and advisory work look promising. Keep promises realistic and expenses measured.", "Travel, learning, advice", "Yellow", "3"],
+  makar: ["मकर", "Makar", "Career progress is possible through senior support and strategy. Be calm with coworkers and keep health steady.", "Career, strategy, discipline", "Blue", "8"],
+  kumbha: ["कुम्भ", "Kumbha", "Ideas feel fresh, but execution needs structure. Friends and groups can open useful doors.", "Ideas, friends, systems", "Sky blue", "4"],
+  meen: ["मीन", "Meen", "A reflective but useful month. Trust intuition, protect energy and choose steady financial decisions over quick gains.", "Intuition, finance, rest", "Sea green", "7"]
+};
+
+const panchangGuidance = [
+  ["Brahma Muhurta", "4:31 AM - 5:15 AM", "Prayer, mantra, study"],
+  ["Abhijit Muhurat", "11:42 AM - 12:34 PM", "Important starts"],
+  ["Vijaya Muhurat", "2:18 PM - 3:10 PM", "Travel, official work"],
+  ["Godhuli Muhurat", "6:21 PM - 6:45 PM", "Puja, family rituals"],
+  ["Amrit Kaal", "8:06 PM - 9:34 PM", "Spiritual work"]
+];
+
+const inauspiciousTimes = [
+  ["Rahu Kaal", "10:21 AM - 12:02 PM"],
+  ["Yamaganda", "3:24 PM - 5:04 PM"],
+  ["Gulika Kaal", "7:00 AM - 8:41 AM"],
+  ["Dur Muhurat", "8:52 AM - 9:44 AM"]
+];
+
+const saitRows = [
+  ["Daily puja", "Brahma Muhurta", "4:31 AM - 5:15 AM", "Best quiet window for japa, study and sankalpa."],
+  ["New work", "Abhijit Muhurat", "11:42 AM - 12:34 PM", "General-purpose shubha window when no specific muhurat is available."],
+  ["Travel", "Vijaya Muhurat", "2:18 PM - 3:10 PM", "Good for departures, paperwork and formal visits."],
+  ["Griha puja", "Godhuli Muhurat", "6:21 PM - 6:45 PM", "Gentle evening window for household rituals."],
+  ["Avoid", "Rahu Kaal", "10:21 AM - 12:02 PM", "Avoid starting new ventures unless unavoidable."]
 ];
 
 const nakshatras = ["अनुराधा", "ज्येष्ठा", "मूल", "पूर्वाषाढा", "उत्तराषाढा", "श्रवण", "धनिष्ठा"];
@@ -427,7 +477,7 @@ const sectionLinks = document.querySelectorAll("[data-section-link]");
 const appSections = document.querySelectorAll(".page");
 const languageButtons = document.querySelectorAll("[data-language]");
 const calendarModeButtons = document.querySelectorAll("[data-calendar-mode]");
-const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "date-converter", "panchang"];
+const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "market", "fuel", "horoscope", "date-converter", "panchang", "shubha-sait"];
 const dailyDataKey = "nepalPatro:dailyDataCheckedAt";
 const dailyDataVersionKey = "nepalPatro:dailyDataVersion";
 const dailyDataCacheKey = "nepalPatro:dailyDataCache";
@@ -443,8 +493,12 @@ const translations = {
     navTools: "Tools",
     navRates: "Rates",
     navGoldSilver: "Gold/Silver",
+    navMarket: "Market",
+    navFuel: "Fuel",
+    navHoroscope: "Horoscope",
     navDateConverter: "Date Converter",
     navPanchang: "Panchang",
+    navShubhaSait: "Shubha Sait",
     todayInNepal: "Today in Nepal",
     weatherSummary: "Kathmandu · Clear",
     nextEvent: "Next event",
@@ -465,10 +519,19 @@ const translations = {
     unit: "Unit",
     buy: "Buy",
     sell: "Sell",
+    refreshData: "Refresh",
     dailyBullion: "Daily bullion",
     goldSilverPrice: "Gold / Silver Price",
     nepaliRupees: "NPR",
     goldHallmarkTola: "Gold Hallmark - Tola",
+    silverTola: "Silver - Tola",
+    marketRates: "Kalimati wholesale",
+    vegetableFruitRates: "Vegetable and Fruit wholesale rates",
+    fuelPrices: "Nepal Oil Corporation",
+    fuelPricesTitle: "Fuel Prices",
+    monthlyRashifal: "Monthly Rashifal",
+    nepaliHoroscope: "Nepali Horoscope for the month",
+    selectRashi: "Select rashi",
     convertDates: "BS ⇄ AD Converter",
     bsToAd: "Nepali to English",
     adToBs: "English to Nepali",
@@ -488,6 +551,15 @@ const translations = {
     yoga: "Yoga",
     karana: "Karana",
     goodTime: "Good time",
+    sunrise: "Sunrise",
+    sunset: "Sunset",
+    moonTimes: "Moonrise / Moonset",
+    paksha: "Paksha",
+    krishnaPaksha: "Krishna Paksha",
+    inauspiciousTimes: "Avoid starting new work",
+    dailyGuidance: "Daily guidance",
+    auspiciousPlanner: "Auspicious time planner",
+    saitNotice: "For marriage, bratabandha, griha prabesh and other sanskar-level decisions, confirm with a family priest or official patro before finalizing.",
     toolPreview: "Tool preview",
     overview: "Overview",
     notes: "Notes",
@@ -504,8 +576,12 @@ const translations = {
     navTools: "टुल्स",
     navRates: "दर",
     navGoldSilver: "सुन/चाँदी",
+    navMarket: "बजार",
+    navFuel: "इन्धन",
+    navHoroscope: "राशिफल",
     navDateConverter: "मिति परिवर्तन",
     navPanchang: "पञ्चाङ्ग",
+    navShubhaSait: "शुभ साइत",
     todayInNepal: "आज नेपालमा",
     weatherSummary: "काठमाडौं · सफा",
     nextEvent: "आउँदो दिन",
@@ -526,10 +602,19 @@ const translations = {
     unit: "इकाई",
     buy: "खरिद",
     sell: "बिक्री",
+    refreshData: "रिफ्रेस",
     dailyBullion: "दैनिक सुनचाँदी",
     goldSilverPrice: "सुन / चाँदी मूल्य",
     nepaliRupees: "नेरु",
     goldHallmarkTola: "छापावाल सुन - तोला",
+    silverTola: "चाँदी - तोला",
+    marketRates: "कालीमाटी थोक",
+    vegetableFruitRates: "तरकारी तथा फलफूल थोक दर",
+    fuelPrices: "नेपाल आयल निगम",
+    fuelPricesTitle: "इन्धन मूल्य",
+    monthlyRashifal: "मासिक राशिफल",
+    nepaliHoroscope: "मासिक नेपाली राशिफल",
+    selectRashi: "राशि छान्नुहोस्",
     convertDates: "वि.सं. ⇄ ई.सं. परिवर्तन",
     bsToAd: "नेपालीबाट अंग्रेजी",
     adToBs: "अंग्रेजीबाट नेपाली",
@@ -549,6 +634,15 @@ const translations = {
     yoga: "योग",
     karana: "करण",
     goodTime: "शुभ समय",
+    sunrise: "सूर्योदय",
+    sunset: "सूर्यास्त",
+    moonTimes: "चन्द्रोदय / चन्द्रास्त",
+    paksha: "पक्ष",
+    krishnaPaksha: "कृष्ण पक्ष",
+    inauspiciousTimes: "नयाँ काम सुरु नगर्ने समय",
+    dailyGuidance: "दैनिक मार्गदर्शन",
+    auspiciousPlanner: "शुभ समय योजना",
+    saitNotice: "विवाह, ब्रतबन्ध, गृह प्रवेश र अन्य संस्कारका लागि अन्तिम निर्णय गर्नुअघि पारिवारिक पुरोहित वा आधिकारिक पात्रो पुष्टि गर्नुहोस्।",
     toolPreview: "टुल पूर्वावलोकन",
     overview: "सारांश",
     notes: "नोट",
@@ -753,8 +847,11 @@ const toolTranslations = {
   "Lucky color": "शुभ रङ",
   "Focus": "केन्द्र",
   "Petrol": "पेट्रोल",
+  "Diesel": "डिजेल",
+  "LP Gas": "एलपी ग्यास",
   "Applies to": "लागू हुने क्षेत्र",
-  "Updated": "अद्यावधिक"
+  "Updated": "अद्यावधिक",
+  "Lucky number": "शुभ अंक"
 };
 
 const marketLabelTranslations = {
@@ -931,33 +1028,48 @@ function localizeMarketValue(value, label) {
 
 function produceIcon(label) {
   const text = label.toLowerCase();
-  if (label === "Published") return "📅";
-  if (/गोलभेडा|tomato/.test(text)) return "🍅";
-  if (/आलु|potato|सखरखण्ड|sweet/.test(text)) return "🥔";
-  if (/प्याज|onion/.test(text)) return "🧅";
-  if (/गाजर|carrot/.test(text)) return "🥕";
-  if (/बन्दा|cabbage|रायो|पालूगो|चमसूर|तोरी|मेथी|साग|greens|spinach/.test(text)) return "🥬";
-  if (/काउली|cauliflower/.test(text)) return "🥦";
-  if (/भन्टा|eggplant/.test(text)) return "🍆";
-  if (/बोडी|सिमी|bean|peas|मटर/.test(text)) return "🫛";
-  if (/करेला|लौका|परवर|घिरौला|झिगूनी|फर्सी|भिण्डी|स्कूस|gourd|pumpkin|okra|squash/.test(text)) return "🥒";
-  if (/च्याउ|mushroom/.test(text)) return "🍄";
-  if (/स्याउ|apple/.test(text)) return "🍎";
-  if (/केरा|banana/.test(text)) return "🍌";
-  if (/कागती|lemon/.test(text)) return "🍋";
-  if (/अनार|pomegranate/.test(text)) return "🍎";
-  if (/अंगुर|grape/.test(text)) return "🍇";
-  if (/तरबुजा|watermelon/.test(text)) return "🍉";
-  if (/कटहर|pineapple|jackfruit/.test(text)) return "🍍";
-  if (/काक्रो|cucumber/.test(text)) return "🥒";
-  if (/नासपाती|pear/.test(text)) return "🍐";
-  if (/मेवा|papaya/.test(text)) return "🥭";
-  if (/आभोकाडो|avocado/.test(text)) return "🥑";
-  if (/अदुवा|ginger/.test(text)) return "🫚";
-  if (/खुर्सानी|चिली|chili|capsicum/.test(text)) return "🌶️";
-  if (/लसुन|garlic/.test(text)) return "🧄";
-  if (/धनिया|coriander|पुदीना|mint|parsley|celery|fennel|dill/.test(text)) return "🌿";
-  return "🥗";
+  if (label === "Published") return "calendar";
+  if (/गोलभेडा|tomato/.test(text)) return "tomato";
+  if (/आलु|potato|सखरखण्ड|sweet/.test(text)) return "potato";
+  if (/प्याज|onion/.test(text)) return "onion";
+  if (/गाजर|carrot/.test(text)) return "carrot";
+  if (/बन्दा|cabbage|रायो|पालूगो|चमसूर|तोरी|मेथी|साग|greens|spinach/.test(text)) return "greens";
+  if (/काउली|cauliflower|ब्रोकाउली|broccoli/.test(text)) return "cauliflower";
+  if (/भन्टा|eggplant/.test(text)) return "eggplant";
+  if (/बोडी|सिमी|bean|peas|मटर/.test(text)) return "beans";
+  if (/करेला|लौका|परवर|घिरौला|झिगूनी|फर्सी|भिण्डी|स्कूस|काक्रो|gourd|pumpkin|okra|squash|cucumber/.test(text)) return "gourd";
+  if (/च्याउ|mushroom/.test(text)) return "mushroom";
+  if (/स्याउ|apple|अनार|pomegranate/.test(text)) return "apple";
+  if (/केरा|banana/.test(text)) return "banana";
+  if (/कागती|lemon/.test(text)) return "lemon";
+  if (/अंगुर|grape/.test(text)) return "grapes";
+  if (/तरबुजा|watermelon/.test(text)) return "watermelon";
+  if (/कटहर|pineapple|jackfruit/.test(text)) return "pineapple";
+  if (/नासपाती|pear/.test(text)) return "pear";
+  if (/मेवा|papaya|आभोकाडो|avocado/.test(text)) return "tropical";
+  if (/अदुवा|ginger/.test(text)) return "ginger";
+  if (/खुर्सानी|चिली|chili|capsicum/.test(text)) return "chili";
+  if (/लसुन|garlic/.test(text)) return "garlic";
+  if (/धनिया|coriander|पुदीना|mint|parsley|celery|fennel|dill/.test(text)) return "herbs";
+  return "produce";
+}
+
+function currencyFlag(code) {
+  return {
+    USD: "🇺🇸",
+    CNY: "🇨🇳",
+    EUR: "🇪🇺",
+    GBP: "🇬🇧",
+    JPY: "🇯🇵",
+    AUD: "🇦🇺",
+    CAD: "🇨🇦"
+  }[code] || "🏳";
+}
+
+function appendProduceIcon(parent, label) {
+  const icon = makeElement("span", `produce-icon produce-${produceIcon(label)}`);
+  icon.setAttribute("aria-hidden", "true");
+  parent.append(icon);
 }
 
 function getTodayKey() {
@@ -1030,11 +1142,19 @@ function applyDailyData(data) {
 
   if (data.fuel) {
     updateToolPreview("Fuel Prices", data.fuel.preview);
-    document.querySelector("#fuelInsightValue").textContent = data.fuel.insight;
+    fuelRows = data.fuel.rows || data.fuel.preview || fuelRows;
+    fuelUpdatedAt = data.fuel.updatedAt || data.updatedAt || fuelUpdatedAt;
+    document.querySelector("#fuelInsightValue").textContent = data.fuel.insight || fuelRows[0]?.[1] || "";
   }
 
   if (data.market?.preview) {
     updateToolPreview("Vegetable and Fruit wholesale rates", data.market.preview);
+    marketRows = data.market.preview;
+    marketUpdatedAt = data.market.updatedAt || data.updatedAt || marketUpdatedAt;
+  }
+
+  if (data.horoscope?.items) {
+    Object.assign(horoscopeData, data.horoscope.items);
   }
 
   if (data.forex?.rates) {
@@ -1067,6 +1187,25 @@ async function getDailyData() {
     throw new Error("Daily data unavailable");
   }
   return response.json();
+}
+
+async function forceRefreshDailyData() {
+  localStorage.removeItem(dailyDataKey);
+  localStorage.removeItem(dailyDataCacheKey);
+  try {
+    const data = await getDailyData();
+    applyDailyData(data);
+    if (data) {
+      setCachedDailyData(data);
+      localStorage.setItem(dailyDataKey, getTodayKey());
+      if (data.updatedAt) {
+        localStorage.setItem(dailyDataVersionKey, data.updatedAt);
+      }
+    }
+    renderAll();
+  } catch (error) {
+    console.warn(error);
+  }
 }
 
 async function refreshDailyDataOncePerDay() {
@@ -1226,14 +1365,15 @@ function formatConverterBsDate(year, month, day) {
 
 function getDayData(month, day) {
   const date = formatEnglishDate(month, day);
+  const lunarPending = month.year >= 2084;
   return {
     day,
     nepaliDay: toNepaliNumber(day),
     englishDay: date.getDate(),
     englishDate: formatReadableDate(date),
     weekday: date.getDay(),
-    event: month.events[day] || "",
-    tithi: tithis[(day + 16) % tithis.length],
+    event: lunarPending && day !== 1 ? "" : month.events[day] || "",
+    tithi: lunarPending ? "2084 lunar data pending" : tithis[(day + 16) % tithis.length],
     nakshatra: nakshatras[day % nakshatras.length],
     yoga: yogas[(day + 2) % yogas.length],
     karana: karanas[(day + 4) % karanas.length],
@@ -1249,6 +1389,14 @@ function renderCalendar() {
     ? `${month.englishRange} (${formatBsMonthYear(month)})`
     : `${formatBsMonthYear(month)} (${month.englishRange})`;
   monthSubLabel.textContent = "";
+  const calendarNotice = document.querySelector("#calendarNotice");
+  const showNotice = month.year >= 2084;
+  calendarNotice.hidden = !showNotice;
+  calendarNotice.textContent = showNotice
+    ? appLanguage === "ne"
+      ? "वि.सं. २०८४ का चन्द्रमास, तिथि र चाडपर्व सम्बन्धी विवरण आधिकारिक नयाँ पात्रो सार्वजनिक भएपछि अद्यावधिक गरिनेछ।"
+      : "Lunar-calendar festivals, tithi and moon-phase dependent details for BS 2084 will be updated when the official new patro is announced."
+    : "";
   monthSelect.value = String(activeMonthIndex);
   monthSelect.setAttribute("aria-label", t("chooseMonth"));
   clearNode(calendarGrid);
@@ -1292,7 +1440,7 @@ function renderCalendar() {
       button.append(makeElement("span", "event-chip", localizeEvent(data.event)));
     }
 
-    button.append(makeElement("span", "tithi", localizeTerm(data.tithi)));
+    button.append(makeElement("span", "tithi", data.tithi === "2084 lunar data pending" ? (appLanguage === "ne" ? "तिथि पछि अद्यावधिक" : "Tithi pending") : localizeTerm(data.tithi)));
 
     button.addEventListener("click", () => openDayModal(month, data));
     calendarGrid.append(button);
@@ -1327,7 +1475,23 @@ function renderTools() {
   });
 
   toolList.querySelectorAll(".tool-link").forEach((button) => {
-    button.addEventListener("click", () => openToolModal(tools[Number(button.dataset.toolIndex)]));
+    button.addEventListener("click", () => {
+      const tool = tools[Number(button.dataset.toolIndex)];
+      const route = {
+        "Nepali <> English Date Converter": "date-converter",
+        "Gold & Silver Rate": "gold-silver",
+        "Shubha Sait": "shubha-sait",
+        "Nepali Panchang": "panchang",
+        "Nepali Horoscope for the month": "horoscope",
+        "Vegetable and Fruit wholesale rates": "market",
+        "Fuel Prices": "fuel"
+      }[tool.title];
+      if (route) {
+        navigateToSection(route);
+      } else {
+        openToolModal(tool);
+      }
+    });
   });
 }
 
@@ -1337,13 +1501,61 @@ function renderRates() {
   exchangeRates.forEach(([code, label, unit, buy, sell]) => {
     const row = document.createElement("tr");
     const currencyCell = document.createElement("td");
-    currencyCell.append(makeElement("strong", "", code));
+    const labelRow = makeElement("strong", "currency-label");
+    labelRow.append(makeElement("span", "flag-icon", currencyFlag(code)));
+    labelRow.append(makeElement("span", "", code));
+    currencyCell.append(labelRow);
     currencyCell.append(makeElement("span", "", label));
     row.append(currencyCell);
     row.append(makeElement("td", "", unit));
     row.append(makeElement("td", "numeric", buy));
     row.append(makeElement("td", "numeric", sell));
     rateList.append(row);
+  });
+}
+
+function drawLineChart(svg, values, color, unitPrefix = "") {
+  clearNode(svg);
+  const width = 520;
+  const height = 220;
+  const pad = 34;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const spread = max - min || 1;
+  const points = values.map((value, index) => {
+    const x = pad + (index * (width - pad * 2)) / (values.length - 1);
+    const y = height - pad - ((value - min) / spread) * (height - pad * 2);
+    return [x, y, value];
+  });
+  [min, Math.round((min + max) / 2), max].forEach((tick) => {
+    const y = height - pad - ((tick - min) / spread) * (height - pad * 2);
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", String(pad));
+    line.setAttribute("x2", String(width - pad));
+    line.setAttribute("y1", String(y));
+    line.setAttribute("y2", String(y));
+    line.setAttribute("class", "chart-grid-line");
+    svg.append(line);
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", "8");
+    text.setAttribute("y", String(y + 4));
+    text.setAttribute("class", "chart-tick");
+    text.textContent = `${unitPrefix}${tick.toLocaleString("en-US")}`;
+    svg.append(text);
+  });
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", points.map(([x, y], index) => `${index === 0 ? "M" : "L"} ${x} ${y}`).join(" "));
+  path.setAttribute("class", "chart-line");
+  path.setAttribute("stroke", color);
+  svg.append(path);
+  points.forEach(([x, y]) => {
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("cx", String(x));
+    circle.setAttribute("cy", String(y));
+    circle.setAttribute("r", "4.5");
+    circle.setAttribute("class", "chart-dot");
+    circle.setAttribute("fill", color);
+    svg.append(circle);
   });
 }
 
@@ -1362,8 +1574,103 @@ function renderGoldSilver() {
   });
 
   const firstPrice = goldSilverRows.find(([label]) => label === "Gold Hallmark - tola")?.[1] || "";
+  const silverPrice = goldSilverRows.find(([label]) => label === "Silver - tola")?.[1] || "";
   document.querySelector("#goldUpdatedText").textContent = `${localizeToolText("Last updated")}: ${localizeToolPreviewValue(goldUpdatedAt)}`;
   document.querySelector("#goldChartValue").textContent = localizeToolPreviewValue(firstPrice);
+  document.querySelector("#silverChartValue").textContent = localizeToolPreviewValue(silverPrice);
+  drawLineChart(document.querySelector("#goldLineChart"), goldHistory, "#315f9f", "Rs ");
+  drawLineChart(document.querySelector("#silverLineChart"), silverHistory, "#767a86", "Rs ");
+}
+
+function renderMarket() {
+  const container = document.querySelector("#marketRows");
+  clearNode(container);
+  document.querySelector("#marketUpdatedText").textContent = `${localizeToolText("Last updated")}: ${localizeMarketValue(marketUpdatedAt, "Published")}`;
+  marketRows.filter(([label]) => label !== "Published").forEach(([label, value]) => {
+    const card = makeElement("article", "market-card");
+    const title = makeElement("span", "market-name");
+    appendProduceIcon(title, label);
+    title.append(makeElement("strong", "", localizeMarketLabel(label)));
+    card.append(title);
+    card.append(makeElement("p", "", localizeMarketValue(value, label)));
+    container.append(card);
+  });
+}
+
+function renderFuel() {
+  const container = document.querySelector("#fuelRows");
+  clearNode(container);
+  document.querySelector("#fuelUpdatedText").textContent = `${localizeToolText("Last updated")}: ${fuelUpdatedAt}`;
+  fuelRows.filter(([label]) => !["Applies to", "Updated"].includes(label)).forEach(([label, value, area]) => {
+    const card = makeElement("article", "fuel-card");
+    card.append(makeElement("span", "fuel-icon", label === "LP Gas" ? "LPG" : label === "Diesel" ? "DSL" : "MS"));
+    card.append(makeElement("strong", "", localizeToolText(label)));
+    card.append(makeElement("p", "", value));
+    card.append(makeElement("small", "", area || "Kathmandu, Pokhara, Dipayal"));
+    container.append(card);
+  });
+}
+
+function renderHoroscopeOptions() {
+  const select = document.querySelector("#rashiSelect");
+  const current = select.value || "meen";
+  clearNode(select);
+  Object.entries(horoscopeData).forEach(([key, value]) => {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = appLanguage === "ne" ? value[0] : value[1];
+    select.append(option);
+  });
+  select.value = current;
+}
+
+function renderHoroscope() {
+  renderHoroscopeOptions();
+  const key = document.querySelector("#rashiSelect").value || "meen";
+  const data = horoscopeData[key] || horoscopeData.meen;
+  const card = document.querySelector("#horoscopeCard");
+  clearNode(card);
+  card.append(makeElement("p", "eyebrow", appLanguage === "ne" ? data[0] : data[1]));
+  card.append(makeElement("h2", "", appLanguage === "ne" ? `${data[0]} राशि` : `${data[1]} Rashi`));
+  card.append(makeElement("p", "", data[2]));
+  const meta = makeElement("div", "horoscope-meta");
+  [["Focus", data[3]], ["Lucky color", data[4]], ["Lucky number", data[5]]].forEach(([label, value]) => {
+    const item = makeElement("span", "");
+    item.append(makeElement("small", "", localizeToolText(label)));
+    item.append(makeElement("strong", "", value));
+    meta.append(item);
+  });
+  card.append(meta);
+}
+
+function renderMiniList(targetId, rows) {
+  const container = document.querySelector(targetId);
+  clearNode(container);
+  rows.forEach(([title, time, note]) => {
+    const row = makeElement("div", "mini-row");
+    row.append(makeElement("strong", "", title));
+    row.append(makeElement("span", "", time));
+    if (note) row.append(makeElement("small", "", note));
+    container.append(row);
+  });
+}
+
+function renderPanchangDetails() {
+  renderMiniList("#inauspiciousTimes", inauspiciousTimes);
+  renderMiniList("#dailyGuidance", panchangGuidance);
+}
+
+function renderShubhaSait() {
+  const container = document.querySelector("#saitRows");
+  clearNode(container);
+  saitRows.forEach(([category, title, time, note]) => {
+    const card = makeElement("article", "sait-card");
+    card.append(makeElement("span", "eyebrow", category));
+    card.append(makeElement("strong", "", title));
+    card.append(makeElement("p", "", time));
+    card.append(makeElement("small", "", note));
+    container.append(card);
+  });
 }
 
 function renderEvents() {
@@ -1443,9 +1750,7 @@ function openToolModal(tool) {
     const item = document.createElement("div");
     const labelWrap = makeElement("span", "market-name");
     if (tool.market) {
-      const icon = makeElement("span", "produce-icon", produceIcon(label));
-      icon.setAttribute("aria-hidden", "true");
-      labelWrap.append(icon);
+      appendProduceIcon(labelWrap, label);
     }
     labelWrap.append(makeElement("span", "", tool.market ? localizeMarketLabel(label) : localizeToolText(label)));
     item.append(labelWrap);
@@ -1563,6 +1868,11 @@ function renderAll() {
   renderTools();
   renderRates();
   renderGoldSilver();
+  renderMarket();
+  renderFuel();
+  renderHoroscope();
+  renderPanchangDetails();
+  renderShubhaSait();
   renderDateConverterPage();
   runBsToAdConversion();
   runAdToBsConversion();
@@ -1705,6 +2015,17 @@ document.querySelector("#bsYearInput").addEventListener("input", runBsToAdConver
 document.querySelector("#bsMonthInput").addEventListener("change", runBsToAdConversion);
 document.querySelector("#bsDayInput").addEventListener("input", runBsToAdConversion);
 document.querySelector("#adDateInput").addEventListener("input", runAdToBsConversion);
+document.querySelector("#rashiSelect").addEventListener("change", renderHoroscope);
+document.querySelectorAll("[data-refresh-button]").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const original = button.textContent;
+    button.textContent = appLanguage === "ne" ? "रिफ्रेस हुँदै..." : "Refreshing...";
+    button.disabled = true;
+    await forceRefreshDailyData();
+    button.disabled = false;
+    button.textContent = original;
+  });
+});
 
 window.addEventListener("hashchange", () => {
   navigateToSection(getCurrentSectionId(), { instant: true });

@@ -26,8 +26,12 @@
           <a href="#tools" data-section-link="tools" data-i18n="navTools">Tools</a>
           <a href="#rates" data-section-link="rates" data-i18n="navRates">Rates</a>
           <a href="#gold-silver" data-section-link="gold-silver" data-i18n="navGoldSilver">Gold/Silver</a>
+          <a href="#market" data-section-link="market" data-i18n="navMarket">Market</a>
+          <a href="#fuel" data-section-link="fuel" data-i18n="navFuel">Fuel</a>
+          <a href="#horoscope" data-section-link="horoscope" data-i18n="navHoroscope">Horoscope</a>
           <a href="#date-converter" data-section-link="date-converter" data-i18n="navDateConverter">Date Converter</a>
           <a href="#panchang" data-section-link="panchang" data-i18n="navPanchang">Panchang</a>
+          <a href="#shubha-sait" data-section-link="shubha-sait" data-i18n="navShubhaSait">Shubha Sait</a>
         </nav>
 
         <div class="header-controls" aria-label="Display settings">
@@ -77,6 +81,7 @@
                   <span aria-hidden="true">›</span>
                 </button>
               </div>
+              <p class="notice-banner" id="calendarNotice" hidden></p>
 
               <div class="weekday-grid" aria-hidden="true">
                 <span>Sun</span>
@@ -165,6 +170,7 @@
               <h1 data-i18n="forexSnapshot">NRB Forex Snapshot</h1>
             </div>
             <span class="section-badge" id="forexUpdatedBadge">Updated May 8</span>
+            <button class="secondary-button" type="button" data-refresh-button data-i18n="refreshData">Refresh</button>
           </div>
           <div class="table-shell">
             <table class="forex-table" aria-label="NRB forex buy and sell rates">
@@ -189,19 +195,65 @@
               <p class="last-updated" id="goldUpdatedText">Last updated: Thursday, May 07, 2026 - 10:45 AM</p>
             </div>
             <span class="section-badge" data-i18n="nepaliRupees">NPR</span>
+            <button class="secondary-button" type="button" data-refresh-button data-i18n="refreshData">Refresh</button>
           </div>
           <div class="gold-layout">
             <div class="price-table" id="goldSilverRows" aria-label="Gold and silver prices"></div>
-            <section class="price-chart" aria-label="Gold hallmark trend">
+            <section class="price-chart readable-chart" aria-label="Gold hallmark trend">
               <div class="chart-header">
                 <span data-i18n="goldHallmarkTola">Gold Hallmark - Tola</span>
                 <strong id="goldChartValue">Nrs. 298,600.00</strong>
               </div>
-              <div class="sparkline" aria-hidden="true">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              <svg class="line-chart" id="goldLineChart" viewBox="0 0 520 220" role="img" aria-label="Gold hallmark tola historical prices"></svg>
+            </section>
+            <section class="price-chart readable-chart" aria-label="Silver tola trend">
+              <div class="chart-header">
+                <span data-i18n="silverTola">Silver - Tola</span>
+                <strong id="silverChartValue">Nrs. 5,155.00</strong>
               </div>
+              <svg class="line-chart" id="silverLineChart" viewBox="0 0 520 220" role="img" aria-label="Silver tola historical prices"></svg>
             </section>
           </div>
+        </section>
+
+        <section class="page page-panel" id="market" data-page="market" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="marketRates">Kalimati wholesale</p>
+              <h1 data-i18n="vegetableFruitRates">Vegetable and Fruit wholesale rates</h1>
+              <p class="last-updated" id="marketUpdatedText">Last updated: Baisakh 24, 2083</p>
+            </div>
+            <button class="secondary-button" type="button" data-refresh-button data-i18n="refreshData">Refresh</button>
+          </div>
+          <div class="market-page-grid" id="marketRows"></div>
+        </section>
+
+        <section class="page page-panel" id="fuel" data-page="fuel" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="fuelPrices">Nepal Oil Corporation</p>
+              <h1 data-i18n="fuelPricesTitle">Fuel Prices</h1>
+              <p class="last-updated" id="fuelUpdatedText">Last updated: 2026-05-08</p>
+            </div>
+            <button class="secondary-button" type="button" data-refresh-button data-i18n="refreshData">Refresh</button>
+          </div>
+          <div class="fuel-grid" id="fuelRows"></div>
+        </section>
+
+        <section class="page page-panel" id="horoscope" data-page="horoscope" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="monthlyRashifal">Monthly Rashifal</p>
+              <h1 data-i18n="nepaliHoroscope">Nepali Horoscope for the month</h1>
+              <p class="last-updated" id="horoscopeUpdatedText">Source: Hamro Patro monthly rashifal</p>
+            </div>
+            <button class="secondary-button" type="button" data-refresh-button data-i18n="refreshData">Refresh</button>
+          </div>
+          <div class="horoscope-toolbar">
+            <label for="rashiSelect" data-i18n="selectRashi">Select rashi</label>
+            <select id="rashiSelect"></select>
+          </div>
+          <div class="horoscope-card" id="horoscopeCard"></div>
         </section>
 
         <section class="page page-panel" id="date-converter" data-page="date-converter" tabindex="-1">
@@ -260,8 +312,46 @@
                 <dt data-i18n="goodTime">Good time</dt>
                 <dd>11:42 AM - 1:18 PM</dd>
               </div>
+              <div>
+                <dt data-i18n="sunrise">Sunrise</dt>
+                <dd>5:16 AM</dd>
+              </div>
+              <div>
+                <dt data-i18n="sunset">Sunset</dt>
+                <dd>6:45 PM</dd>
+              </div>
+              <div>
+                <dt data-i18n="moonTimes">Moonrise / Moonset</dt>
+                <dd>10:42 PM / 8:58 AM</dd>
+              </div>
+              <div>
+                <dt data-i18n="paksha">Paksha</dt>
+                <dd data-i18n="krishnaPaksha">Krishna Paksha</dd>
+              </div>
             </dl>
           </section>
+          <div class="panchang-extra-grid">
+            <section class="converter-panel">
+              <h2 data-i18n="inauspiciousTimes">Avoid starting new work</h2>
+              <div class="mini-list" id="inauspiciousTimes"></div>
+            </section>
+            <section class="converter-panel">
+              <h2 data-i18n="dailyGuidance">Daily guidance</h2>
+              <div class="mini-list" id="dailyGuidance"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="page page-panel" id="shubha-sait" data-page="shubha-sait" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="shubhaSait">Shubha sait</p>
+              <h1 data-i18n="auspiciousPlanner">Auspicious time planner</h1>
+            </div>
+            <span class="section-badge">Kathmandu</span>
+          </div>
+          <div class="sait-grid" id="saitRows"></div>
+          <p class="notice-banner visible" data-i18n="saitNotice">For marriage, bratabandha, griha prabesh and other sanskar-level decisions, confirm with a family priest or official patro before finalizing.</p>
         </section>
       </main>
     </div>
@@ -345,7 +435,7 @@
       </article>
     </div>
 
-    <script src="data/daily-data.js?v=19"></script>
-    <script src="app.js?v=19"></script>
+    <script src="data/daily-data.js?v=20"></script>
+    <script src="app.js?v=20"></script>
   </body>
 </html>

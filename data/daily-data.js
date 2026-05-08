@@ -15,8 +15,16 @@ window.NEPAL_PATRO_DAILY_DATA = {
   },
   "fuel": {
     "insight": "Rs. 217.0",
+    "updatedAt": "2026-05-02",
+    "rows": [
+      ["Petrol", "NRs 217.0/L", "Kathmandu, Pokhara, Dipayal"],
+      ["Diesel", "NRs 225.0/L", "Kathmandu, Pokhara, Dipayal"],
+      ["LP Gas", "NRs 2160.0/cyl", "Nationwide domestic cylinder"]
+    ],
     "preview": [
       ["Petrol", "NRs 217.0/L"],
+      ["Diesel", "NRs 225.0/L"],
+      ["LP Gas", "NRs 2160.0/cyl"],
       ["Applies to", "Kathmandu, Pokhara, Dipayal"],
       ["Updated", "2026-05-02"]
     ]
@@ -38,5 +46,10 @@ window.NEPAL_PATRO_DAILY_DATA = {
       ["AUD", "Australian Dollar", "1", "109.21", "109.65"],
       ["CAD", "Canadian Dollar", "1", "110.45", "110.89"]
     ]
+  },
+  "horoscope": {
+    "updatedAt": "2083 Baisakh",
+    "source": "Hamro Patro monthly rashifal",
+    "items": {}
   }
 };
