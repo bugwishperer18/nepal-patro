@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
+    <title>Nepal Patro</title>
+    <link rel="stylesheet" href="styles.css?v=19">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#calendar" aria-label="Nepal Patro home" data-section-link="calendar">
+          <span class="app-mark" aria-hidden="true">
+            <span></span>
+          </span>
+          <span>
+            <strong>Nepal Patro</strong>
+            <small>नेपाली पात्रो</small>
+          </span>
+        </a>
+
+        <nav class="nav-pills" aria-label="Primary">
+          <a href="#calendar" data-section-link="calendar" data-i18n="navCalendar">Calendar</a>
+          <a href="#events" data-section-link="events" data-i18n="navEvents">Events</a>
+          <a href="#tools" data-section-link="tools" data-i18n="navTools">Tools</a>
+          <a href="#rates" data-section-link="rates" data-i18n="navRates">Rates</a>
+          <a href="#gold-silver" data-section-link="gold-silver" data-i18n="navGoldSilver">Gold/Silver</a>
+          <a href="#date-converter" data-section-link="date-converter" data-i18n="navDateConverter">Date Converter</a>
+          <a href="#panchang" data-section-link="panchang" data-i18n="navPanchang">Panchang</a>
+        </nav>
+
+        <div class="header-controls" aria-label="Display settings">
+          <div class="segmented-control" aria-label="Website language">
+            <button class="segment active" type="button" data-language="en" aria-pressed="true">EN</button>
+            <button class="segment" type="button" data-language="ne" aria-pressed="false">ने</button>
+          </div>
+          <div class="segmented-control" aria-label="Calendar system">
+            <button class="segment active" type="button" data-calendar-mode="bs" aria-pressed="true">BS</button>
+            <button class="segment" type="button" data-calendar-mode="ad" aria-pressed="false">AD</button>
+          </div>
+          <button class="icon-button" id="todayButton" type="button" aria-label="Jump to today" title="Jump to today">
+            <span aria-hidden="true">⌖</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="app-pages">
+        <section class="page active" id="calendar" data-page="calendar" aria-labelledby="calendarTitle" tabindex="-1">
+          <div class="layout">
+            <section class="main-panel">
+              <div class="hero-strip">
+                <div>
+                  <p class="eyebrow" data-i18n="todayInNepal">Today in Nepal</p>
+                  <h1 id="calendarTitle">२२ वैशाख २०८३</h1>
+                  <p class="hero-copy">Tuesday, May 5, 2026 · जेठ कृष्ण चतुर्थी</p>
+                </div>
+                <div class="weather-card" aria-label="Kathmandu weather summary">
+                  <span class="weather-icon" aria-hidden="true">☼</span>
+                  <div>
+                    <strong>28°C</strong>
+                    <small data-i18n="weatherSummary">Kathmandu · Clear</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="calendar-toolbar">
+                <button class="icon-button" id="prevMonth" type="button" aria-label="Previous month" title="Previous month">
+                  <span aria-hidden="true">‹</span>
+                </button>
+                <div class="month-heading">
+                  <strong id="monthLabel">वैशाख २०८३</strong>
+                  <small id="monthSubLabel">April - May 2026</small>
+                </div>
+                <select class="month-select" id="monthSelect" aria-label="Choose Nepali month"></select>
+                <button class="icon-button" id="nextMonth" type="button" aria-label="Next month" title="Next month">
+                  <span aria-hidden="true">›</span>
+                </button>
+              </div>
+
+              <div class="weekday-grid" aria-hidden="true">
+                <span>Sun</span>
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+              </div>
+
+              <div class="calendar-grid" id="calendarGrid" role="grid" aria-label="Nepali calendar month"></div>
+            </section>
+
+            <aside class="sidebar" aria-label="Tools and widgets">
+              <section class="side-section daily-overview-card">
+                <div class="section-title">
+                  <p class="eyebrow" data-i18n="todayInNepal">Today in Nepal</p>
+                  <h2>Quick view</h2>
+                </div>
+                <div class="insight-grid" aria-label="Daily overview">
+                  <article class="insight-card">
+                    <span data-i18n="nextEvent">Next event</span>
+                    <strong id="nextEventTitle">Kirat Social Reform Day</strong>
+                    <small data-i18n="twoDaysAway">२ days away</small>
+                  </article>
+                  <article class="insight-card">
+                    <span data-i18n="shubhaSait">Shubha sait</span>
+                    <strong>11:42 AM</strong>
+                    <small data-i18n="bestWindow">Best window starts</small>
+                  </article>
+                  <article class="insight-card">
+                    <span data-i18n="gold">Gold</span>
+                    <strong id="goldInsightValue">Nrs. 298,600.00</strong>
+                    <small data-i18n="fineGold">Fine gold per tola</small>
+                  </article>
+                  <article class="insight-card">
+                    <span data-i18n="fuel">Fuel</span>
+                    <strong id="fuelInsightValue">Rs. 217.0</strong>
+                    <small data-i18n="fuelArea">KTM/Pokhara/Dipayal petrol</small>
+                  </article>
+                </div>
+              </section>
+
+              <section class="side-section converter-card">
+                <div class="section-title">
+                  <p class="eyebrow" data-i18n="dateConverter">Date converter</p>
+                  <h2>BS ⇄ AD</h2>
+                </div>
+                <div class="converter-form">
+                  <input id="converterInput" type="number" min="1" max="32" value="22" aria-label="Nepali day">
+                  <button class="primary-button" id="convertButton" type="button" data-i18n="preview">Preview</button>
+                </div>
+                <p class="converter-result" id="converterResult">वैशाख २२, २०८३ ≈ May 5, 2026</p>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="page page-panel" id="events" data-page="events" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="upcoming">Upcoming</p>
+              <h1 data-i18n="nextDates">Next dates</h1>
+            </div>
+            <span class="section-badge" id="eventCountBadge">5</span>
+          </div>
+          <div class="event-list page-list" id="eventList"></div>
+        </section>
+
+        <section class="page page-panel" id="tools" data-page="tools" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="quickTools">Quick tools</p>
+              <h1 data-i18n="dailyUtilities">Daily utilities</h1>
+            </div>
+            <span class="section-badge">7</span>
+          </div>
+          <div class="tool-list page-grid" id="toolList"></div>
+        </section>
+
+        <section class="page page-panel" id="rates" data-page="rates" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="exchangeRates">Nepal exchange rates</p>
+              <h1 data-i18n="forexSnapshot">NRB Forex Snapshot</h1>
+            </div>
+            <span class="section-badge" id="forexUpdatedBadge">Updated May 8</span>
+          </div>
+          <div class="table-shell">
+            <table class="forex-table" aria-label="NRB forex buy and sell rates">
+              <thead>
+                <tr>
+                  <th scope="col" data-i18n="currency">Currency</th>
+                  <th scope="col" data-i18n="unit">Unit</th>
+                  <th scope="col" data-i18n="buy">Buy</th>
+                  <th scope="col" data-i18n="sell">Sell</th>
+                </tr>
+              </thead>
+              <tbody id="exchangeRates"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="page page-panel" id="gold-silver" data-page="gold-silver" tabindex="-1">
+          <div class="page-hero price-page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="dailyBullion">Daily bullion</p>
+              <h1 data-i18n="goldSilverPrice">Gold / Silver Price</h1>
+              <p class="last-updated" id="goldUpdatedText">Last updated: Thursday, May 07, 2026 - 10:45 AM</p>
+            </div>
+            <span class="section-badge" data-i18n="nepaliRupees">NPR</span>
+          </div>
+          <div class="gold-layout">
+            <div class="price-table" id="goldSilverRows" aria-label="Gold and silver prices"></div>
+            <section class="price-chart" aria-label="Gold hallmark trend">
+              <div class="chart-header">
+                <span data-i18n="goldHallmarkTola">Gold Hallmark - Tola</span>
+                <strong id="goldChartValue">Nrs. 298,600.00</strong>
+              </div>
+              <div class="sparkline" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="page page-panel" id="date-converter" data-page="date-converter" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="dateConverter">Date converter</p>
+              <h1 data-i18n="convertDates">BS ⇄ AD Converter</h1>
+            </div>
+            <span class="section-badge" id="converterRange">BS 2000-2090</span>
+          </div>
+          <div class="converter-page-grid">
+            <section class="converter-panel" aria-labelledby="bsToAdTitle">
+              <h2 id="bsToAdTitle" data-i18n="bsToAd">Nepali to English</h2>
+              <div class="date-input-grid">
+                <input id="bsYearInput" type="number" min="2000" max="2090" value="2083" aria-label="BS year">
+                <select id="bsMonthInput" aria-label="BS month"></select>
+                <input id="bsDayInput" type="number" min="1" max="32" value="22" aria-label="BS day">
+              </div>
+              <button class="primary-button" id="convertBsToAd" type="button" data-i18n="convert">Convert</button>
+              <p class="converter-result large" id="bsToAdResult">Baisakh 22, 2083 = May 5, 2026</p>
+            </section>
+            <section class="converter-panel" aria-labelledby="adToBsTitle">
+              <h2 id="adToBsTitle" data-i18n="adToBs">English to Nepali</h2>
+              <div class="date-input-grid">
+                <input id="adDateInput" type="date" value="2026-05-05" aria-label="AD date">
+              </div>
+              <button class="primary-button" id="convertAdToBs" type="button" data-i18n="convert">Convert</button>
+              <p class="converter-result large" id="adToBsResult">May 5, 2026 = Baisakh 22, 2083</p>
+            </section>
+          </div>
+        </section>
+
+        <section class="page page-panel" id="panchang" data-page="panchang" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="panchang">Panchang</p>
+              <h1 data-i18n="todaysSignals">Today's signals</h1>
+            </div>
+            <span class="section-badge">Today</span>
+          </div>
+          <section class="panchang-card">
+            <dl>
+              <div>
+                <dt data-i18n="tithi">Tithi</dt>
+                <dd id="todayTithi">कृष्ण चतुर्थी</dd>
+              </div>
+              <div>
+                <dt data-i18n="nakshatra">Nakshatra</dt>
+                <dd id="todayNakshatra">अनुराधा</dd>
+              </div>
+              <div>
+                <dt data-i18n="yoga">Yoga</dt>
+                <dd id="todayYoga">परिधि</dd>
+              </div>
+              <div>
+                <dt data-i18n="goodTime">Good time</dt>
+                <dd>11:42 AM - 1:18 PM</dd>
+              </div>
+            </dl>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="toolBackdrop" hidden>
+      <article class="tool-modal" role="dialog" aria-modal="true" aria-labelledby="toolTitle">
+        <button class="icon-button close-button" id="closeToolModal" type="button" aria-label="Close tool details" title="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <p class="eyebrow" data-i18n="toolPreview">Tool preview</p>
+        <h2 id="toolTitle">Nepali Panchang</h2>
+        <p id="toolDescription">Tithi, nakshatra, yoga and karana.</p>
+        <div class="tool-preview-grid" id="toolPreviewGrid"></div>
+      </article>
+    </div>
+
+    <div class="modal-backdrop" id="modalBackdrop" hidden>
+      <article class="day-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="icon-button close-button" id="closeModal" type="button" aria-label="Close day details" title="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <div class="modal-date">
+          <span id="modalNepaliDay">२२</span>
+          <div>
+            <p class="eyebrow" id="modalMonth">वैशाख २०८३</p>
+            <h2 id="modalTitle">मंगलचौथी व्रत</h2>
+            <p id="modalEnglishDate">Tuesday, May 5, 2026</p>
+          </div>
+        </div>
+        <div class="modal-tabs" aria-label="Day details">
+          <button class="tab active" type="button" data-tab="overview" data-i18n="overview">Overview</button>
+          <button class="tab" type="button" data-tab="panchang" data-i18n="panchang">Panchang</button>
+          <button class="tab" type="button" data-tab="notes" data-i18n="notes">Notes</button>
+        </div>
+        <div class="tab-panel active" data-panel="overview">
+          <div class="detail-grid">
+            <div>
+              <span data-i18n="festival">Festival</span>
+              <strong id="modalFestival">मंगलचौथी व्रत</strong>
+            </div>
+            <div>
+              <span data-i18n="rashi">Rashi</span>
+              <strong id="modalRashi">मेष</strong>
+            </div>
+            <div>
+              <span data-i18n="luckyColor">Lucky color</span>
+              <strong id="modalColor">Crimson</strong>
+            </div>
+            <div>
+              <span data-i18n="marketNote">Market note</span>
+              <strong id="modalMarket">Gold steady</strong>
+            </div>
+          </div>
+          <p class="day-note" id="modalNote"></p>
+        </div>
+        <div class="tab-panel" data-panel="panchang">
+          <dl class="modal-dl">
+            <div>
+              <dt data-i18n="tithi">Tithi</dt>
+              <dd id="modalTithi">कृष्ण चतुर्थी</dd>
+            </div>
+            <div>
+              <dt data-i18n="nakshatra">Nakshatra</dt>
+              <dd id="modalNakshatra">अनुराधा</dd>
+            </div>
+            <div>
+              <dt data-i18n="yoga">Yoga</dt>
+              <dd id="modalYoga">परिधि</dd>
+            </div>
+            <div>
+              <dt data-i18n="karana">Karana</dt>
+              <dd id="modalKarana">वणिज</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="tab-panel" data-panel="notes">
+          <label class="note-label" for="personalNote" data-i18n="personalNote">Personal note</label>
+          <textarea id="personalNote" rows="4" placeholder="Add a reminder for this day" data-i18n-placeholder="notePlaceholder"></textarea>
+          <button class="primary-button" id="saveNote" type="button">Save note</button>
+        </div>
+      </article>
+    </div>
+
+    <script src="data/daily-data.js?v=19"></script>
+    <script src="app.js?v=19"></script>
+  </body>
+</html>

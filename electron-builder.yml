@@ -1,0 +1,20 @@
+appId: com.bugwhisperer.nepalpatro
+productName: Nepal Patro
+copyright: Copyright © 2026 BugWhisperer
+files:
+  - index.html
+  - app.js
+  - styles.css
+  - data/**
+  - electron/**
+mac:
+  category: public.app-category.productivity
+  target:
+    - target: dmg
+      arch:
+        - arm64
+        - x64
+  hardenedRuntime: false
+dmg:
+  sign: false
+  artifactName: Nepal-Patro-${version}-${arch}.${ext}

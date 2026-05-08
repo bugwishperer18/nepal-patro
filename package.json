@@ -1,0 +1,23 @@
+{
+  "name": "nepal-patro",
+  "version": "1.0.0",
+  "description": "A modern Nepali calendar, rates, panchang, and date converter app.",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "serve": "python3 -m http.server 5173",
+    "electron": "electron .",
+    "dist:mac": "electron-builder --mac dmg",
+    "check:js": "node --check app.js && node --check api/daily-data.js && node --check electron/main.cjs"
+  },
+  "keywords": [
+    "nepali-calendar",
+    "patro",
+    "electron"
+  ],
+  "author": "BugWhisperer",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^42.0.0",
+    "electron-builder": "^26.0.12"
+  }
+}
