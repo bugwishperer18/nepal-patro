@@ -626,6 +626,7 @@ let activeRashi = "meen";
 let marketSearchQuery = "";
 let appLanguage = ["en", "ne"].includes(storedLanguage) ? storedLanguage : "en";
 let calendarMode = ["bs", "ad"].includes(storedCalendarMode) ? storedCalendarMode : "bs";
+let sidebarConverterMode = "bs";
 
 const calendarGrid = document.querySelector("#calendarGrid");
 const monthLabel = document.querySelector("#monthLabel");
@@ -696,6 +697,9 @@ const translations = {
     fuelArea: "KTM/Pokhara/Dipayal petrol",
     dateConverter: "Date converter",
     preview: "Preview",
+    nepaliDate: "Nepali date",
+    englishDate: "English date",
+    openFullConverter: "Open full converter",
     upcoming: "Upcoming",
     nextDates: "Next dates",
     exchangeRates: "Nepal exchange rates",
@@ -801,6 +805,9 @@ const translations = {
     fuelArea: "काठमाडौं/पोखरा/दिपायल पेट्रोल",
     dateConverter: "मिति परिवर्तन",
     preview: "हेर्नुहोस्",
+    nepaliDate: "नेपाली मिति",
+    englishDate: "अंग्रेजी मिति",
+    openFullConverter: "पूरा मिति परिवर्तक खोल्नुहोस्",
     upcoming: "आउँदै",
     nextDates: "आउँदा दिनहरु",
     exchangeRates: "नेपाल विनिमय दर",
@@ -2153,8 +2160,22 @@ function renderBsMonthOptions() {
   select.value = currentValue;
 }
 
+function renderSidebarBsMonthOptions() {
+  const select = document.querySelector("#sidebarBsMonthInput");
+  const currentValue = select.value || String(getCurrentCalendarDay().monthIndex + 1);
+  clearNode(select);
+  bsMonthNames.forEach((name, index) => {
+    const option = document.createElement("option");
+    option.value = String(index + 1);
+    option.textContent = localizeMonthName(name);
+    select.append(option);
+  });
+  select.value = currentValue;
+}
+
 function renderDateConverterPage() {
   renderBsMonthOptions();
+  renderSidebarBsMonthOptions();
   document.querySelector("#converterRange").textContent = appLanguage === "ne"
     ? `वि.सं. ${toNepaliNumber(converterStartYear)}-${toNepaliNumber(converterEndYear)}`
     : `BS ${converterStartYear}-${converterEndYear}`;
@@ -2176,6 +2197,53 @@ function runAdToBsConversion() {
   const date = input.value ? new Date(`${input.value}T00:00:00`) : new Date();
   const converted = convertAdToBs(date);
   document.querySelector("#adToBsResult").textContent = `${formatFullAdDate(date)} = ${formatConverterBsDate(converted.year, converted.month, converted.day)}`;
+}
+
+function syncSidebarConverterDefaults() {
+  const current = getCurrentCalendarDay();
+  const month = months[current.monthIndex];
+  const adDate = formatEnglishDate(month, current.day);
+  const yearInput = document.querySelector("#sidebarBsYearInput");
+  const monthInput = document.querySelector("#sidebarBsMonthInput");
+  const dayInput = document.querySelector("#sidebarBsDayInput");
+  const adInput = document.querySelector("#sidebarAdDateInput");
+
+  if (!yearInput.value) yearInput.value = String(month.year);
+  if (!monthInput.value) monthInput.value = String(current.monthIndex + 1);
+  if (!dayInput.value) dayInput.value = String(current.day);
+  if (!adInput.value) adInput.value = formatDateKey(adDate);
+}
+
+function runSidebarConversion() {
+  syncSidebarConverterDefaults();
+  const bsInputs = document.querySelector("#sidebarBsInputs");
+  const adInputs = document.querySelector("#sidebarAdInputs");
+  const tabs = document.querySelectorAll("[data-sidebar-converter-mode]");
+  bsInputs.hidden = sidebarConverterMode !== "bs";
+  adInputs.hidden = sidebarConverterMode !== "ad";
+  tabs.forEach((button) => {
+    const isActive = button.dataset.sidebarConverterMode === sidebarConverterMode;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+
+  if (sidebarConverterMode === "ad") {
+    const adInput = document.querySelector("#sidebarAdDateInput");
+    const date = adInput.value ? new Date(`${adInput.value}T00:00:00`) : new Date();
+    const converted = convertAdToBs(date);
+    adInput.value = formatDateKey(date);
+    document.querySelector("#converterResult").textContent = `${formatFullAdDate(date)} = ${formatConverterBsDate(converted.year, converted.month, converted.day)}`;
+    return;
+  }
+
+  const yearInput = document.querySelector("#sidebarBsYearInput");
+  const monthInput = document.querySelector("#sidebarBsMonthInput");
+  const dayInput = document.querySelector("#sidebarBsDayInput");
+  const converted = convertBsToAd(Number(yearInput.value), Number(monthInput.value), Number(dayInput.value));
+  yearInput.value = String(converted.year);
+  monthInput.value = String(converted.month);
+  dayInput.value = String(converted.day);
+  document.querySelector("#converterResult").textContent = `${formatConverterBsDate(converted.year, converted.month, converted.day)} = ${formatFullAdDate(converted.date)}`;
 }
 
 function openToolModal(tool) {
@@ -2257,15 +2325,8 @@ function renderHero() {
 }
 
 function renderConverter() {
-  const month = months[activeMonthIndex];
-  const rawDay = Number(document.querySelector("#converterInput").value);
-  const day = Math.max(1, Math.min(month.days, rawDay || 22));
-  const date = formatEnglishDate(month, day);
-  const bsDate = formatBsDate(month, day);
-  const adDate = date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-  document.querySelector("#converterResult").textContent = calendarMode === "ad"
-    ? `${adDate} ≈ ${bsDate}`
-    : `${bsDate} ≈ ${adDate}`;
+  renderSidebarBsMonthOptions();
+  runSidebarConversion();
 }
 
 function updateLanguage() {
@@ -2447,11 +2508,7 @@ document.querySelector("#saveNote").addEventListener("click", () => {
 });
 
 document.querySelector("#convertButton").addEventListener("click", () => {
-  const month = months[activeMonthIndex];
-  const rawDay = Number(document.querySelector("#converterInput").value);
-  const day = Math.max(1, Math.min(month.days, rawDay || 1));
-  document.querySelector("#converterInput").value = String(day);
-  renderConverter();
+  runSidebarConversion();
 });
 
 document.querySelector("#convertBsToAd").addEventListener("click", runBsToAdConversion);
@@ -2460,6 +2517,16 @@ document.querySelector("#bsYearInput").addEventListener("input", runBsToAdConver
 document.querySelector("#bsMonthInput").addEventListener("change", runBsToAdConversion);
 document.querySelector("#bsDayInput").addEventListener("input", runBsToAdConversion);
 document.querySelector("#adDateInput").addEventListener("input", runAdToBsConversion);
+document.querySelectorAll("[data-sidebar-converter-mode]").forEach((button) => {
+  button.addEventListener("click", () => {
+    sidebarConverterMode = button.dataset.sidebarConverterMode;
+    runSidebarConversion();
+  });
+});
+document.querySelector("#sidebarBsYearInput").addEventListener("input", runSidebarConversion);
+document.querySelector("#sidebarBsMonthInput").addEventListener("change", runSidebarConversion);
+document.querySelector("#sidebarBsDayInput").addEventListener("input", runSidebarConversion);
+document.querySelector("#sidebarAdDateInput").addEventListener("input", runSidebarConversion);
 document.querySelector("#backToHoroscope").addEventListener("click", () => navigateToSection("horoscope"));
 document.querySelector("#marketSearch").addEventListener("input", (event) => {
   marketSearchQuery = event.target.value;

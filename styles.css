@@ -766,10 +766,61 @@ textarea:focus {
   display: block;
 }
 
-.converter-form {
+.mini-converter-tabs {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  margin: 12px 0;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.mini-converter-tabs button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--ink-soft);
+  background: transparent;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 760;
+  cursor: pointer;
+}
+
+.mini-converter-tabs button.active {
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(20, 24, 38, 0.08);
+}
+
+.sidebar-date-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.15fr 0.7fr;
+  gap: 8px;
+}
+
+.sidebar-date-grid.single {
+  grid-template-columns: 1fr;
+}
+
+.sidebar-date-grid[hidden],
+.sidebar-date-grid.single[hidden] {
+  display: none;
+}
+
+.sidebar-date-grid input,
+.sidebar-date-grid select {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  border-radius: 13px;
+}
+
+.converter-wide-button {
+  width: 100%;
+  margin-top: 10px;
 }
 
 .converter-result {
@@ -781,6 +832,15 @@ textarea:focus {
   background: rgba(118, 118, 128, 0.08);
   font-family: var(--font-nepali);
   font-weight: 600;
+}
+
+.converter-card .text-link {
+  display: inline-flex;
+  margin-top: 10px;
+  color: var(--blue);
+  font-size: 0.86rem;
+  font-weight: 760;
+  text-decoration: none;
 }
 
 .saved-notes-list,
