@@ -10,6 +10,7 @@ A modern Nepali calendar, panchang, forex, bullion, market-rate, and date-conver
 - NRB-focused forex rates with buy and sell prices for USD, CNY, EUR, GBP, JPY, AUD, and CAD.
 - Gold and silver price page with last updated date and clean table layout.
 - BS to AD and AD to BS date converter.
+- Clear confidence notes for advisory panchang, shubha sait, horoscope, and supported converter range.
 - Daily data refresh through a Vercel serverless endpoint with local cache fallback.
 - Optional Electron desktop shell for macOS.
 
@@ -44,3 +45,7 @@ Deploy this repo to Vercel. The static app is served from the project root and t
 ## Developer
 
 Built and maintained by BugWhisperer.
+
+## Data Confidence
+
+Forex uses NRB as the preferred source. Gold/silver, fuel, and Kalimati market data are fetched from named public pages and cached daily. Panchang, shubha sait, and horoscope guidance are advisory unless connected to an official patro/ephemeris source. The BS/AD converter is limited to the bundled calendar range until a verified multi-year BS date table is added.

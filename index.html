@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nepal-patro.vercel.app https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
     <title>Nepal Patro</title>
-    <link rel="stylesheet" href="styles.css?v=23">
+    <link rel="stylesheet" href="styles.css?v=24">
   </head>
   <body>
     <div class="app-shell">
@@ -59,11 +59,11 @@
                   <h1 id="calendarTitle">२२ वैशाख २०८३</h1>
                   <p class="hero-copy">Tuesday, May 5, 2026 · जेठ कृष्ण चतुर्थी</p>
                 </div>
-                <div class="weather-card" aria-label="Kathmandu weather summary">
-                  <span class="weather-icon" aria-hidden="true">☼</span>
+                <div class="weather-card" aria-label="Nepal Standard Time">
+                  <span class="weather-icon" aria-hidden="true">⌚</span>
                   <div>
-                    <strong>28°C</strong>
-                    <small data-i18n="weatherSummary">Kathmandu · Clear</small>
+                    <strong id="nepalClock">--:--</strong>
+                    <small data-i18n="nepalTime">Nepal Standard Time</small>
                   </div>
                 </div>
               </div>
@@ -268,9 +268,9 @@
             <div>
               <p class="eyebrow" data-i18n="monthlyRashifal">Monthly Rashifal</p>
               <h1 data-i18n="nepaliHoroscope">Nepali Horoscope for the month</h1>
-              <p class="last-updated" id="horoscopeUpdatedText">Source: Hamro Patro monthly rashifal</p>
+              <p class="last-updated" id="horoscopeUpdatedText" data-i18n="horoscopeNotice">Advisory Vedic guide. Verify personal decisions with a qualified astrologer.</p>
             </div>
-            <button class="secondary-button" type="button" data-refresh-button data-i18n="refreshData">Refresh</button>
+            <span class="section-badge" data-i18n="advisory">Advisory</span>
           </div>
           <div class="horoscope-grid" id="horoscopeGrid"></div>
         </section>
@@ -293,13 +293,14 @@
               <p class="eyebrow" data-i18n="dateConverter">Date converter</p>
               <h1 data-i18n="convertDates">BS ⇄ AD Converter</h1>
             </div>
-            <span class="section-badge" id="converterRange">BS 2000-2090</span>
+            <span class="section-badge" id="converterRange">BS 2083-2084</span>
           </div>
+          <p class="notice-banner visible" data-i18n="converterNotice">Converter is verified only for the bundled calendar range. More years should be added from an official BS date table before relying on older or future dates.</p>
           <div class="converter-page-grid">
             <section class="converter-panel" aria-labelledby="bsToAdTitle">
               <h2 id="bsToAdTitle" data-i18n="bsToAd">Nepali to English</h2>
               <div class="date-input-grid">
-                <input id="bsYearInput" type="number" min="2000" max="2090" value="2083" aria-label="BS year">
+                <input id="bsYearInput" type="number" min="2083" max="2084" value="2083" aria-label="BS year">
                 <select id="bsMonthInput" aria-label="BS month"></select>
                 <input id="bsDayInput" type="number" min="1" max="32" value="22" aria-label="BS day">
               </div>
@@ -323,8 +324,9 @@
               <p class="eyebrow" data-i18n="panchang">Panchang</p>
               <h1 data-i18n="todaysSignals">Today's signals</h1>
             </div>
-            <span class="section-badge">Today</span>
+            <span class="section-badge" data-i18n="advisory">Advisory</span>
           </div>
+          <p class="notice-banner visible" data-i18n="panchangNotice">Indicative daily panchang values are shown for planning context. Use an official patro or priest for muhurat, samskar, fasting, and religious decisions.</p>
           <section class="panchang-card">
             <dl>
               <div>
@@ -466,7 +468,7 @@
       </article>
     </div>
 
-    <script src="data/daily-data.js?v=21"></script>
-    <script src="app.js?v=23"></script>
+    <script src="data/daily-data.js?v=24"></script>
+    <script src="app.js?v=25"></script>
   </body>
 </html>

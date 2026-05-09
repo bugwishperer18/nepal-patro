@@ -225,6 +225,15 @@ function getNepalDateKey(date = new Date()) {
   return `${lookup.year}-${lookup.month}-${lookup.day}`;
 }
 
+function formatNepalTime(date = new Date()) {
+  return new Intl.DateTimeFormat(appLanguage === "ne" ? "ne-NP" : "en-US", {
+    timeZone: "Asia/Kathmandu",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true
+  }).format(date);
+}
+
 function buildMonths(seed) {
   let start = new Date(`${seed[0].englishStart}T00:00:00`);
   return seed.map((month) => {
@@ -595,8 +604,8 @@ const karanas = ["वणिज", "विष्टि", "बव", "बालव",
 const rashis = ["मेष", "वृष", "मिथुन", "कर्कट", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुम्भ", "मीन"];
 const colors = ["Crimson", "Sapphire", "White", "Ruby", "Indigo", "Pearl"];
 const bsMonthNames = ["वैशाख", "जेठ", "असार", "साउन", "भदौ", "आश्विन", "कार्तिक", "मंसिर", "पुष", "माघ", "फागुन", "चैत"];
-const converterStartYear = 2000;
-const converterEndYear = 2090;
+const converterStartYear = 2083;
+const converterEndYear = 2084;
 const converterAnchor = {
   bsYear: 2083,
   bsMonth: 1,
@@ -631,9 +640,9 @@ const appSections = document.querySelectorAll(".page");
 const languageButtons = document.querySelectorAll("[data-language]");
 const calendarModeButtons = document.querySelectorAll("[data-calendar-mode]");
 const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "market", "fuel", "horoscope", "horoscope-detail", "date-converter", "panchang", "shubha-sait"];
-const dailyDataKey = "nepalPatro:dailyDataCheckedAt";
-const dailyDataVersionKey = "nepalPatro:dailyDataVersion";
-const dailyDataCacheKey = "nepalPatro:dailyDataCache";
+const dailyDataKey = "nepalPatro:dailyDataCheckedAt:v2";
+const dailyDataVersionKey = "nepalPatro:dailyDataVersion:v2";
+const dailyDataCacheKey = "nepalPatro:dailyDataCache:v2";
 const dataSourceStatusKey = "nepalPatro:dailyDataSource";
 let dailyDataSnapshot = window.NEPAL_PATRO_DAILY_DATA || null;
 let goldSilverRows = window.NEPAL_PATRO_DAILY_DATA?.gold?.preview || tools[1].preview;
@@ -655,7 +664,7 @@ const translations = {
     navShubhaSait: "Shubha Sait",
     allRashi: "All rashi",
     todayInNepal: "Today in Nepal",
-    weatherSummary: "Kathmandu · Clear",
+    nepalTime: "Nepal Standard Time",
     nextEvent: "Next event",
     quickView: "Quick view",
     bsAdShort: "BS ⇄ AD",
@@ -669,6 +678,10 @@ const translations = {
     freshToday: "Fresh today",
     cachedToday: "Cached today",
     fallbackData: "Fallback data",
+    advisory: "Advisory",
+    panchangNotice: "Indicative daily panchang values are shown for planning context. Use an official patro or priest for muhurat, samskar, fasting, and religious decisions.",
+    horoscopeNotice: "Advisory Vedic guide. Verify personal decisions with a qualified astrologer.",
+    converterNotice: "Converter is verified only for the bundled calendar range. More years should be added from an official BS date table before relying on older or future dates.",
     exportCalendar: "Export calendar",
     exported: "Exported",
     searchMarket: "Search market rates",
@@ -756,7 +769,7 @@ const translations = {
     navShubhaSait: "शुभ साइत",
     allRashi: "सबै राशि",
     todayInNepal: "आज नेपालमा",
-    weatherSummary: "काठमाडौं · सफा",
+    nepalTime: "नेपाल मानक समय",
     nextEvent: "आउँदो दिन",
     quickView: "छिटो दृश्य",
     bsAdShort: "वि.सं. ⇄ ई.सं.",
@@ -770,6 +783,10 @@ const translations = {
     freshToday: "आजको ताजा",
     cachedToday: "आजको क्यास",
     fallbackData: "बैकल्पिक डाटा",
+    advisory: "सल्लाह",
+    panchangNotice: "दैनिक पञ्चाङ्ग संकेत योजना सन्दर्भका लागि मात्र हो। मुहूर्त, संस्कार, व्रत र धार्मिक निर्णयका लागि आधिकारिक पात्रो वा पुरोहितसँग पुष्टि गर्नुहोस्।",
+    horoscopeNotice: "यो वैदिक ज्योतिष मार्गदर्शन सल्लाह मात्र हो। व्यक्तिगत निर्णयका लागि योग्य ज्योतिषीसँग पुष्टि गर्नुहोस्।",
+    converterNotice: "मिति परिवर्तन हाल समावेश गरिएको पात्रो दायराका लागि मात्र प्रमाणित छ। पुराना वा भविष्यका मितिमा भर पर्नुअघि आधिकारिक वि.सं. मिति तालिका थप्नुपर्छ।",
     exportCalendar: "क्यालेन्डर एक्सपोर्ट",
     exported: "एक्सपोर्ट भयो",
     searchMarket: "बजार दर खोज्नुहोस्",
@@ -1190,11 +1207,27 @@ function toEnglishNumber(value) {
   return String(value).replace(/[०-९]/g, (digit) => String(nepaliDigits.indexOf(digit)));
 }
 
+function localizeNepaliDateText(value) {
+  return toEnglishNumber(value).replace(/वैशाख|बैशाख/g, "Baisakh")
+    .replace(/जेठ/g, "Jestha")
+    .replace(/असार/g, "Asar")
+    .replace(/साउन/g, "Shrawan")
+    .replace(/भदौ/g, "Bhadra")
+    .replace(/आश्विन/g, "Ashwin")
+    .replace(/कार्तिक/g, "Kartik")
+    .replace(/मंसिर/g, "Mangsir")
+    .replace(/पुष/g, "Poush")
+    .replace(/माघ/g, "Magh")
+    .replace(/फागुन/g, "Falgun")
+    .replace(/चैत/g, "Chaitra");
+}
+
 function localizeMarketLabel(label) {
   if (appLanguage === "ne") {
     return label;
   }
-  return marketLabelTranslations[label] || label;
+  const normalized = String(label).replace(/\s*\(/g, " (").trim();
+  return marketLabelTranslations[normalized] || marketLabelTranslations[label] || label;
 }
 
 function localizeMarketSignal(value) {
@@ -1206,10 +1239,12 @@ function localizeMarketValue(value, label) {
     return value;
   }
   if (label === "Published") {
-    return "Baisakh 24, 2083";
+    return localizeNepaliDateText(value);
   }
   return toEnglishNumber(value)
     .replaceAll("के.जी.", "kg")
+    .replaceAll("केजी", "kg")
+    .replaceAll("के जी", "kg")
     .replaceAll("दर्जन", "dozen")
     .replaceAll("प्रति गोटा", "each")
     .replaceAll("रू", "Rs")
@@ -1954,6 +1989,10 @@ function renderDailyOverview() {
   document.querySelector("#nextEventTitle").nextElementSibling.textContent = formatCountdown(getDaysUntil(nextEvent.date));
 }
 
+function renderNepalClock() {
+  document.querySelector("#nepalClock").textContent = formatNepalTime();
+}
+
 function renderSavedNotes() {
   const container = document.querySelector("#savedNotesList");
   clearNode(container);
@@ -2271,6 +2310,7 @@ function renderAll() {
   renderMarket();
   renderFuel();
   renderDailyOverview();
+  renderNepalClock();
   renderSavedNotes();
   renderFreshness();
   renderHoroscope();
@@ -2459,3 +2499,4 @@ window.addEventListener("load", () => {
 activeMonthIndex = getCurrentCalendarDay().monthIndex;
 renderAll();
 refreshDailyDataOncePerDay();
+setInterval(renderNepalClock, 60 * 1000);

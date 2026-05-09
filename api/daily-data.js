@@ -185,16 +185,29 @@ async function buildDailyData() {
 }
 
 module.exports = async function handler(request, response) {
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS");
+  response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (request?.method === "OPTIONS") {
+    response.status(204).end();
+    return;
+  }
+
+  if (request?.method && !["GET", "HEAD"].includes(request.method)) {
+    response.setHeader("Allow", "GET, HEAD, OPTIONS");
+    response.status(405).json({ error: "Method not allowed" });
+    return;
+  }
+
   const isManualRefresh = Boolean(request?.query?.refresh)
     || new URL(request?.url || "/", "https://nepal-patro.vercel.app").searchParams.has("refresh");
   try {
     const data = await buildDailyData();
-    response.setHeader("Access-Control-Allow-Origin", "*");
     response.setHeader("Cache-Control", isManualRefresh ? "no-store" : "public, s-maxage=86400, stale-while-revalidate=43200");
     response.setHeader("Content-Type", "application/json; charset=utf-8");
     response.status(200).json(data);
   } catch {
-    response.setHeader("Access-Control-Allow-Origin", "*");
     response.setHeader("Cache-Control", isManualRefresh ? "no-store" : "public, s-maxage=3600");
     response.status(200).json({
       ...fallback,
