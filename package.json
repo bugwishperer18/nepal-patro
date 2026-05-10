@@ -7,7 +7,9 @@
     "serve": "python3 -m http.server 5173",
     "electron": "electron .",
     "dist:mac": "electron-builder --mac dmg",
-    "check:js": "node --check app.js && node --check api/daily-data.js && node --check electron/main.cjs"
+    "check:js": "node --check app.js && node --check api/daily-data.js && node --check electron/main.cjs && node --check scripts/validate-data.cjs",
+    "check:data": "node scripts/validate-data.cjs",
+    "check:all": "npm run check:js && npm run check:data"
   },
   "keywords": [
     "nepali-calendar",

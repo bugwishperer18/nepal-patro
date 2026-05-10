@@ -499,5 +499,43 @@
     "updatedAt": "2083 Baisakh",
     "source": "Hamro Patro monthly rashifal",
     "items": {}
+  },
+  "sourceHealth": {
+    "forex": {
+      "source": "NRB forex",
+      "status": "fallback",
+      "checkedAt": "2026-05-09",
+      "reason": "Bundled offline snapshot"
+    },
+    "gold": {
+      "source": "Hamro Patro gold",
+      "status": "fallback",
+      "checkedAt": "2026-05-09",
+      "reason": "Bundled offline snapshot"
+    },
+    "fuel": {
+      "source": "NOC fuel",
+      "status": "fallback",
+      "checkedAt": "2026-05-09",
+      "reason": "Bundled offline snapshot"
+    },
+    "market": {
+      "source": "Kalimati market",
+      "status": "fallback",
+      "checkedAt": "2026-05-09",
+      "reason": "Bundled offline snapshot"
+    },
+    "panchang": {
+      "source": "Patro/ephemeris",
+      "status": "fallback",
+      "checkedAt": "2026-05-09",
+      "reason": "Official ephemeris integration not configured"
+    },
+    "horoscope": {
+      "source": "Rashifal provider",
+      "status": "fallback",
+      "checkedAt": "2026-05-09",
+      "reason": "Licensed monthly rashifal source not configured"
+    }
   }
 }

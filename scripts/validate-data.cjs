@@ -1,0 +1,55 @@
+const fs = require("node:fs");
+const path = require("node:path");
+const dailyData = require("../data/daily-data.json");
+const dailyApi = require("../api/daily-data.js");
+
+const root = path.resolve(__dirname, "..");
+const requiredCurrencies = ["USD", "CNY", "EUR", "GBP", "JPY", "AUD", "CAD"];
+
+function fail(message) {
+  throw new Error(message);
+}
+
+function assert(condition, message) {
+  if (!condition) {
+    fail(message);
+  }
+}
+
+function read(relativePath) {
+  return fs.readFileSync(path.join(root, relativePath), "utf8");
+}
+
+function validateDailyData() {
+  assert(dailyData.updatedAt, "daily data needs updatedAt");
+  assert(dailyData.forex?.rates?.length === requiredCurrencies.length, "forex must include the expected currency count");
+  assert(JSON.stringify(dailyData.forex.rates.map(([code]) => code)) === JSON.stringify(requiredCurrencies), "forex ordering changed");
+  assert(dailyApi._internal.validateForex(dailyData.forex), "forex data failed validation");
+  assert(dailyApi._internal.validateGold(dailyData.gold), "gold data failed validation");
+  assert(dailyApi._internal.validateFuel(dailyData.fuel), "fuel data failed validation");
+  assert(dailyApi._internal.validateMarket(dailyData.market), "market data failed validation");
+  assert(dailyData.sourceHealth, "sourceHealth is required for honest data confidence");
+}
+
+function validateSecuritySurface() {
+  const app = read("app.js");
+  const html = read("index.html");
+  const electron = read("electron/main.cjs");
+  assert(!/\.innerHTML\s*=|insertAdjacentHTML|document\.write|eval\s*\(|new Function\s*\(/.test(app), "unsafe HTML/eval sink found in app.js");
+  assert(/Content-Security-Policy/.test(html), "index.html needs a CSP");
+  assert(/contextIsolation:\s*true/.test(electron), "Electron contextIsolation must stay enabled");
+  assert(/nodeIntegration:\s*false/.test(electron), "Electron nodeIntegration must stay disabled");
+  assert(/sandbox:\s*true/.test(electron), "Electron sandbox must stay enabled");
+}
+
+function validateConverterClaims() {
+  const app = read("app.js");
+  assert(/Verified: BS 2083 - Baisakh 2084/.test(app), "converter range copy must disclose exact verified range");
+  assert(!/BS 2000-2090|2000-2090/.test(app + read("index.html")), "overbroad converter range claim found");
+  assert(!/const variant = base\.slice/.test(app), "converter must not use generated BS month patterns");
+}
+
+validateDailyData();
+validateSecuritySurface();
+validateConverterClaims();
+console.log("World-class guardrails passed");

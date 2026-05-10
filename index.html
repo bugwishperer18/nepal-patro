@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nepal-patro.vercel.app https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
     <title>Nepal Patro</title>
-    <link rel="stylesheet" href="styles.css?v=25">
+    <link rel="stylesheet" href="styles.css?v=26">
   </head>
   <body>
     <div class="app-shell">
@@ -158,7 +158,7 @@
                   <input id="sidebarBsDayInput" type="number" min="1" max="32" value="26" aria-label="BS day">
                 </div>
                 <div class="sidebar-date-grid single" id="sidebarAdInputs" hidden>
-                  <input id="sidebarAdDateInput" type="date" value="2026-05-09" aria-label="AD date">
+                  <input id="sidebarAdDateInput" type="date" min="2026-04-14" max="2027-05-14" value="2026-05-09" aria-label="AD date">
                 </div>
                 <button class="primary-button converter-wide-button" id="convertButton" type="button" data-i18n="preview">Preview</button>
                 <p class="converter-result" id="converterResult">वैशाख २२, २०८३ ≈ May 5, 2026</p>
@@ -303,7 +303,7 @@
               <p class="eyebrow" data-i18n="dateConverter">Date converter</p>
               <h1 data-i18n="convertDates">BS ⇄ AD Converter</h1>
             </div>
-            <span class="section-badge" id="converterRange">BS 2083-2084</span>
+            <span class="section-badge" id="converterRange">Verified: BS 2083 - Baisakh 2084</span>
           </div>
           <p class="notice-banner visible" data-i18n="converterNotice">Converter is verified only for the bundled calendar range. More years should be added from an official BS date table before relying on older or future dates.</p>
           <div class="converter-page-grid">
@@ -320,10 +320,78 @@
             <section class="converter-panel" aria-labelledby="adToBsTitle">
               <h2 id="adToBsTitle" data-i18n="adToBs">English to Nepali</h2>
               <div class="date-input-grid">
-                <input id="adDateInput" type="date" value="2026-05-05" aria-label="AD date">
+                <input id="adDateInput" type="date" min="2026-04-14" max="2027-05-14" value="2026-05-05" aria-label="AD date">
               </div>
               <button class="primary-button" id="convertAdToBs" type="button" data-i18n="convert">Convert</button>
               <p class="converter-result large" id="adToBsResult">May 5, 2026 = Baisakh 22, 2083</p>
+            </section>
+          </div>
+        </section>
+
+        <section class="page page-panel" id="land-converter" data-page="land-converter" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="landTools">Land tools</p>
+              <h1 data-i18n="landConverterTitle">Nepali Land Metrics Converter</h1>
+            </div>
+            <span class="section-badge" data-i18n="landStandard">Nepal land units</span>
+          </div>
+          <p class="notice-banner visible" data-i18n="landConverterNotice">Use this for everyday land-area conversion. Verify legal documents with the official survey map or land-revenue office.</p>
+          <div class="land-converter-grid">
+            <section class="converter-panel land-system-card">
+              <div class="land-system-title">
+                <span class="land-system-icon landscape" aria-hidden="true"></span>
+                <div>
+                  <p class="eyebrow">landscape</p>
+                  <h2 data-i18n="ropaniSystem">Ropani System</h2>
+                </div>
+              </div>
+              <div class="land-table" role="group" aria-label="Ropani system">
+                <div class="land-table-head">
+                  <span data-i18n="unit">Unit</span>
+                  <span data-i18n="value">Value</span>
+                </div>
+                <label><span data-i18n="ropani">Ropani</span><input type="number" min="0" step="any" inputmode="decimal" data-land-unit="ropani" value="1"></label>
+                <label><span data-i18n="aana">Aana</span><input type="number" min="0" step="any" inputmode="decimal" data-land-unit="aana"></label>
+                <label><span data-i18n="paisa">Paisa</span><input type="number" min="0" step="any" inputmode="decimal" data-land-unit="paisa"></label>
+                <label><span data-i18n="daam">Daam</span><input type="number" min="0" step="any" inputmode="decimal" data-land-unit="daam"></label>
+              </div>
+            </section>
+            <section class="converter-panel land-system-card">
+              <div class="land-system-title">
+                <span class="land-system-icon house" aria-hidden="true"></span>
+                <div>
+                  <p class="eyebrow">house</p>
+                  <h2 data-i18n="bighaSystem">Bigha System</h2>
+                </div>
+              </div>
+              <div class="land-table" role="group" aria-label="Bigha system">
+                <div class="land-table-head">
+                  <span data-i18n="unit">Unit</span>
+                  <span data-i18n="value">Value</span>
+                </div>
+                <label><span data-i18n="bigha">Bigha</span><input type="number" min="0" step="any" inputmode="decimal" data-land-unit="bigha"></label>
+                <label><span data-i18n="kattha">Kattha</span><input type="number" min="0" step="any" inputmode="decimal" data-land-unit="kattha"></label>
+                <label><span data-i18n="dhur">Dhur</span><input type="number" min="0" step="any" inputmode="decimal" data-land-unit="dhur"></label>
+              </div>
+            </section>
+            <section class="converter-panel land-system-card">
+              <div class="land-system-title">
+                <span class="land-system-icon measure" aria-hidden="true"></span>
+                <div>
+                  <p class="eyebrow">measure</p>
+                  <h2 data-i18n="sqSystem">Sq.Ft/M System</h2>
+                </div>
+              </div>
+              <div class="land-table" role="group" aria-label="Square feet and square meter system">
+                <div class="land-table-head">
+                  <span data-i18n="unit">Unit</span>
+                  <span data-i18n="value">Value</span>
+                </div>
+                <label><span data-i18n="sqft">Sq.Ft</span><input type="number" min="0" step="any" inputmode="decimal" data-land-unit="sqft"></label>
+                <label><span data-i18n="sqm">Sq.M</span><input type="number" min="0" step="any" inputmode="decimal" data-land-unit="sqm"></label>
+              </div>
+              <div class="land-summary" id="landSummary">1 Ropani = 5,476 sq.ft = 508.737 sq.m</div>
             </section>
           </div>
         </section>
@@ -478,7 +546,7 @@
       </article>
     </div>
 
-    <script src="data/daily-data.js?v=24"></script>
-    <script src="app.js?v=25"></script>
+    <script src="data/daily-data.js?v=26"></script>
+    <script src="app.js?v=26"></script>
   </body>
 </html>

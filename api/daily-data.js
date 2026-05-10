@@ -85,6 +85,20 @@ function parseForex(text) {
   };
 }
 
+function numberFromPrice(value) {
+  const match = String(value || "").replace(/,/g, "").match(/\d+(?:\.\d+)?/);
+  return match ? Number(match[0]) : 0;
+}
+
+function validateForex(data) {
+  return Array.isArray(data?.rates)
+    && data.rates.length === currencyOrder.length
+    && data.rates.every(([code, , unit, buy, sell]) => currencyOrder.includes(code)
+      && Number(unit) > 0
+      && Number(buy) > 0
+      && Number(sell) >= Number(buy));
+}
+
 function parseGold(text) {
   const normalized = cleanText(text);
   const hallmark = normalized.match(/Gold Hallmark\s*-\s*tola[\s\S]{0,80}?(Nrs\.\s*[\d,]+(?:\.\d+)?)/i)?.[1];
@@ -108,6 +122,12 @@ function parseGold(text) {
     updatedAt: preview[5][1],
     preview
   };
+}
+
+function validateGold(data) {
+  const hallmark = numberFromPrice(data?.preview?.find(([label]) => label === "Gold Hallmark - tola")?.[1]);
+  const silver = numberFromPrice(data?.preview?.find(([label]) => label === "Silver - tola")?.[1]);
+  return hallmark > 100000 && silver > 1000 && Boolean(data?.updatedAt);
 }
 
 function parseFuel(text) {
@@ -134,6 +154,13 @@ function parseFuel(text) {
       ["Updated", updated]
     ]
   };
+}
+
+function validateFuel(data) {
+  return Array.isArray(data?.rows)
+    && data.rows.length >= 3
+    && data.rows.every((row) => numberFromPrice(row[1]) > 0)
+    && Boolean(data?.updatedAt);
 }
 
 function parseMarket(text) {
@@ -164,6 +191,62 @@ function parseMarket(text) {
   };
 }
 
+function validateMarket(data) {
+  return Array.isArray(data?.preview)
+    && data.preview.length >= 25
+    && Boolean(data.updatedAt)
+    && data.preview[0]?.[0] === "Published";
+}
+
+function healthOk(source, details = {}) {
+  return {
+    source,
+    status: "live",
+    checkedAt: todayInNepal(),
+    ...details
+  };
+}
+
+function healthFallback(source, reason) {
+  return {
+    source,
+    status: "fallback",
+    checkedAt: todayInNepal(),
+    reason: reason || "Source unavailable or parser validation failed"
+  };
+}
+
+function useParsedSource(result, parser, validator, fallbackValue, sourceName) {
+  if (result.status !== "fulfilled") {
+    return {
+      value: fallbackValue,
+      health: healthFallback(sourceName, result.reason?.message || "Fetch failed")
+    };
+  }
+
+  try {
+    const parsed = parser(result.value);
+    if (!validator(parsed)) {
+      return {
+        value: fallbackValue,
+        health: healthFallback(sourceName, "Parsed data did not pass validation")
+      };
+    }
+    return {
+      value: parsed,
+      health: healthOk(sourceName, {
+        updatedAt: parsed.updatedAt,
+        rowCount: parsed.rates?.length || parsed.rows?.length || parsed.preview?.length || undefined
+      })
+    };
+  } catch (error) {
+    return {
+      value: fallbackValue,
+      health: healthFallback(sourceName, error.message)
+    };
+  }
+}
+
 async function buildDailyData() {
   const [forexHtml, goldHtml, fuelHtml, marketHtml] = await Promise.allSettled([
     safeFetch("https://www.nrb.org.np/forex/"),
@@ -171,16 +254,28 @@ async function buildDailyData() {
     safeFetch("https://noc.org.np/petrol"),
     safeFetch("https://kalimatimarket.gov.np/price")
   ]);
+  const forex = useParsedSource(forexHtml, parseForex, validateForex, fallback.forex, "NRB forex");
+  const gold = useParsedSource(goldHtml, parseGold, validateGold, fallback.gold, "Hamro Patro gold");
+  const fuel = useParsedSource(fuelHtml, parseFuel, validateFuel, fallback.fuel, "NOC fuel");
+  const market = useParsedSource(marketHtml, parseMarket, validateMarket, fallback.market, "Kalimati market");
 
   return {
     ...fallback,
     updatedAt: todayInNepal(),
     sourceNote: "Daily snapshot from allowlisted NRB, Hamro Patro, NOC, and Kalimati sources.",
-    forex: forexHtml.status === "fulfilled" ? parseForex(forexHtml.value) : fallback.forex,
-    gold: goldHtml.status === "fulfilled" ? parseGold(goldHtml.value) : fallback.gold,
-    fuel: fuelHtml.status === "fulfilled" ? parseFuel(fuelHtml.value) : fallback.fuel,
-    market: marketHtml.status === "fulfilled" ? parseMarket(marketHtml.value) : fallback.market,
-    horoscope: fallback.horoscope
+    forex: forex.value,
+    gold: gold.value,
+    fuel: fuel.value,
+    market: market.value,
+    horoscope: fallback.horoscope,
+    sourceHealth: {
+      forex: forex.health,
+      gold: gold.health,
+      fuel: fuel.health,
+      market: market.health,
+      panchang: healthFallback("Patro/ephemeris", "Official ephemeris integration not configured"),
+      horoscope: healthFallback("Rashifal provider", "Licensed monthly rashifal source not configured")
+    }
   };
 }
 
@@ -212,7 +307,27 @@ module.exports = async function handler(request, response) {
     response.status(200).json({
       ...fallback,
       updatedAt: fallback.updatedAt,
-      sourceNote: `${fallback.sourceNote} Live refresh fallback was used.`
+      sourceNote: `${fallback.sourceNote} Live refresh fallback was used.`,
+      sourceHealth: {
+        forex: healthFallback("NRB forex", "API-level fallback"),
+        gold: healthFallback("Hamro Patro gold", "API-level fallback"),
+        fuel: healthFallback("NOC fuel", "API-level fallback"),
+        market: healthFallback("Kalimati market", "API-level fallback"),
+        panchang: healthFallback("Patro/ephemeris", "Official ephemeris integration not configured"),
+        horoscope: healthFallback("Rashifal provider", "Licensed monthly rashifal source not configured")
+      }
     });
   }
+};
+
+module.exports._internal = {
+  parseForex,
+  parseGold,
+  parseFuel,
+  parseMarket,
+  validateForex,
+  validateGold,
+  validateFuel,
+  validateMarket,
+  useParsedSource
 };

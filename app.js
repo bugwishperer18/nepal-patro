@@ -262,6 +262,13 @@ const tools = [
     preview: [["BS date", "वैशाख २२, २०८३"], ["AD date", "May 5, 2026"], ["Mode", "Approximate local seed"]]
   },
   {
+    icon: "▣",
+    iconKey: "land",
+    title: "Nepali Land Metrics Converter",
+    description: "Convert Ropani, Bigha, Kattha, Dhur, sq.ft and sq.m",
+    preview: [["1 Ropani", "5,476 sq.ft"], ["1 Bigha", "72,900 sq.ft"], ["1 Kattha", "3,645 sq.ft"]]
+  },
+  {
     icon: "Au",
     iconKey: "gold",
     title: "Gold & Silver Rate",
@@ -606,6 +613,7 @@ const colors = ["Crimson", "Sapphire", "White", "Ruby", "Indigo", "Pearl"];
 const bsMonthNames = ["वैशाख", "जेठ", "असार", "साउन", "भदौ", "आश्विन", "कार्तिक", "मंसिर", "पुष", "माघ", "फागुन", "चैत"];
 const converterStartYear = 2083;
 const converterEndYear = 2084;
+const verifiedBsMonthKeys = new Set(monthSeed.map((month) => `${month.year}-${month.name}`));
 const converterAnchor = {
   bsYear: 2083,
   bsMonth: 1,
@@ -640,13 +648,24 @@ const sectionLinks = document.querySelectorAll("[data-section-link]");
 const appSections = document.querySelectorAll(".page");
 const languageButtons = document.querySelectorAll("[data-language]");
 const calendarModeButtons = document.querySelectorAll("[data-calendar-mode]");
-const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "market", "fuel", "horoscope", "horoscope-detail", "date-converter", "panchang", "shubha-sait"];
+const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "market", "fuel", "horoscope", "horoscope-detail", "date-converter", "land-converter", "panchang", "shubha-sait"];
 const dailyDataKey = "nepalPatro:dailyDataCheckedAt:v2";
 const dailyDataVersionKey = "nepalPatro:dailyDataVersion:v2";
 const dailyDataCacheKey = "nepalPatro:dailyDataCache:v2";
 const dataSourceStatusKey = "nepalPatro:dailyDataSource";
+const landUnitSqft = {
+  ropani: 5476,
+  aana: 342.25,
+  paisa: 85.5625,
+  daam: 21.390625,
+  bigha: 72900,
+  kattha: 3645,
+  dhur: 182.25,
+  sqft: 1,
+  sqm: 10.763910416709722
+};
 let dailyDataSnapshot = window.NEPAL_PATRO_DAILY_DATA || null;
-let goldSilverRows = window.NEPAL_PATRO_DAILY_DATA?.gold?.preview || tools[1].preview;
+let goldSilverRows = window.NEPAL_PATRO_DAILY_DATA?.gold?.preview || tools.find((tool) => tool.title === "Gold & Silver Rate")?.preview || [];
 let goldUpdatedAt = window.NEPAL_PATRO_DAILY_DATA?.gold?.updatedAt || "Thursday, May 07, 2026 - 10:45 AM";
 const liveDataUrl = "https://nepal-patro.vercel.app/api/daily-data";
 
@@ -679,10 +698,12 @@ const translations = {
     freshToday: "Fresh today",
     cachedToday: "Cached today",
     fallbackData: "Fallback data",
+    sourceNeedsReview: "Source needs review",
+    verifiedRangeShort: "Verified: BS 2083 - Baisakh 2084",
     advisory: "Advisory",
     panchangNotice: "Indicative daily panchang values are shown for planning context. Use an official patro or priest for muhurat, samskar, fasting, and religious decisions.",
     horoscopeNotice: "Advisory Vedic guide. Verify personal decisions with a qualified astrologer.",
-    converterNotice: "Converter is verified only for the bundled calendar range. More years should be added from an official BS date table before relying on older or future dates.",
+    converterNotice: "Converter is verified for the bundled months only: BS 2083 through Baisakh 2084. More years should be added from an official BS date table before relying on older or future dates.",
     exportCalendar: "Export calendar",
     exported: "Exported",
     searchMarket: "Search market rates",
@@ -724,6 +745,23 @@ const translations = {
     convertDates: "BS ⇄ AD Converter",
     bsToAd: "Nepali to English",
     adToBs: "English to Nepali",
+    landTools: "Land tools",
+    landConverterTitle: "Nepali Land Metrics Converter",
+    landStandard: "Nepal land units",
+    landConverterNotice: "Use this for everyday land-area conversion. Verify legal documents with the official survey map or land-revenue office.",
+    ropaniSystem: "Ropani System",
+    bighaSystem: "Bigha System",
+    sqSystem: "Sq.Ft/M System",
+    value: "Value",
+    ropani: "Ropani",
+    aana: "Aana",
+    paisa: "Paisa",
+    daam: "Daam",
+    bigha: "Bigha",
+    kattha: "Kattha",
+    dhur: "Dhur",
+    sqft: "Sq.Ft",
+    sqm: "Sq.M",
     convert: "Convert",
     quickTools: "Quick tools",
     dailyUtilities: "Daily utilities",
@@ -787,10 +825,12 @@ const translations = {
     freshToday: "आजको ताजा",
     cachedToday: "आजको क्यास",
     fallbackData: "बैकल्पिक डाटा",
+    sourceNeedsReview: "स्रोत जाँच आवश्यक",
+    verifiedRangeShort: "प्रमाणित: वि.सं. २०८३ - वैशाख २०८४",
     advisory: "सल्लाह",
     panchangNotice: "दैनिक पञ्चाङ्ग संकेत योजना सन्दर्भका लागि मात्र हो। मुहूर्त, संस्कार, व्रत र धार्मिक निर्णयका लागि आधिकारिक पात्रो वा पुरोहितसँग पुष्टि गर्नुहोस्।",
     horoscopeNotice: "यो वैदिक ज्योतिष मार्गदर्शन सल्लाह मात्र हो। व्यक्तिगत निर्णयका लागि योग्य ज्योतिषीसँग पुष्टि गर्नुहोस्।",
-    converterNotice: "मिति परिवर्तन हाल समावेश गरिएको पात्रो दायराका लागि मात्र प्रमाणित छ। पुराना वा भविष्यका मितिमा भर पर्नुअघि आधिकारिक वि.सं. मिति तालिका थप्नुपर्छ।",
+    converterNotice: "मिति परिवर्तन हाल समावेश गरिएको महिना दायराका लागि मात्र प्रमाणित छ: वि.सं. २०८३ देखि वैशाख २०८४ सम्म। पुराना वा भविष्यका मितिमा भर पर्नुअघि आधिकारिक वि.सं. मिति तालिका थप्नुपर्छ।",
     exportCalendar: "क्यालेन्डर एक्सपोर्ट",
     exported: "एक्सपोर्ट भयो",
     searchMarket: "बजार दर खोज्नुहोस्",
@@ -832,6 +872,23 @@ const translations = {
     convertDates: "वि.सं. ⇄ ई.सं. परिवर्तन",
     bsToAd: "नेपालीबाट अंग्रेजी",
     adToBs: "अंग्रेजीबाट नेपाली",
+    landTools: "जग्गा टुल्स",
+    landConverterTitle: "नेपाली जग्गा मापन परिवर्तक",
+    landStandard: "नेपाली जग्गा इकाइ",
+    landConverterNotice: "दैनिक जग्गा क्षेत्रफल रूपान्तरणका लागि प्रयोग गर्नुहोस्। कानूनी कागजातका लागि आधिकारिक नापी नक्सा वा मालपोत कार्यालयसँग पुष्टि गर्नुहोस्।",
+    ropaniSystem: "रोपनी प्रणाली",
+    bighaSystem: "बिघा प्रणाली",
+    sqSystem: "वर्ग फिट/मिटर प्रणाली",
+    value: "मान",
+    ropani: "रोपनी",
+    aana: "आना",
+    paisa: "पैसा",
+    daam: "दाम",
+    bigha: "बिघा",
+    kattha: "कट्ठा",
+    dhur: "धुर",
+    sqft: "वर्ग फिट",
+    sqm: "वर्ग मिटर",
     convert: "परिवर्तन",
     quickTools: "दैनिक टुल्स",
     dailyUtilities: "उपयोगी सेवा",
@@ -1027,6 +1084,11 @@ const termTranslations = {
 const toolTranslations = {
   "Nepali <> English Date Converter": "नेपाली <> अंग्रेजी मिति परिवर्तन",
   "Quickly convert BS and AD dates": "वि.सं. र ई.सं. मिति छिटो परिवर्तन",
+  "Nepali Land Metrics Converter": "नेपाली जग्गा मापन परिवर्तक",
+  "Convert Ropani, Bigha, Kattha, Dhur, sq.ft and sq.m": "रोपनी, बिघा, कट्ठा, धुर, वर्ग फिट र वर्ग मिटर परिवर्तन",
+  "1 Ropani": "१ रोपनी",
+  "1 Bigha": "१ बिघा",
+  "1 Kattha": "१ कट्ठा",
   "Gold & Silver Rate": "सुनचाँदी दर",
   "Daily bullion market snapshot": "दैनिक सुनचाँदी बजार संकेत",
   "Shubha Sait": "शुभ साइत",
@@ -1332,6 +1394,36 @@ function makeElement(tagName, className, text) {
   return element;
 }
 
+function formatLandValue(value) {
+  if (!Number.isFinite(value)) return "";
+  if (value === 0) return "0";
+  const decimals = value >= 1000 ? 2 : value >= 10 ? 3 : 4;
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: decimals
+  }).format(Number(value.toFixed(decimals)));
+}
+
+function renderLandConverter(sourceUnit = "ropani") {
+  const inputs = document.querySelectorAll("[data-land-unit]");
+  if (!inputs.length) {
+    return;
+  }
+  const sourceInput = document.querySelector(`[data-land-unit="${sourceUnit}"]`) || document.querySelector("[data-land-unit='ropani']");
+  const sourceValue = Number(sourceInput.value || 0);
+  const sqft = Math.max(0, sourceValue) * landUnitSqft[sourceUnit];
+  inputs.forEach((input) => {
+    if (input === sourceInput && document.activeElement === sourceInput) {
+      return;
+    }
+    const unit = input.dataset.landUnit;
+    input.value = formatLandValue(sqft / landUnitSqft[unit]);
+  });
+  const summary = document.querySelector("#landSummary");
+  if (summary) {
+    summary.textContent = `${formatLandValue(sqft)} sq.ft = ${formatLandValue(sqft / landUnitSqft.sqm)} sq.m`;
+  }
+}
+
 function getCachedDailyData() {
   try {
     const cached = JSON.parse(localStorage.getItem(dailyDataCacheKey) || "null");
@@ -1513,18 +1605,54 @@ function formatFullAdDate(date) {
   });
 }
 
+function getVerifiedMonth(year, month) {
+  const name = bsMonthNames[month - 1];
+  if (!verifiedBsMonthKeys.has(`${year}-${name}`)) {
+    return null;
+  }
+  return monthSeed.find((item) => item.year === year && item.name === name) || null;
+}
+
+function getLastVerifiedBsMonth() {
+  const last = monthSeed[monthSeed.length - 1];
+  return {
+    year: last.year,
+    month: (monthSeed.length - 1) % 12 + 1,
+    day: last.days
+  };
+}
+
+function clampVerifiedBsDate(year, month, day) {
+  const last = getLastVerifiedBsMonth();
+  let boundedYear = Math.max(converterStartYear, Math.min(last.year, year || converterAnchor.bsYear));
+  let boundedMonth = Math.max(1, Math.min(12, month || converterAnchor.bsMonth));
+  if (boundedYear === last.year && boundedMonth > last.month) {
+    boundedMonth = last.month;
+  }
+  if (!getVerifiedMonth(boundedYear, boundedMonth)) {
+    boundedYear = last.year;
+    boundedMonth = last.month;
+  }
+  const maxDay = getBsMonthDays(boundedYear, boundedMonth);
+  return {
+    year: boundedYear,
+    month: boundedMonth,
+    day: Math.max(1, Math.min(maxDay, day || converterAnchor.bsDay))
+  };
+}
+
+function getConverterMaxAdDate() {
+  const last = getLastVerifiedBsMonth();
+  return convertBsToAd(last.year, last.month, last.day).date;
+}
+
 function getBsMonthDays(year, month) {
   const index = month - 1;
-  const base = [31, 32, 31, 31, 31, 31, 29, 30, 29, 30, 30, 30];
-  const variant = base.slice();
-  if (year % 4 === 0) variant[2] = 32;
-  if (year % 3 === 0) variant[6] = 30;
-  if (year % 5 === 0) variant[8] = 30;
-  if (year % 7 === 0) variant[10] = 29;
-  if (year === 2083) {
-    return monthSeed[index]?.days || variant[index];
+  const verified = getVerifiedMonth(year, month);
+  if (!verified) {
+    return getLastVerifiedBsMonth().day;
   }
-  return variant[index];
+  return verified.days;
 }
 
 function countDaysFromBsAnchor(year, month, day) {
@@ -1547,21 +1675,21 @@ function countDaysFromBsAnchor(year, month, day) {
 }
 
 function convertBsToAd(year, month, day) {
-  const boundedYear = Math.max(converterStartYear, Math.min(converterEndYear, year));
-  const boundedMonth = Math.max(1, Math.min(12, month));
-  const maxDay = getBsMonthDays(boundedYear, boundedMonth);
-  const boundedDay = Math.max(1, Math.min(maxDay, day));
-  const offset = countDaysFromBsAnchor(boundedYear, boundedMonth, boundedDay);
+  const bounded = clampVerifiedBsDate(year, month, day);
+  const offset = countDaysFromBsAnchor(bounded.year, bounded.month, bounded.day);
   return {
-    year: boundedYear,
-    month: boundedMonth,
-    day: boundedDay,
+    year: bounded.year,
+    month: bounded.month,
+    day: bounded.day,
     date: addDays(converterAnchor.adDate, offset)
   };
 }
 
 function convertAdToBs(date) {
-  const target = new Date(`${formatDateKey(date)}T00:00:00`);
+  const minDate = converterAnchor.adDate;
+  const maxDate = getConverterMaxAdDate();
+  const rawTarget = new Date(`${formatDateKey(date)}T00:00:00`);
+  const target = rawTarget < minDate ? minDate : rawTarget > maxDate ? maxDate : rawTarget;
   const dayMs = 24 * 60 * 60 * 1000;
   let remaining = Math.round((target - converterAnchor.adDate) / dayMs);
   let year = converterAnchor.bsYear;
@@ -1569,7 +1697,8 @@ function convertAdToBs(date) {
   let day = converterAnchor.bsDay;
 
   if (remaining >= 0) {
-    while (remaining > 0 && year <= converterEndYear) {
+    const last = getLastVerifiedBsMonth();
+    while (remaining > 0 && (year < last.year || (year === last.year && month <= last.month))) {
       const daysInMonth = getBsMonthDays(year, month);
       const canMove = Math.min(remaining, daysInMonth - day + 1);
       day += canMove;
@@ -1825,6 +1954,7 @@ function renderTools() {
       const tool = tools[Number(button.dataset.toolIndex)];
       const route = {
         "Nepali <> English Date Converter": "date-converter",
+        "Nepali Land Metrics Converter": "land-converter",
         "Gold & Silver Rate": "gold-silver",
         "Shubha Sait": "shubha-sait",
         "Nepali Panchang": "panchang",
@@ -2026,19 +2156,22 @@ function renderFreshness() {
   clearNode(container);
   const source = localStorage.getItem(dataSourceStatusKey) || "embedded";
   const today = localStorage.getItem(dailyDataKey) === getTodayKey();
+  const health = dailyDataSnapshot?.sourceHealth || {};
   const rows = [
-    ["Forex", document.querySelector("#forexUpdatedBadge")?.textContent || dailyDataSnapshot?.forex?.updatedAt || dailyDataSnapshot?.updatedAt || ""],
-    ["Gold", goldUpdatedAt],
-    ["Market", marketUpdatedAt],
-    ["Fuel", fuelUpdatedAt]
+    ["Forex", document.querySelector("#forexUpdatedBadge")?.textContent || dailyDataSnapshot?.forex?.updatedAt || dailyDataSnapshot?.updatedAt || "", health.forex],
+    ["Gold", goldUpdatedAt, health.gold],
+    ["Market", marketUpdatedAt, health.market],
+    ["Fuel", fuelUpdatedAt, health.fuel]
   ];
-  rows.forEach(([label, value]) => {
-    const item = makeElement("div", "freshness-item");
+  rows.forEach(([label, value, sourceHealth]) => {
+    const item = makeElement("div", `freshness-item ${sourceHealth?.status === "fallback" ? "needs-review" : ""}`);
     item.append(makeElement("span", "", localizeToolText(label)));
-    item.append(makeElement("strong", "", value ? localizeToolPreviewValue(value) : today ? t("cachedToday") : t("fallbackData")));
+    const valueText = value ? localizeToolPreviewValue(value) : today ? t("cachedToday") : t("fallbackData");
+    item.append(makeElement("strong", "", sourceHealth?.status === "fallback" ? `${valueText} · ${t("sourceNeedsReview")}` : valueText));
     container.append(item);
   });
-  const status = source.includes("api") || source === "live-api" ? t("freshToday") : today ? t("cachedToday") : t("fallbackData");
+  const hasFallbackSource = Object.values(health).some((item) => item?.status === "fallback");
+  const status = hasFallbackSource ? t("sourceNeedsReview") : source.includes("api") || source === "live-api" ? t("freshToday") : today ? t("cachedToday") : t("fallbackData");
   document.querySelector("#refreshStatus").textContent = status;
 }
 
@@ -2147,44 +2280,51 @@ function renderEvents() {
   });
 }
 
-function renderBsMonthOptions() {
-  const select = document.querySelector("#bsMonthInput");
+function renderBsMonthOptionsFor(select, year) {
   const currentValue = select.value || "1";
   clearNode(select);
   bsMonthNames.forEach((name, index) => {
     const option = document.createElement("option");
     option.value = String(index + 1);
     option.textContent = localizeMonthName(name);
+    option.disabled = !getVerifiedMonth(Number(year), index + 1);
     select.append(option);
   });
-  select.value = currentValue;
+  select.value = select.querySelector(`option[value="${currentValue}"]:not(:disabled)`) ? currentValue : "1";
+}
+
+function renderBsMonthOptions() {
+  renderBsMonthOptionsFor(document.querySelector("#bsMonthInput"), document.querySelector("#bsYearInput")?.value || converterStartYear);
 }
 
 function renderSidebarBsMonthOptions() {
   const select = document.querySelector("#sidebarBsMonthInput");
-  const currentValue = select.value || String(getCurrentCalendarDay().monthIndex + 1);
-  clearNode(select);
-  bsMonthNames.forEach((name, index) => {
-    const option = document.createElement("option");
-    option.value = String(index + 1);
-    option.textContent = localizeMonthName(name);
-    select.append(option);
-  });
-  select.value = currentValue;
+  if (!select.value) {
+    select.value = String(getCurrentCalendarDay().monthIndex + 1);
+  }
+  renderBsMonthOptionsFor(select, document.querySelector("#sidebarBsYearInput")?.value || converterStartYear);
 }
 
 function renderDateConverterPage() {
   renderBsMonthOptions();
   renderSidebarBsMonthOptions();
-  document.querySelector("#converterRange").textContent = appLanguage === "ne"
-    ? `वि.सं. ${toNepaliNumber(converterStartYear)}-${toNepaliNumber(converterEndYear)}`
-    : `BS ${converterStartYear}-${converterEndYear}`;
+  const last = getLastVerifiedBsMonth();
+  document.querySelector("#converterRange").textContent = t("verifiedRangeShort");
+  document.querySelector("#bsYearInput").min = String(converterStartYear);
+  document.querySelector("#bsYearInput").max = String(last.year);
+  document.querySelector("#sidebarBsYearInput").min = String(converterStartYear);
+  document.querySelector("#sidebarBsYearInput").max = String(last.year);
+  document.querySelector("#adDateInput").min = formatDateKey(converterAnchor.adDate);
+  document.querySelector("#adDateInput").max = formatDateKey(getConverterMaxAdDate());
+  document.querySelector("#sidebarAdDateInput").min = formatDateKey(converterAnchor.adDate);
+  document.querySelector("#sidebarAdDateInput").max = formatDateKey(getConverterMaxAdDate());
 }
 
 function runBsToAdConversion() {
   const yearInput = document.querySelector("#bsYearInput");
   const monthInput = document.querySelector("#bsMonthInput");
   const dayInput = document.querySelector("#bsDayInput");
+  renderBsMonthOptions();
   const converted = convertBsToAd(Number(yearInput.value), Number(monthInput.value), Number(dayInput.value));
   yearInput.value = String(converted.year);
   monthInput.value = String(converted.month);
@@ -2239,6 +2379,7 @@ function runSidebarConversion() {
   const yearInput = document.querySelector("#sidebarBsYearInput");
   const monthInput = document.querySelector("#sidebarBsMonthInput");
   const dayInput = document.querySelector("#sidebarBsDayInput");
+  renderSidebarBsMonthOptions();
   const converted = convertBsToAd(Number(yearInput.value), Number(monthInput.value), Number(dayInput.value));
   yearInput.value = String(converted.year);
   monthInput.value = String(converted.month);
@@ -2379,6 +2520,7 @@ function renderAll() {
   renderPanchangDetails();
   renderShubhaSait();
   renderDateConverterPage();
+  renderLandConverter();
   runBsToAdConversion();
   runAdToBsConversion();
   renderEvents();
@@ -2527,6 +2669,10 @@ document.querySelector("#sidebarBsYearInput").addEventListener("input", runSideb
 document.querySelector("#sidebarBsMonthInput").addEventListener("change", runSidebarConversion);
 document.querySelector("#sidebarBsDayInput").addEventListener("input", runSidebarConversion);
 document.querySelector("#sidebarAdDateInput").addEventListener("input", runSidebarConversion);
+document.querySelectorAll("[data-land-unit]").forEach((input) => {
+  input.addEventListener("input", () => renderLandConverter(input.dataset.landUnit));
+  input.addEventListener("focus", () => input.select());
+});
 document.querySelector("#backToHoroscope").addEventListener("click", () => navigateToSection("horoscope"));
 document.querySelector("#marketSearch").addEventListener("input", (event) => {
   marketSearchQuery = event.target.value;
