@@ -258,6 +258,7 @@ const tools = [
     icon: "⇄",
     iconKey: "converter",
     title: "Nepali <> English Date Converter",
+    category: "Date",
     description: "Quickly convert BS and AD dates",
     preview: [["BS date", "वैशाख २२, २०८३"], ["AD date", "May 5, 2026"], ["Mode", "Approximate local seed"]]
   },
@@ -265,6 +266,7 @@ const tools = [
     icon: "▣",
     iconKey: "land",
     title: "Nepali Land Metrics Converter",
+    category: "Property",
     description: "Convert Ropani, Bigha, Kattha, Dhur, sq.ft and sq.m",
     preview: [["1 Ropani", "5,476 sq.ft"], ["1 Bigha", "72,900 sq.ft"], ["1 Kattha", "3,645 sq.ft"]]
   },
@@ -272,6 +274,7 @@ const tools = [
     icon: "₨",
     iconKey: "loan",
     title: "Loan EMI Calculator",
+    category: "Finance",
     description: "Calculate EMI, compare installments and model loan changes",
     preview: [["EMI", "Monthly installment"], ["Compare", "Two loan options"], ["Amendments", "Principal, rate and tenure impact"]]
   },
@@ -279,6 +282,7 @@ const tools = [
     icon: "Au",
     iconKey: "gold",
     title: "Gold & Silver Rate",
+    category: "Rates",
     description: "Daily bullion market snapshot",
     preview: [
       ["Gold Hallmark - tola", "Nrs. 298,600.00"],
@@ -293,6 +297,7 @@ const tools = [
     icon: "ॐ",
     iconKey: "sait",
     title: "Shubha Sait",
+    category: "Patro",
     description: "Auspicious time finder",
     preview: [["Good window", "11:42 AM - 1:18 PM"], ["Rahu kaal", "3:10 PM - 4:45 PM"], ["Direction", "पूर्व"]]
   },
@@ -300,6 +305,7 @@ const tools = [
     icon: "प",
     iconKey: "panchang",
     title: "Nepali Panchang",
+    category: "Patro",
     description: "Tithi, nakshatra, yoga and karana",
     preview: [["Tithi", "कृष्ण चतुर्थी"], ["Nakshatra", "अनुराधा"], ["Yoga", "परिधि"]]
   },
@@ -307,6 +313,7 @@ const tools = [
     icon: "♈",
     iconKey: "horoscope",
     title: "Nepali Horoscope for the month",
+    category: "Astrology",
     description: "Monthly rashi overview",
     preview: [["Rashi", "मेष"], ["Lucky color", "Crimson"], ["Focus", "Work and decisions"]]
   },
@@ -314,6 +321,7 @@ const tools = [
     icon: "₨",
     iconKey: "market",
     title: "Vegetable and Fruit wholesale rates",
+    category: "Market",
     description: "Kalimati daily wholesale snapshot",
     market: true,
     preview: [
@@ -414,6 +422,7 @@ const tools = [
     icon: "⛽",
     iconKey: "fuel",
     title: "Fuel Prices",
+    category: "Rates",
     description: "Petrol, diesel and LP gas rates",
     preview: [["Petrol", "NRs 217.0/L"], ["Applies to", "Kathmandu, Pokhara, Dipayal"], ["Updated", "2026-05-02"]]
   }
@@ -796,6 +805,7 @@ const translations = {
     totalChange: "Total change",
     optionBMore: "Option B costs {amount} more per month.",
     optionBSaves: "Option B saves {amount} per month.",
+    openTool: "Open",
     convert: "Convert",
     quickTools: "Quick tools",
     dailyUtilities: "Daily utilities",
@@ -950,6 +960,7 @@ const translations = {
     totalChange: "कुल परिवर्तन",
     optionBMore: "विकल्प B मा प्रतिमहिना {amount} बढी पर्छ।",
     optionBSaves: "विकल्प B ले प्रतिमहिना {amount} बचत गर्छ।",
+    openTool: "खोल्नुहोस्",
     convert: "परिवर्तन",
     quickTools: "दैनिक टुल्स",
     dailyUtilities: "उपयोगी सेवा",
@@ -1155,6 +1166,13 @@ const toolTranslations = {
   "Two loan options": "दुई ऋण विकल्प",
   "Amendments": "परिवर्तन",
   "Principal, rate and tenure impact": "साँवा, ब्याजदर र अवधिको प्रभाव",
+  "Date": "मिति",
+  "Property": "सम्पत्ति",
+  "Finance": "वित्त",
+  "Rates": "दर",
+  "Patro": "पात्रो",
+  "Astrology": "ज्योतिष",
+  "Market": "बजार",
   "1 Ropani": "१ रोपनी",
   "1 Bigha": "१ बिघा",
   "1 Kattha": "१ कट्ठा",
@@ -1481,6 +1499,7 @@ function renderLandConverter(sourceUnit = "ropani") {
   const sourceValue = Number(sourceInput.value || 0);
   const sqft = Math.max(0, sourceValue) * landUnitSqft[sourceUnit];
   inputs.forEach((input) => {
+    input.closest("label")?.classList.toggle("active", input === sourceInput);
     if (input === sourceInput && document.activeElement === sourceInput) {
       return;
     }
@@ -1489,7 +1508,7 @@ function renderLandConverter(sourceUnit = "ropani") {
   });
   const summary = document.querySelector("#landSummary");
   if (summary) {
-    summary.textContent = `${formatLandValue(sqft)} sq.ft = ${formatLandValue(sqft / landUnitSqft.sqm)} sq.m`;
+    summary.textContent = `${formatLandValue(sqft)} sq.ft = ${formatLandValue(sqft / landUnitSqft.sqm)} sq.m · ${formatLandValue(sqft / landUnitSqft.ropani)} ropani · ${formatLandValue(sqft / landUnitSqft.bigha)} bigha`;
   }
 }
 
@@ -1550,6 +1569,9 @@ function renderLoanCalculator() {
   document.querySelector("#loanInterest").textContent = formatMoney(base.interest);
   document.querySelector("#loanTotal").textContent = formatMoney(base.total);
   document.querySelector("#loanEndDate").textContent = formatFullAdDate(endDate);
+  document.querySelector("#loanHeroEmi").textContent = formatMoney(base.emi);
+  document.querySelector("#loanHeroInterest").textContent = formatMoney(base.interest);
+  document.querySelector("#loanHeroEndDate").textContent = formatFullAdDate(endDate);
 
   const optionA = calculateEmi(getNumberValue("compareAAmount"), getNumberValue("compareARate"), getNumberValue("compareAMonths"));
   const optionB = calculateEmi(getNumberValue("compareBAmount"), getNumberValue("compareBRate"), getNumberValue("compareBMonths"));
@@ -2077,6 +2099,7 @@ function renderMonthPicker() {
 
 function renderTools() {
   const toolList = document.querySelector("#toolList");
+  document.querySelector("#toolCountBadge").textContent = String(tools.length);
   clearNode(toolList);
   tools.forEach((tool, index) => {
     const button = makeElement("button", "tool-link");
@@ -2086,9 +2109,11 @@ function renderTools() {
     const icon = makeElement("span", `tool-icon tool-${tool.iconKey || "default"}`);
     icon.setAttribute("aria-hidden", "true");
     const textWrap = document.createElement("span");
+    textWrap.append(makeElement("em", "tool-category", localizeToolText(tool.category || "Tool")));
     textWrap.append(makeElement("strong", "", localizeToolText(tool.title)));
     textWrap.append(makeElement("span", "", localizeToolText(tool.description)));
-    button.append(icon, textWrap);
+    const affordance = makeElement("small", "tool-affordance", t("openTool"));
+    button.append(icon, textWrap, affordance);
     toolList.append(button);
   });
 

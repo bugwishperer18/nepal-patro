@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nepal-patro.vercel.app https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
     <title>Nepal Patro</title>
-    <link rel="stylesheet" href="styles.css?v=27">
+    <link rel="stylesheet" href="styles.css?v=28">
   </head>
   <body>
     <div class="app-shell">
@@ -186,7 +186,7 @@
               <p class="eyebrow" data-i18n="quickTools">Quick tools</p>
               <h1 data-i18n="dailyUtilities">Daily utilities</h1>
             </div>
-            <span class="section-badge">7</span>
+            <span class="section-badge" id="toolCountBadge">9</span>
           </div>
           <div class="tool-list page-grid" id="toolList"></div>
         </section>
@@ -337,6 +337,11 @@
             <span class="section-badge" data-i18n="landStandard">Nepal land units</span>
           </div>
           <p class="notice-banner visible" data-i18n="landConverterNotice">Use this for everyday land-area conversion. Verify legal documents with the official survey map or land-revenue office.</p>
+          <div class="land-equivalence-strip">
+            <span>1 Ropani = 16 Aana = 64 Paisa = 256 Daam</span>
+            <span>1 Bigha = 20 Kattha = 400 Dhur</span>
+            <span>1 Sq.M = 10.764 Sq.Ft</span>
+          </div>
           <div class="land-converter-grid">
             <section class="converter-panel land-system-card">
               <div class="land-system-title">
@@ -405,6 +410,20 @@
             <span class="section-badge" data-i18n="emiPlanning">EMI planning</span>
           </div>
           <p class="notice-banner visible" data-i18n="loanCalculatorNotice">Estimate monthly installments, interest cost, payoff date, comparisons, and amendment impact. Confirm bank fees and repayment terms with your lender.</p>
+          <div class="loan-kpi-strip">
+            <div>
+              <span data-i18n="monthlyEmi">EMI per month</span>
+              <strong id="loanHeroEmi">NPR 0</strong>
+            </div>
+            <div>
+              <span data-i18n="totalInterest">Total interest</span>
+              <strong id="loanHeroInterest">NPR 0</strong>
+            </div>
+            <div>
+              <span data-i18n="emiEndDate">EMI end date</span>
+              <strong id="loanHeroEndDate">-</strong>
+            </div>
+          </div>
           <div class="loan-layout">
             <section class="converter-panel loan-card">
               <h2 data-i18n="emiInputs">Loan details</h2>
@@ -618,6 +637,6 @@
     </div>
 
     <script src="data/daily-data.js?v=26"></script>
-    <script src="app.js?v=27"></script>
+    <script src="app.js?v=28"></script>
   </body>
 </html>
