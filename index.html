@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nepal-patro.vercel.app https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
     <title>Nepal Patro</title>
-    <link rel="stylesheet" href="styles.css?v=26">
+    <link rel="stylesheet" href="styles.css?v=27">
   </head>
   <body>
     <div class="app-shell">
@@ -396,6 +396,77 @@
           </div>
         </section>
 
+        <section class="page page-panel" id="loan-calculator" data-page="loan-calculator" tabindex="-1">
+          <div class="page-hero">
+            <div>
+              <p class="eyebrow" data-i18n="financeTools">Finance tools</p>
+              <h1 data-i18n="loanCalculatorTitle">Loan EMI Calculator</h1>
+            </div>
+            <span class="section-badge" data-i18n="emiPlanning">EMI planning</span>
+          </div>
+          <p class="notice-banner visible" data-i18n="loanCalculatorNotice">Estimate monthly installments, interest cost, payoff date, comparisons, and amendment impact. Confirm bank fees and repayment terms with your lender.</p>
+          <div class="loan-layout">
+            <section class="converter-panel loan-card">
+              <h2 data-i18n="emiInputs">Loan details</h2>
+              <div class="loan-input-grid">
+                <label><span data-i18n="loanAmount">Loan amount</span><input id="loanAmount" type="number" min="0" step="1000" inputmode="decimal" value="5000000"></label>
+                <label><span data-i18n="interestRate">Interest rate %</span><input id="loanRate" type="number" min="0" step="0.01" inputmode="decimal" value="10.5"></label>
+                <label><span data-i18n="tenureYears">Tenure years</span><input id="loanYears" type="number" min="0" step="1" inputmode="numeric" value="20"></label>
+                <label><span data-i18n="tenureMonths">Tenure months</span><input id="loanMonths" type="number" min="0" step="1" inputmode="numeric" value="0"></label>
+                <label class="wide"><span data-i18n="startDate">Start date</span><input id="loanStartDate" type="date" value="2026-05-12"></label>
+              </div>
+              <div class="loan-result-grid">
+                <div><span data-i18n="monthlyEmi">EMI per month</span><strong id="loanEmi">NPR 0</strong></div>
+                <div><span data-i18n="totalInterest">Total interest</span><strong id="loanInterest">NPR 0</strong></div>
+                <div><span data-i18n="totalPayable">Total amount</span><strong id="loanTotal">NPR 0</strong></div>
+                <div><span data-i18n="emiEndDate">EMI end date</span><strong id="loanEndDate">-</strong></div>
+              </div>
+            </section>
+            <section class="converter-panel loan-card">
+              <h2 data-i18n="compareInstallments">Compare monthly installments</h2>
+              <div class="loan-compare-grid">
+                <div class="loan-scenario">
+                  <h3 data-i18n="optionA">Option A</h3>
+                  <label><span data-i18n="loanAmount">Loan amount</span><input id="compareAAmount" type="number" min="0" step="1000" value="5000000"></label>
+                  <label><span data-i18n="interestRate">Interest rate %</span><input id="compareARate" type="number" min="0" step="0.01" value="10.5"></label>
+                  <label><span data-i18n="tenureMonths">Tenure months</span><input id="compareAMonths" type="number" min="1" step="1" value="240"></label>
+                  <strong id="compareAEmi">NPR 0</strong>
+                </div>
+                <div class="loan-scenario">
+                  <h3 data-i18n="optionB">Option B</h3>
+                  <label><span data-i18n="loanAmount">Loan amount</span><input id="compareBAmount" type="number" min="0" step="1000" value="5000000"></label>
+                  <label><span data-i18n="interestRate">Interest rate %</span><input id="compareBRate" type="number" min="0" step="0.01" value="11.5"></label>
+                  <label><span data-i18n="tenureMonths">Tenure months</span><input id="compareBMonths" type="number" min="1" step="1" value="240"></label>
+                  <strong id="compareBEmi">NPR 0</strong>
+                </div>
+              </div>
+              <p class="land-summary" id="compareSummary">Option B costs NPR 0 more per month.</p>
+            </section>
+            <section class="converter-panel loan-card loan-amendment-card">
+              <h2 data-i18n="amendmentImpact">Amendment impact</h2>
+              <div class="loan-compare-grid">
+                <div class="loan-scenario">
+                  <h3 data-i18n="currentLoan">Current loan</h3>
+                  <label><span data-i18n="principal">Principal</span><input id="amendCurrentAmount" type="number" min="0" step="1000" value="5000000"></label>
+                  <label><span data-i18n="interestRate">Interest rate %</span><input id="amendCurrentRate" type="number" min="0" step="0.01" value="10.5"></label>
+                  <label><span data-i18n="remainingMonths">Remaining months</span><input id="amendCurrentMonths" type="number" min="1" step="1" value="240"></label>
+                </div>
+                <div class="loan-scenario">
+                  <h3 data-i18n="changedLoan">Changed loan</h3>
+                  <label><span data-i18n="principal">Principal</span><input id="amendNewAmount" type="number" min="0" step="1000" value="4500000"></label>
+                  <label><span data-i18n="interestRate">Interest rate %</span><input id="amendNewRate" type="number" min="0" step="0.01" value="10"></label>
+                  <label><span data-i18n="remainingMonths">Remaining months</span><input id="amendNewMonths" type="number" min="1" step="1" value="180"></label>
+                </div>
+              </div>
+              <div class="loan-result-grid compact">
+                <div><span data-i18n="emiChange">EMI change</span><strong id="amendEmiChange">NPR 0</strong></div>
+                <div><span data-i18n="interestChange">Interest change</span><strong id="amendInterestChange">NPR 0</strong></div>
+                <div><span data-i18n="totalChange">Total change</span><strong id="amendTotalChange">NPR 0</strong></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
         <section class="page page-panel" id="panchang" data-page="panchang" tabindex="-1">
           <div class="page-hero">
             <div>
@@ -547,6 +618,6 @@
     </div>
 
     <script src="data/daily-data.js?v=26"></script>
-    <script src="app.js?v=26"></script>
+    <script src="app.js?v=27"></script>
   </body>
 </html>

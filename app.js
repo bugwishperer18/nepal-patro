@@ -269,6 +269,13 @@ const tools = [
     preview: [["1 Ropani", "5,476 sq.ft"], ["1 Bigha", "72,900 sq.ft"], ["1 Kattha", "3,645 sq.ft"]]
   },
   {
+    icon: "₨",
+    iconKey: "loan",
+    title: "Loan EMI Calculator",
+    description: "Calculate EMI, compare installments and model loan changes",
+    preview: [["EMI", "Monthly installment"], ["Compare", "Two loan options"], ["Amendments", "Principal, rate and tenure impact"]]
+  },
+  {
     icon: "Au",
     iconKey: "gold",
     title: "Gold & Silver Rate",
@@ -648,7 +655,7 @@ const sectionLinks = document.querySelectorAll("[data-section-link]");
 const appSections = document.querySelectorAll(".page");
 const languageButtons = document.querySelectorAll("[data-language]");
 const calendarModeButtons = document.querySelectorAll("[data-calendar-mode]");
-const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "market", "fuel", "horoscope", "horoscope-detail", "date-converter", "land-converter", "panchang", "shubha-sait"];
+const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "market", "fuel", "horoscope", "horoscope-detail", "date-converter", "land-converter", "loan-calculator", "panchang", "shubha-sait"];
 const dailyDataKey = "nepalPatro:dailyDataCheckedAt:v2";
 const dailyDataVersionKey = "nepalPatro:dailyDataVersion:v2";
 const dailyDataCacheKey = "nepalPatro:dailyDataCache:v2";
@@ -762,6 +769,33 @@ const translations = {
     dhur: "Dhur",
     sqft: "Sq.Ft",
     sqm: "Sq.M",
+    financeTools: "Finance tools",
+    loanCalculatorTitle: "Loan EMI Calculator",
+    emiPlanning: "EMI planning",
+    loanCalculatorNotice: "Estimate monthly installments, interest cost, payoff date, comparisons, and amendment impact. Confirm bank fees and repayment terms with your lender.",
+    emiInputs: "Loan details",
+    loanAmount: "Loan amount",
+    interestRate: "Interest rate %",
+    tenureYears: "Tenure years",
+    tenureMonths: "Tenure months",
+    startDate: "Start date",
+    monthlyEmi: "EMI per month",
+    totalInterest: "Total interest",
+    totalPayable: "Total amount",
+    emiEndDate: "EMI end date",
+    compareInstallments: "Compare monthly installments",
+    optionA: "Option A",
+    optionB: "Option B",
+    amendmentImpact: "Amendment impact",
+    currentLoan: "Current loan",
+    changedLoan: "Changed loan",
+    principal: "Principal",
+    remainingMonths: "Remaining months",
+    emiChange: "EMI change",
+    interestChange: "Interest change",
+    totalChange: "Total change",
+    optionBMore: "Option B costs {amount} more per month.",
+    optionBSaves: "Option B saves {amount} per month.",
     convert: "Convert",
     quickTools: "Quick tools",
     dailyUtilities: "Daily utilities",
@@ -889,6 +923,33 @@ const translations = {
     dhur: "धुर",
     sqft: "वर्ग फिट",
     sqm: "वर्ग मिटर",
+    financeTools: "वित्तीय टुल्स",
+    loanCalculatorTitle: "लोन ईएमआई क्याल्कुलेटर",
+    emiPlanning: "ईएमआई योजना",
+    loanCalculatorNotice: "मासिक किस्ता, ब्याज लागत, अन्तिम किस्ता मिति, तुलना र ऋण परिवर्तनको प्रभाव अनुमान गर्नुहोस्। बैंक शुल्क र सर्तहरू ऋणदातासँग पुष्टि गर्नुहोस्।",
+    emiInputs: "ऋण विवरण",
+    loanAmount: "ऋण रकम",
+    interestRate: "ब्याजदर %",
+    tenureYears: "अवधि वर्ष",
+    tenureMonths: "अवधि महिना",
+    startDate: "सुरु मिति",
+    monthlyEmi: "मासिक ईएमआई",
+    totalInterest: "कुल ब्याज",
+    totalPayable: "कुल रकम",
+    emiEndDate: "ईएमआई अन्त्य मिति",
+    compareInstallments: "मासिक किस्ता तुलना",
+    optionA: "विकल्प A",
+    optionB: "विकल्प B",
+    amendmentImpact: "परिवर्तनको प्रभाव",
+    currentLoan: "हालको ऋण",
+    changedLoan: "परिवर्तित ऋण",
+    principal: "साँवा",
+    remainingMonths: "बाँकी महिना",
+    emiChange: "ईएमआई परिवर्तन",
+    interestChange: "ब्याज परिवर्तन",
+    totalChange: "कुल परिवर्तन",
+    optionBMore: "विकल्प B मा प्रतिमहिना {amount} बढी पर्छ।",
+    optionBSaves: "विकल्प B ले प्रतिमहिना {amount} बचत गर्छ।",
     convert: "परिवर्तन",
     quickTools: "दैनिक टुल्स",
     dailyUtilities: "उपयोगी सेवा",
@@ -1086,6 +1147,14 @@ const toolTranslations = {
   "Quickly convert BS and AD dates": "वि.सं. र ई.सं. मिति छिटो परिवर्तन",
   "Nepali Land Metrics Converter": "नेपाली जग्गा मापन परिवर्तक",
   "Convert Ropani, Bigha, Kattha, Dhur, sq.ft and sq.m": "रोपनी, बिघा, कट्ठा, धुर, वर्ग फिट र वर्ग मिटर परिवर्तन",
+  "Loan EMI Calculator": "लोन ईएमआई क्याल्कुलेटर",
+  "Calculate EMI, compare installments and model loan changes": "ईएमआई गणना, किस्ता तुलना र ऋण परिवर्तनको प्रभाव",
+  "EMI": "ईएमआई",
+  "Monthly installment": "मासिक किस्ता",
+  "Compare": "तुलना",
+  "Two loan options": "दुई ऋण विकल्प",
+  "Amendments": "परिवर्तन",
+  "Principal, rate and tenure impact": "साँवा, ब्याजदर र अवधिको प्रभाव",
   "1 Ropani": "१ रोपनी",
   "1 Bigha": "१ बिघा",
   "1 Kattha": "१ कट्ठा",
@@ -1422,6 +1491,80 @@ function renderLandConverter(sourceUnit = "ropani") {
   if (summary) {
     summary.textContent = `${formatLandValue(sqft)} sq.ft = ${formatLandValue(sqft / landUnitSqft.sqm)} sq.m`;
   }
+}
+
+function formatMoney(value) {
+  const amount = Number.isFinite(value) ? value : 0;
+  return `NPR ${new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 0
+  }).format(Math.round(amount))}`;
+}
+
+function signedMoney(value) {
+  const sign = value > 0 ? "+" : value < 0 ? "-" : "";
+  return `${sign}${formatMoney(Math.abs(value))}`;
+}
+
+function addMonths(date, monthsToAdd) {
+  const next = new Date(date);
+  const originalDay = next.getDate();
+  next.setMonth(next.getMonth() + monthsToAdd);
+  if (next.getDate() < originalDay) {
+    next.setDate(0);
+  }
+  return next;
+}
+
+function getNumberValue(id) {
+  return Number(document.querySelector(`#${id}`)?.value || 0);
+}
+
+function calculateEmi(principal, annualRate, months) {
+  const safePrincipal = Math.max(0, Number(principal) || 0);
+  const safeMonths = Math.max(1, Math.round(Number(months) || 1));
+  const monthlyRate = Math.max(0, Number(annualRate) || 0) / 12 / 100;
+  const emi = monthlyRate === 0
+    ? safePrincipal / safeMonths
+    : safePrincipal * monthlyRate * ((1 + monthlyRate) ** safeMonths) / (((1 + monthlyRate) ** safeMonths) - 1);
+  const total = emi * safeMonths;
+  return {
+    emi,
+    interest: Math.max(0, total - safePrincipal),
+    total,
+    months: safeMonths
+  };
+}
+
+function renderLoanCalculator() {
+  const amount = getNumberValue("loanAmount");
+  const rate = getNumberValue("loanRate");
+  const tenureMonths = (getNumberValue("loanYears") * 12) + getNumberValue("loanMonths");
+  const startInput = document.querySelector("#loanStartDate");
+  if (startInput && !startInput.value) {
+    startInput.value = getNepalDateKey();
+  }
+  const base = calculateEmi(amount, rate, tenureMonths);
+  const startDate = new Date(`${startInput?.value || getNepalDateKey()}T00:00:00`);
+  const endDate = addMonths(startDate, Math.max(0, base.months - 1));
+  document.querySelector("#loanEmi").textContent = formatMoney(base.emi);
+  document.querySelector("#loanInterest").textContent = formatMoney(base.interest);
+  document.querySelector("#loanTotal").textContent = formatMoney(base.total);
+  document.querySelector("#loanEndDate").textContent = formatFullAdDate(endDate);
+
+  const optionA = calculateEmi(getNumberValue("compareAAmount"), getNumberValue("compareARate"), getNumberValue("compareAMonths"));
+  const optionB = calculateEmi(getNumberValue("compareBAmount"), getNumberValue("compareBRate"), getNumberValue("compareBMonths"));
+  document.querySelector("#compareAEmi").textContent = formatMoney(optionA.emi);
+  document.querySelector("#compareBEmi").textContent = formatMoney(optionB.emi);
+  const diff = optionB.emi - optionA.emi;
+  document.querySelector("#compareSummary").textContent = diff >= 0
+    ? t("optionBMore").replace("{amount}", formatMoney(diff))
+    : t("optionBSaves").replace("{amount}", formatMoney(Math.abs(diff)));
+
+  const current = calculateEmi(getNumberValue("amendCurrentAmount"), getNumberValue("amendCurrentRate"), getNumberValue("amendCurrentMonths"));
+  const changed = calculateEmi(getNumberValue("amendNewAmount"), getNumberValue("amendNewRate"), getNumberValue("amendNewMonths"));
+  document.querySelector("#amendEmiChange").textContent = signedMoney(changed.emi - current.emi);
+  document.querySelector("#amendInterestChange").textContent = signedMoney(changed.interest - current.interest);
+  document.querySelector("#amendTotalChange").textContent = signedMoney(changed.total - current.total);
 }
 
 function getCachedDailyData() {
@@ -1955,6 +2098,7 @@ function renderTools() {
       const route = {
         "Nepali <> English Date Converter": "date-converter",
         "Nepali Land Metrics Converter": "land-converter",
+        "Loan EMI Calculator": "loan-calculator",
         "Gold & Silver Rate": "gold-silver",
         "Shubha Sait": "shubha-sait",
         "Nepali Panchang": "panchang",
@@ -2521,6 +2665,7 @@ function renderAll() {
   renderShubhaSait();
   renderDateConverterPage();
   renderLandConverter();
+  renderLoanCalculator();
   runBsToAdConversion();
   runAdToBsConversion();
   renderEvents();
@@ -2672,6 +2817,13 @@ document.querySelector("#sidebarAdDateInput").addEventListener("input", runSideb
 document.querySelectorAll("[data-land-unit]").forEach((input) => {
   input.addEventListener("input", () => renderLandConverter(input.dataset.landUnit));
   input.addEventListener("focus", () => input.select());
+});
+document.querySelectorAll("#loan-calculator input").forEach((input) => {
+  input.addEventListener("input", renderLoanCalculator);
+  input.addEventListener("change", renderLoanCalculator);
+  input.addEventListener("focus", () => {
+    if (input.type !== "date") input.select();
+  });
 });
 document.querySelector("#backToHoroscope").addEventListener("click", () => navigateToSection("horoscope"));
 document.querySelector("#marketSearch").addEventListener("input", (event) => {

@@ -8,6 +8,7 @@ A modern Nepali calendar, panchang, forex, bullion, market-rate, and date-conver
 - Clickable day details with festival, panchang, rashi, market notes, and personal notes.
 - Dedicated pages for Calendar, Events, Tools, Rates, Gold/Silver, Date Converter, and Panchang.
 - Nepali land metrics converter for Ropani, Aana, Paisa, Daam, Bigha, Kattha, Dhur, sq.ft, and sq.m.
+- Loan EMI calculator with monthly EMI, total interest, payoff date, installment comparison, and loan-amendment impact.
 - NRB-focused forex rates with buy and sell prices for USD, CNY, EUR, GBP, JPY, AUD, and CAD.
 - Gold and silver price page with last updated date and clean table layout.
 - BS to AD and AD to BS date converter.
