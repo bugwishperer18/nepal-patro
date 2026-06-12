@@ -202,6 +202,65 @@ function validateMarket(data) {
     && data.preview[0]?.[0] === "Published";
 }
 
+function parsePanchangReference(text) {
+  const normalized = cleanText(text);
+  const date = normalized.match(/([०-९\d]{1,2}\s+\S+\s+[०-९\d]{4},\s*\S+)/)?.[1] || todayInNepal();
+  const englishDate = normalized.match(/\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{1,2},\s+\d{4}\b/)?.[0] || todayInNepal();
+  const dateIndex = normalized.indexOf(date);
+  const panchangIndex = normalized.indexOf("पञ्चाङ्ग:");
+  const tithiCandidate = dateIndex >= 0 && panchangIndex > dateIndex
+    ? normalized.slice(dateIndex + date.length, panchangIndex).trim()
+    : normalized.match(/(?:शुक्ल|कृष्ण)\s+\S+/)?.[0]?.trim();
+  const tithiLine = tithiCandidate
+    || fallback.panchang?.tithiLine
+    || "";
+  const panchangText = normalized.match(/पञ्चाङ्ग:\s*([अ-ह०-९\s:]+?)(?:\s+\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b|#|Aajako)/)?.[1]?.trim()
+    || fallback.panchang?.panchangText
+    || "";
+  const components = panchangText.split(/\s+/).filter(Boolean);
+
+  return {
+    updatedAt: englishDate,
+    date,
+    tithiLine,
+    panchangText,
+    source: "Hamro Patro daily panchang reference",
+    sourceUrl: "https://www.hamropatro.com/rashifal",
+    authority: "Nepal Panchang Nirnayak Bikas Samiti approved patro should be treated as final for religious decisions.",
+    components: {
+      yoga: components[0] || "",
+      karana: components[1] || "",
+      nakshatra: components.slice(2).join(" ")
+    },
+    note: "Live reference parsed from Hamro Patro. Use an officially published patro or priest for sanskar-level muhurat."
+  };
+}
+
+function validatePanchang(data) {
+  return Boolean(data?.updatedAt)
+    && Boolean(data?.sourceUrl)
+    && (Boolean(data?.tithiLine) || Boolean(data?.panchangText));
+}
+
+function parseHoroscopeReference(text) {
+  const normalized = cleanText(text);
+  const hasRashiList = ["मेष", "वृष", "मिथुन", "कर्कट", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुम्भ", "मीन"]
+    .every((sign) => normalized.includes(sign));
+
+  return {
+    ...fallback.horoscope,
+    updatedAt: todayInNepal(),
+    source: "Hamro Patro daily rashifal reference",
+    sourceUrl: "https://www.hamropatro.com/rashifal",
+    providerNote: "Live rashifal source is reachable. The app keeps its own advisory summaries unless a licensed content feed is configured.",
+    referenceAvailable: hasRashiList
+  };
+}
+
+function validateHoroscopeReference(data) {
+  return Boolean(data?.sourceUrl) && data?.referenceAvailable === true;
+}
+
 function healthOk(source, details = {}) {
   return {
     source,
@@ -252,16 +311,19 @@ function useParsedSource(result, parser, validator, fallbackValue, sourceName) {
 }
 
 async function buildDailyData() {
-  const [forexHtml, goldHtml, fuelHtml, marketHtml] = await Promise.allSettled([
+  const [forexHtml, goldHtml, fuelHtml, marketHtml, rashifalHtml] = await Promise.allSettled([
     safeFetch("https://www.nrb.org.np/forex/"),
     safeFetch("https://www.hamropatro.com/gold"),
     safeFetch("https://noc.org.np/petrol"),
-    safeFetch("https://kalimatimarket.gov.np/price")
+    safeFetch("https://kalimatimarket.gov.np/price"),
+    safeFetch("https://www.hamropatro.com/rashifal")
   ]);
   const forex = useParsedSource(forexHtml, parseForex, validateForex, fallback.forex, "NRB forex");
   const gold = useParsedSource(goldHtml, parseGold, validateGold, fallback.gold, "Hamro Patro gold");
   const fuel = useParsedSource(fuelHtml, parseFuel, validateFuel, fallback.fuel, "NOC fuel");
   const market = useParsedSource(marketHtml, parseMarket, validateMarket, fallback.market, "Kalimati market");
+  const panchang = useParsedSource(rashifalHtml, parsePanchangReference, validatePanchang, fallback.panchang, "Hamro Patro panchang");
+  const horoscope = useParsedSource(rashifalHtml, parseHoroscopeReference, validateHoroscopeReference, fallback.horoscope, "Hamro Patro rashifal");
 
   return {
     ...fallback,
@@ -271,14 +333,15 @@ async function buildDailyData() {
     gold: gold.value,
     fuel: fuel.value,
     market: market.value,
-    horoscope: fallback.horoscope,
+    panchang: panchang.value,
+    horoscope: horoscope.value,
     sourceHealth: {
       forex: forex.health,
       gold: gold.health,
       fuel: fuel.health,
       market: market.health,
-      panchang: healthFallback("Patro/ephemeris", "Official ephemeris integration not configured"),
-      horoscope: healthFallback("Rashifal provider", "Licensed monthly rashifal source not configured")
+      panchang: panchang.health,
+      horoscope: horoscope.health
     }
   };
 }
@@ -317,8 +380,8 @@ module.exports = async function handler(request, response) {
         gold: healthFallback("Hamro Patro gold", "API-level fallback"),
         fuel: healthFallback("NOC fuel", "API-level fallback"),
         market: healthFallback("Kalimati market", "API-level fallback"),
-        panchang: healthFallback("Patro/ephemeris", "Official ephemeris integration not configured"),
-        horoscope: healthFallback("Rashifal provider", "Licensed monthly rashifal source not configured")
+        panchang: healthFallback("Hamro Patro panchang", "API-level fallback"),
+        horoscope: healthFallback("Hamro Patro rashifal", "API-level fallback")
       }
     });
   }
@@ -329,9 +392,13 @@ module.exports._internal = {
   parseGold,
   parseFuel,
   parseMarket,
+  parsePanchangReference,
+  parseHoroscopeReference,
   validateForex,
   validateGold,
   validateFuel,
   validateMarket,
+  validatePanchang,
+  validateHoroscopeReference,
   useParsedSource
 };

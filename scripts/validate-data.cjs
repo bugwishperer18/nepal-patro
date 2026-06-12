@@ -28,7 +28,11 @@ function validateDailyData() {
   assert(dailyApi._internal.validateGold(dailyData.gold), "gold data failed validation");
   assert(dailyApi._internal.validateFuel(dailyData.fuel), "fuel data failed validation");
   assert(dailyApi._internal.validateMarket(dailyData.market), "market data failed validation");
+  assert(dailyApi._internal.validatePanchang(dailyData.panchang), "panchang data failed validation");
+  assert(dailyData.horoscope?.sourceUrl, "horoscope sourceUrl is required");
   assert(dailyData.sourceHealth, "sourceHealth is required for honest data confidence");
+  assert(dailyData.sourceHealth.panchang, "panchang sourceHealth is required");
+  assert(dailyData.sourceHealth.horoscope, "horoscope sourceHealth is required");
 }
 
 function validateSecuritySurface() {
@@ -41,6 +45,7 @@ function validateSecuritySurface() {
   assert(/object-src 'none'/.test(html), "CSP must block object embeds");
   assert(/frame-src 'none'/.test(html), "CSP must block frames");
   assert(/base-uri 'self'/.test(html), "CSP must restrict base-uri");
+  assert(/source-panel/.test(html), "source status panels must stay visible");
   assert(/manifest\.webmanifest/.test(html), "index.html must reference the PWA manifest");
   assert(fs.existsSync(path.join(root, "manifest.webmanifest")), "PWA manifest is missing");
   assert(/contextIsolation:\s*true/.test(electron), "Electron contextIsolation must stay enabled");

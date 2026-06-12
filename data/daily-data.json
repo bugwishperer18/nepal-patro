@@ -495,9 +495,26 @@
       ]
     ]
   },
+  "panchang": {
+    "updatedAt": "2026-05-09",
+    "date": "२२ वैशाख २०८३",
+    "tithiLine": "जेठ कृष्ण चतुर्थी",
+    "panchangText": "परिधि वणिज अनुराधा",
+    "source": "Bundled advisory panchang snapshot",
+    "sourceUrl": "https://www.hamropatro.com/rashifal",
+    "authority": "Nepal Panchang Nirnayak Bikas Samiti approved patro should be treated as final for religious decisions.",
+    "components": {
+      "yoga": "परिधि",
+      "karana": "वणिज",
+      "nakshatra": "अनुराधा"
+    },
+    "note": "Offline fallback. Refresh online for a live Hamro Patro panchang reference."
+  },
   "horoscope": {
     "updatedAt": "2083 Baisakh",
-    "source": "Hamro Patro monthly rashifal",
+    "source": "Advisory in-app rashifal with Hamro Patro reference link",
+    "sourceUrl": "https://www.hamropatro.com/rashifal",
+    "providerNote": "Use a licensed rashifal feed before republishing third-party horoscope text.",
     "items": {}
   },
   "sourceHealth": {
@@ -526,16 +543,16 @@
       "reason": "Bundled offline snapshot"
     },
     "panchang": {
-      "source": "Patro/ephemeris",
+      "source": "Hamro Patro panchang",
       "status": "fallback",
       "checkedAt": "2026-05-09",
-      "reason": "Official ephemeris integration not configured"
+      "reason": "Bundled offline snapshot"
     },
     "horoscope": {
-      "source": "Rashifal provider",
+      "source": "Hamro Patro rashifal",
       "status": "fallback",
       "checkedAt": "2026-05-09",
-      "reason": "Licensed monthly rashifal source not configured"
+      "reason": "Reference link only until licensed content feed is configured"
     }
   }
 }

@@ -447,6 +447,8 @@ let fuelRows = [
 let fuelUpdatedAt = window.NEPAL_PATRO_DAILY_DATA?.fuel?.updatedAt || "2026-05-08";
 let marketRows = tools.find((tool) => tool.market)?.preview || [];
 let marketUpdatedAt = window.NEPAL_PATRO_DAILY_DATA?.market?.updatedAt || "बैशाख २४, २०८३";
+let panchangReference = window.NEPAL_PATRO_DAILY_DATA?.panchang || null;
+let horoscopeReference = window.NEPAL_PATRO_DAILY_DATA?.horoscope || null;
 const goldHistory = [314000, 318000, 316000, 322000, 315000, 311000, 309000, 296000, 286000, 294000, 290000, 298600];
 const silverHistory = [4860, 4920, 5010, 4980, 5060, 5120, 5080, 5155, 5090, 5180, 5115, 5155];
 const bullionHistoryDates = ["Apr 27", "Apr 28", "Apr 29", "Apr 30", "May 1", "May 2", "May 3", "May 4", "May 5", "May 6", "May 7", "May 8"];
@@ -719,6 +721,17 @@ const translations = {
     advisory: "Advisory",
     panchangNotice: "Indicative daily panchang values are shown for planning context. Use an official patro or priest for muhurat, samskar, fasting, and religious decisions.",
     horoscopeNotice: "Advisory Vedic guide. Verify personal decisions with a qualified astrologer.",
+    sourceStatus: "Source status",
+    liveReference: "Live reference",
+    sourceReference: "Reference",
+    officialAuthority: "Official authority",
+    licensedContent: "Licensed content",
+    openSource: "Open source",
+    advisoryOnly: "Advisory only",
+    sourceLive: "Live source checked",
+    sourceFallback: "Offline fallback",
+    noLicensedHoroscope: "Full third-party rashifal text needs publisher permission. This app shows original advisory guidance and links to the source.",
+    panchangAuthorityNote: "Nepal Panchang Nirnayak Bikas Samiti-approved patro should override app guidance for religious decisions.",
     converterNotice: "Converter is verified for the bundled months only: BS 2083 through Baisakh 2084. More years should be added from an official BS date table before relying on older or future dates.",
     exportCalendar: "Export calendar",
     exported: "Exported",
@@ -880,6 +893,17 @@ const translations = {
     advisory: "सल्लाह",
     panchangNotice: "दैनिक पञ्चाङ्ग संकेत योजना सन्दर्भका लागि मात्र हो। मुहूर्त, संस्कार, व्रत र धार्मिक निर्णयका लागि आधिकारिक पात्रो वा पुरोहितसँग पुष्टि गर्नुहोस्।",
     horoscopeNotice: "यो वैदिक ज्योतिष मार्गदर्शन सल्लाह मात्र हो। व्यक्तिगत निर्णयका लागि योग्य ज्योतिषीसँग पुष्टि गर्नुहोस्।",
+    sourceStatus: "स्रोत अवस्था",
+    liveReference: "लाइभ सन्दर्भ",
+    sourceReference: "सन्दर्भ",
+    officialAuthority: "आधिकारिक निकाय",
+    licensedContent: "लाइसेन्स सामग्री",
+    openSource: "स्रोत खोल्नुहोस्",
+    advisoryOnly: "सल्लाह मात्र",
+    sourceLive: "लाइभ स्रोत जाँच भयो",
+    sourceFallback: "अफलाइन वैकल्पिक",
+    noLicensedHoroscope: "तेस्रो पक्षको पूरा राशिफल पुनःप्रकाशन गर्न प्रकाशकको अनुमति चाहिन्छ। यो एपले आफ्नै सल्लाहात्मक मार्गदर्शन र स्रोत लिङ्क देखाउँछ।",
+    panchangAuthorityNote: "धार्मिक निर्णयका लागि नेपाल पञ्चाङ्ग निर्णायक विकास समितिबाट स्वीकृत पात्रोलाई प्राथमिकता दिनुहोस्।",
     converterNotice: "मिति परिवर्तन हाल समावेश गरिएको महिना दायराका लागि मात्र प्रमाणित छ: वि.सं. २०८३ देखि वैशाख २०८४ सम्म। पुराना वा भविष्यका मितिमा भर पर्नुअघि आधिकारिक वि.सं. मिति तालिका थप्नुपर्छ।",
     exportCalendar: "क्यालेन्डर एक्सपोर्ट",
     exported: "एक्सपोर्ट भयो",
@@ -1185,6 +1209,11 @@ const toolTranslations = {
   "Patro": "पात्रो",
   "Astrology": "ज्योतिष",
   "Market": "बजार",
+  "Forex": "विदेशी मुद्रा",
+  "Gold": "सुन",
+  "Fuel": "इन्धन",
+  "Panchang": "पञ्चाङ्ग",
+  "Rashifal": "राशिफल",
   "1 Ropani": "१ रोपनी",
   "1 Bigha": "१ बिघा",
   "1 Kattha": "१ कट्ठा",
@@ -1653,8 +1682,16 @@ function applyDailyData(data) {
     marketUpdatedAt = data.market.updatedAt || data.updatedAt || marketUpdatedAt;
   }
 
+  if (data.panchang) {
+    panchangReference = data.panchang;
+  }
+
   if (data.horoscope?.items) {
     Object.assign(horoscopeData, data.horoscope.items);
+  }
+
+  if (data.horoscope) {
+    horoscopeReference = data.horoscope;
   }
 
   if (data.forex?.rates) {
@@ -2374,7 +2411,9 @@ function renderFreshness() {
     ["Forex", document.querySelector("#forexUpdatedBadge")?.textContent || dailyDataSnapshot?.forex?.updatedAt || dailyDataSnapshot?.updatedAt || "", health.forex],
     ["Gold", goldUpdatedAt, health.gold],
     ["Market", marketUpdatedAt, health.market],
-    ["Fuel", fuelUpdatedAt, health.fuel]
+    ["Fuel", fuelUpdatedAt, health.fuel],
+    ["Panchang", panchangReference?.updatedAt || "", health.panchang],
+    ["Rashifal", horoscopeReference?.updatedAt || "", health.horoscope]
   ];
   rows.forEach(([label, value, sourceHealth]) => {
     const item = makeElement("div", `freshness-item ${sourceHealth?.status === "fallback" ? "needs-review" : ""}`);
@@ -2388,9 +2427,50 @@ function renderFreshness() {
   document.querySelector("#refreshStatus").textContent = status;
 }
 
+function renderSourcePanel(targetId, rows) {
+  const panel = document.querySelector(targetId);
+  if (!panel) {
+    return;
+  }
+  clearNode(panel);
+  rows.filter(Boolean).forEach((row) => {
+    const card = makeElement("article", `source-card ${row.status === "fallback" ? "needs-review" : ""}`);
+    const text = document.createElement("div");
+    text.append(makeElement("span", "eyebrow", row.label));
+    text.append(makeElement("strong", "", row.title));
+    if (row.note) {
+      text.append(makeElement("p", "", row.note));
+    }
+    card.append(text);
+    if (row.url) {
+      const link = makeElement("a", "source-link", t("openSource"));
+      link.href = row.url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      card.append(link);
+    }
+    panel.append(card);
+  });
+}
+
 function renderHoroscope() {
   const grid = document.querySelector("#horoscopeGrid");
   clearNode(grid);
+  const health = dailyDataSnapshot?.sourceHealth?.horoscope;
+  renderSourcePanel("#horoscopeSourcePanel", [
+    {
+      label: t("sourceStatus"),
+      title: health?.status === "live" ? t("sourceLive") : t("sourceFallback"),
+      note: horoscopeReference?.providerNote || t("noLicensedHoroscope"),
+      status: health?.status || "fallback",
+      url: horoscopeReference?.sourceUrl || "https://www.hamropatro.com/rashifal"
+    },
+    {
+      label: t("licensedContent"),
+      title: t("advisoryOnly"),
+      note: t("noLicensedHoroscope")
+    }
+  ]);
   Object.entries(horoscopeData).forEach(([key, data]) => {
     const card = makeElement("button", "rashi-card");
     card.type = "button";
@@ -2449,6 +2529,31 @@ function renderMiniList(targetId, rows) {
 }
 
 function renderPanchangDetails() {
+  const health = dailyDataSnapshot?.sourceHealth?.panchang;
+  const components = panchangReference?.components || {};
+  if (panchangReference?.tithiLine) {
+    document.querySelector("#todayTithi").textContent = appLanguage === "ne" ? panchangReference.tithiLine : localizeNepaliDateText(panchangReference.tithiLine);
+  }
+  if (components.nakshatra) {
+    document.querySelector("#todayNakshatra").textContent = appLanguage === "ne" ? components.nakshatra : localizeTerm(components.nakshatra);
+  }
+  if (components.yoga) {
+    document.querySelector("#todayYoga").textContent = appLanguage === "ne" ? components.yoga : localizeTerm(components.yoga);
+  }
+  renderSourcePanel("#panchangSourcePanel", [
+    {
+      label: t("liveReference"),
+      title: health?.status === "live" ? t("sourceLive") : t("sourceFallback"),
+      note: panchangReference?.note || t("panchangAuthorityNote"),
+      status: health?.status || "fallback",
+      url: panchangReference?.sourceUrl || "https://www.hamropatro.com/rashifal"
+    },
+    {
+      label: t("officialAuthority"),
+      title: "Nepal Panchang Nirnayak Bikas Samiti",
+      note: t("panchangAuthorityNote")
+    }
+  ]);
   renderMiniList("#inauspiciousTimes", inauspiciousTimes);
   renderMiniList("#dailyGuidance", panchangGuidance);
 }
