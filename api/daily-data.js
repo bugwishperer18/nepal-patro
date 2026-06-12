@@ -29,6 +29,10 @@ function todayInNepal() {
 
 async function safeFetch(url) {
   const parsed = new URL(url);
+  if (parsed.protocol !== "https:") {
+    throw new Error("Blocked non-HTTPS source");
+  }
+
   if (!allowedHosts.has(parsed.hostname)) {
     throw new Error("Blocked source host");
   }

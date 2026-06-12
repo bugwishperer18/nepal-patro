@@ -1,0 +1,17 @@
+{
+  "name": "Nepal Patro",
+  "short_name": "Nepal Patro",
+  "description": "A modern Nepali calendar and daily utility toolkit for Nepal.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5f1",
+  "theme_color": "#f7f5f1",
+  "icons": [
+    {
+      "src": "build/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

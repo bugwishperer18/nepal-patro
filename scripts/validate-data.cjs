@@ -35,11 +35,21 @@ function validateSecuritySurface() {
   const app = read("app.js");
   const html = read("index.html");
   const electron = read("electron/main.cjs");
+  const api = read("api/daily-data.js");
   assert(!/\.innerHTML\s*=|insertAdjacentHTML|document\.write|eval\s*\(|new Function\s*\(/.test(app), "unsafe HTML/eval sink found in app.js");
   assert(/Content-Security-Policy/.test(html), "index.html needs a CSP");
+  assert(/object-src 'none'/.test(html), "CSP must block object embeds");
+  assert(/frame-src 'none'/.test(html), "CSP must block frames");
+  assert(/base-uri 'self'/.test(html), "CSP must restrict base-uri");
+  assert(/manifest\.webmanifest/.test(html), "index.html must reference the PWA manifest");
+  assert(fs.existsSync(path.join(root, "manifest.webmanifest")), "PWA manifest is missing");
   assert(/contextIsolation:\s*true/.test(electron), "Electron contextIsolation must stay enabled");
   assert(/nodeIntegration:\s*false/.test(electron), "Electron nodeIntegration must stay disabled");
   assert(/sandbox:\s*true/.test(electron), "Electron sandbox must stay enabled");
+  assert(/setPermissionRequestHandler/.test(electron), "Electron must deny unexpected permission requests");
+  assert(/function openExternalSafely/.test(electron), "Electron external links must go through a safe protocol check");
+  assert(!/shell\.openExternal\(url\)/.test(electron), "Electron must not open unvalidated URLs");
+  assert(/parsed\.protocol !== "https:"/.test(api), "API safeFetch must enforce HTTPS sources");
 }
 
 function validateConverterClaims() {

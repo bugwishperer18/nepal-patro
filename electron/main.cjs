@@ -3,6 +3,22 @@ const path = require("path");
 
 let mainWindow;
 
+function openExternalSafely(targetUrl) {
+  let parsed;
+  try {
+    parsed = new URL(targetUrl);
+  } catch {
+    return false;
+  }
+
+  if (!["https:", "http:"].includes(parsed.protocol)) {
+    return false;
+  }
+
+  shell.openExternal(parsed.toString());
+  return true;
+}
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1440,
@@ -21,17 +37,21 @@ function createWindow() {
     }
   });
 
+  mainWindow.webContents.session.setPermissionRequestHandler((_webContents, _permission, callback) => {
+    callback(false);
+  });
+
   mainWindow.loadFile(path.join(__dirname, "../index.html"));
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
+    openExternalSafely(url);
     return { action: "deny" };
   });
 
   mainWindow.webContents.on("will-navigate", (event, url) => {
     if (!url.startsWith("file://")) {
       event.preventDefault();
-      shell.openExternal(url);
+      openExternalSafely(url);
     }
   });
 }

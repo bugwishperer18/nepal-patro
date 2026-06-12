@@ -809,6 +809,12 @@ const translations = {
     convert: "Convert",
     quickTools: "Quick tools",
     dailyUtilities: "Daily utilities",
+    publicReady: "Public ready",
+    shareNepalPatro: "Share Nepal Patro",
+    shareNepalPatroText: "A no-login Nepali calendar and daily utility toolkit for family, work, travel, and planning.",
+    shareTool: "Share",
+    linkCopied: "Link copied",
+    shareFailed: "Unable to share",
     panchang: "Panchang",
     saveNote: "Save note",
     saved: "Saved",
@@ -964,6 +970,12 @@ const translations = {
     convert: "परिवर्तन",
     quickTools: "दैनिक टुल्स",
     dailyUtilities: "उपयोगी सेवा",
+    publicReady: "सार्वजनिक प्रयोगका लागि",
+    shareNepalPatro: "नेपाल पात्रो सेयर गर्नुहोस्",
+    shareNepalPatroText: "परिवार, काम, यात्रा र योजनाका लागि लगइन नचाहिने नेपाली पात्रो र दैनिक उपयोगी टुलकिट।",
+    shareTool: "सेयर",
+    linkCopied: "लिङ्क कपी भयो",
+    shareFailed: "सेयर गर्न सकिएन",
     panchang: "पञ्चाङ्ग",
     saveNote: "नोट राख्नुहोस्",
     saved: "सेभ भयो",
@@ -2140,6 +2152,38 @@ function renderTools() {
   });
 }
 
+async function shareApp() {
+  const button = document.querySelector("#shareAppButton");
+  const originalText = button.textContent;
+  const appUrl = window.location.origin && window.location.origin !== "null"
+    ? `${window.location.origin}${window.location.pathname}`
+    : "https://nepal-patro.vercel.app/";
+  const shareData = {
+    title: "Nepal Patro",
+    text: t("shareNepalPatroText"),
+    url: appUrl
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(appUrl);
+      button.textContent = t("linkCopied");
+      setTimeout(() => {
+        button.textContent = originalText;
+      }, 1400);
+    } else {
+      throw new Error("Share APIs unavailable");
+    }
+  } catch {
+    button.textContent = t("shareFailed");
+    setTimeout(() => {
+      button.textContent = originalText;
+    }, 1400);
+  }
+}
+
 function renderRates() {
   const rateList = document.querySelector("#exchangeRates");
   clearNode(rateList);
@@ -2864,6 +2908,7 @@ document.querySelector("#exportEventsButton").addEventListener("click", () => {
     button.textContent = original;
   }, 1400);
 });
+document.querySelector("#shareAppButton").addEventListener("click", shareApp);
 document.querySelectorAll("[data-refresh-button]").forEach((button) => {
   button.addEventListener("click", async () => {
     const original = button.textContent;

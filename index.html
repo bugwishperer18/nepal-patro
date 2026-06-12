@@ -3,8 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nepal-patro.vercel.app https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
+    <meta name="description" content="Nepal Patro is a modern Nepali calendar with BS/AD conversion, daily rates, panchang, rashifal, land conversion, and EMI planning tools.">
+    <meta name="theme-color" content="#f7f5f1">
+    <meta name="apple-mobile-web-app-title" content="Nepal Patro">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta property="og:title" content="Nepal Patro">
+    <meta property="og:description" content="A no-login Nepali calendar and daily utility toolkit for Nepal.">
+    <meta property="og:type" content="website">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://nepal-patro.vercel.app https://www.nrb.org.np https://www.hamropatro.com https://noc.org.np https://kalimatimarket.gov.np; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; manifest-src 'self'; object-src 'none'; frame-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
     <title>Nepal Patro</title>
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="stylesheet" href="styles.css?v=28">
   </head>
   <body>
@@ -188,6 +196,14 @@
             </div>
             <span class="section-badge" id="toolCountBadge">9</span>
           </div>
+          <section class="share-tool-strip" aria-labelledby="shareToolTitle">
+            <div>
+              <p class="eyebrow" data-i18n="publicReady">Public ready</p>
+              <h2 id="shareToolTitle" data-i18n="shareNepalPatro">Share Nepal Patro</h2>
+              <p data-i18n="shareNepalPatroText">A no-login Nepali calendar and daily utility toolkit for family, work, travel, and planning.</p>
+            </div>
+            <button class="secondary-button" type="button" id="shareAppButton" data-i18n="shareTool">Share</button>
+          </section>
           <div class="tool-list page-grid" id="toolList"></div>
         </section>
 
