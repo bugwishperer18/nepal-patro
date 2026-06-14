@@ -5,8 +5,11 @@ files:
   - index.html
   - app.js
   - styles.css
+  - manifest.webmanifest
+  - build/**
   - data/**
   - electron/**
+  - vendor/**
 mac:
   category: public.app-category.productivity
   icon: build/icon.png

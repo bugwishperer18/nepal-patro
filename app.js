@@ -629,9 +629,10 @@ const karanas = ["वणिज", "विष्टि", "बव", "बालव",
 const rashis = ["मेष", "वृष", "मिथुन", "कर्कट", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुम्भ", "मीन"];
 const colors = ["Crimson", "Sapphire", "White", "Ruby", "Indigo", "Pearl"];
 const bsMonthNames = ["वैशाख", "जेठ", "असार", "साउन", "भदौ", "आश्विन", "कार्तिक", "मंसिर", "पुष", "माघ", "फागुन", "चैत"];
-const converterStartYear = 2083;
-const converterEndYear = 2084;
-const verifiedBsMonthKeys = new Set(monthSeed.map((month) => `${month.year}-${month.name}`));
+const converterStartYear = 1975;
+const converterEndYear = 2099;
+const converterMinAdDate = new Date("1918-04-13T00:00:00");
+const converterMaxAdDate = new Date("2043-04-13T00:00:00");
 const converterAnchor = {
   bsYear: 2083,
   bsMonth: 1,
@@ -717,7 +718,7 @@ const translations = {
     cachedToday: "Cached today",
     fallbackData: "Fallback data",
     sourceNeedsReview: "Source needs review",
-    verifiedRangeShort: "Verified: BS 2083 - Baisakh 2084",
+    verifiedRangeShort: "Verified: BS 1975 - 2099",
     advisory: "Advisory",
     panchangNotice: "Indicative daily panchang values are shown for planning context. Use an official patro or priest for muhurat, samskar, fasting, and religious decisions.",
     horoscopeNotice: "Advisory Vedic guide. Verify personal decisions with a qualified astrologer.",
@@ -732,7 +733,7 @@ const translations = {
     sourceFallback: "Offline fallback",
     noLicensedHoroscope: "Full third-party rashifal text needs publisher permission. This app shows original advisory guidance and links to the source.",
     panchangAuthorityNote: "Nepal Panchang Nirnayak Bikas Samiti-approved patro should override app guidance for religious decisions.",
-    converterNotice: "Converter is verified for the bundled months only: BS 2083 through Baisakh 2084. More years should be added from an official BS date table before relying on older or future dates.",
+    converterNotice: "Converter uses the MIT-licensed @remotemerge/nepali-date-converter table for BS 1975-2099. Confirm official records for legal documents.",
     exportCalendar: "Export calendar",
     exported: "Exported",
     searchMarket: "Search market rates",
@@ -889,7 +890,7 @@ const translations = {
     cachedToday: "आजको क्यास",
     fallbackData: "बैकल्पिक डाटा",
     sourceNeedsReview: "स्रोत जाँच आवश्यक",
-    verifiedRangeShort: "प्रमाणित: वि.सं. २०८३ - वैशाख २०८४",
+    verifiedRangeShort: "प्रमाणित: वि.सं. १९७५ - २०९९",
     advisory: "सल्लाह",
     panchangNotice: "दैनिक पञ्चाङ्ग संकेत योजना सन्दर्भका लागि मात्र हो। मुहूर्त, संस्कार, व्रत र धार्मिक निर्णयका लागि आधिकारिक पात्रो वा पुरोहितसँग पुष्टि गर्नुहोस्।",
     horoscopeNotice: "यो वैदिक ज्योतिष मार्गदर्शन सल्लाह मात्र हो। व्यक्तिगत निर्णयका लागि योग्य ज्योतिषीसँग पुष्टि गर्नुहोस्।",
@@ -904,7 +905,7 @@ const translations = {
     sourceFallback: "अफलाइन वैकल्पिक",
     noLicensedHoroscope: "तेस्रो पक्षको पूरा राशिफल पुनःप्रकाशन गर्न प्रकाशकको अनुमति चाहिन्छ। यो एपले आफ्नै सल्लाहात्मक मार्गदर्शन र स्रोत लिङ्क देखाउँछ।",
     panchangAuthorityNote: "धार्मिक निर्णयका लागि नेपाल पञ्चाङ्ग निर्णायक विकास समितिबाट स्वीकृत पात्रोलाई प्राथमिकता दिनुहोस्।",
-    converterNotice: "मिति परिवर्तन हाल समावेश गरिएको महिना दायराका लागि मात्र प्रमाणित छ: वि.सं. २०८३ देखि वैशाख २०८४ सम्म। पुराना वा भविष्यका मितिमा भर पर्नुअघि आधिकारिक वि.सं. मिति तालिका थप्नुपर्छ।",
+    converterNotice: "मिति परिवर्तनले MIT-licensed @remotemerge/nepali-date-converter तालिका प्रयोग गर्छ: वि.सं. १९७५-२०९९। कानूनी कागजातका लागि आधिकारिक रेकर्डसँग पुष्टि गर्नुहोस्।",
     exportCalendar: "क्यालेन्डर एक्सपोर्ट",
     exported: "एक्सपोर्ट भयो",
     searchMarket: "बजार दर खोज्नुहोस्",
@@ -1821,32 +1822,12 @@ function formatFullAdDate(date) {
 
 function getVerifiedMonth(year, month) {
   const name = bsMonthNames[month - 1];
-  if (!verifiedBsMonthKeys.has(`${year}-${name}`)) {
-    return null;
-  }
   return monthSeed.find((item) => item.year === year && item.name === name) || null;
 }
 
-function getLastVerifiedBsMonth() {
-  const last = monthSeed[monthSeed.length - 1];
-  return {
-    year: last.year,
-    month: (monthSeed.length - 1) % 12 + 1,
-    day: last.days
-  };
-}
-
 function clampVerifiedBsDate(year, month, day) {
-  const last = getLastVerifiedBsMonth();
-  let boundedYear = Math.max(converterStartYear, Math.min(last.year, year || converterAnchor.bsYear));
+  let boundedYear = Math.max(converterStartYear, Math.min(converterEndYear, year || converterAnchor.bsYear));
   let boundedMonth = Math.max(1, Math.min(12, month || converterAnchor.bsMonth));
-  if (boundedYear === last.year && boundedMonth > last.month) {
-    boundedMonth = last.month;
-  }
-  if (!getVerifiedMonth(boundedYear, boundedMonth)) {
-    boundedYear = last.year;
-    boundedMonth = last.month;
-  }
   const maxDay = getBsMonthDays(boundedYear, boundedMonth);
   return {
     year: boundedYear,
@@ -1856,41 +1837,46 @@ function clampVerifiedBsDate(year, month, day) {
 }
 
 function getConverterMaxAdDate() {
-  const last = getLastVerifiedBsMonth();
-  return convertBsToAd(last.year, last.month, last.day).date;
+  return converterMaxAdDate;
 }
 
 function getBsMonthDays(year, month) {
-  const index = month - 1;
   const verified = getVerifiedMonth(year, month);
-  if (!verified) {
-    return getLastVerifiedBsMonth().day;
+  if (verified) {
+    return verified.days;
   }
-  return verified.days;
-}
-
-function countDaysFromBsAnchor(year, month, day) {
-  let total = 0;
-  if (year >= converterAnchor.bsYear) {
-    for (let y = converterAnchor.bsYear; y < year; y += 1) {
-      for (let m = 1; m <= 12; m += 1) total += getBsMonthDays(y, m);
+  if (!window.DateConverter) {
+    return 32;
+  }
+  for (let day = 32; day >= 28; day -= 1) {
+    try {
+      const result = new window.DateConverter(`${year}-${month}-${day}`).toAd();
+      if (result?.year) return day;
+    } catch {
+      // Try the next lower day.
     }
-    for (let m = 1; m < month; m += 1) total += getBsMonthDays(year, m);
-    total += day - 1;
-    return total;
   }
-
-  for (let y = year; y < converterAnchor.bsYear; y += 1) {
-    for (let m = 1; m <= 12; m += 1) total -= getBsMonthDays(y, m);
-  }
-  for (let m = 1; m < month; m += 1) total += getBsMonthDays(year, m);
-  total += day - 1;
-  return total;
+  return 30;
 }
 
 function convertBsToAd(year, month, day) {
   const bounded = clampVerifiedBsDate(year, month, day);
-  const offset = countDaysFromBsAnchor(bounded.year, bounded.month, bounded.day);
+  if (window.DateConverter) {
+    try {
+      const converted = new window.DateConverter(`${bounded.year}-${bounded.month}-${bounded.day}`).toAd();
+      return {
+        year: bounded.year,
+        month: bounded.month,
+        day: bounded.day,
+        date: new Date(`${converted.year}-${String(converted.month).padStart(2, "0")}-${String(converted.date).padStart(2, "0")}T00:00:00`)
+      };
+    } catch {
+      return convertBsToAd(bounded.year, bounded.month, getBsMonthDays(bounded.year, bounded.month));
+    }
+  }
+  const offset = Math.round((bounded.year - converterAnchor.bsYear) * 365.25)
+    + monthSeed.slice(0, Math.max(0, bounded.month - 1)).reduce((sum, item) => sum + item.days, 0)
+    + bounded.day - converterAnchor.bsDay;
   return {
     year: bounded.year,
     month: bounded.month,
@@ -1900,48 +1886,13 @@ function convertBsToAd(year, month, day) {
 }
 
 function convertAdToBs(date) {
-  const minDate = converterAnchor.adDate;
-  const maxDate = getConverterMaxAdDate();
   const rawTarget = new Date(`${formatDateKey(date)}T00:00:00`);
-  const target = rawTarget < minDate ? minDate : rawTarget > maxDate ? maxDate : rawTarget;
-  const dayMs = 24 * 60 * 60 * 1000;
-  let remaining = Math.round((target - converterAnchor.adDate) / dayMs);
-  let year = converterAnchor.bsYear;
-  let month = converterAnchor.bsMonth;
-  let day = converterAnchor.bsDay;
-
-  if (remaining >= 0) {
-    const last = getLastVerifiedBsMonth();
-    while (remaining > 0 && (year < last.year || (year === last.year && month <= last.month))) {
-      const daysInMonth = getBsMonthDays(year, month);
-      const canMove = Math.min(remaining, daysInMonth - day + 1);
-      day += canMove;
-      remaining -= canMove;
-      if (day > daysInMonth) {
-        day = 1;
-        month += 1;
-        if (month > 12) {
-          month = 1;
-          year += 1;
-        }
-      }
-    }
-  } else {
-    while (remaining < 0 && year >= converterStartYear) {
-      day -= 1;
-      remaining += 1;
-      if (day < 1) {
-        month -= 1;
-        if (month < 1) {
-          month = 12;
-          year -= 1;
-        }
-        day = getBsMonthDays(year, month);
-      }
-    }
+  const target = rawTarget < converterMinAdDate ? converterMinAdDate : rawTarget > converterMaxAdDate ? converterMaxAdDate : rawTarget;
+  if (window.DateConverter) {
+    const converted = new window.DateConverter(formatDateKey(target)).toBs();
+    return { year: converted.year, month: converted.month, day: converted.date };
   }
-
-  return { year, month, day };
+  return { year: converterAnchor.bsYear, month: converterAnchor.bsMonth, day: converterAnchor.bsDay };
 }
 
 function formatConverterBsDate(year, month, day) {
@@ -2605,7 +2556,6 @@ function renderBsMonthOptionsFor(select, year) {
     const option = document.createElement("option");
     option.value = String(index + 1);
     option.textContent = localizeMonthName(name);
-    option.disabled = !getVerifiedMonth(Number(year), index + 1);
     select.append(option);
   });
   select.value = select.querySelector(`option[value="${currentValue}"]:not(:disabled)`) ? currentValue : "1";
@@ -2626,15 +2576,14 @@ function renderSidebarBsMonthOptions() {
 function renderDateConverterPage() {
   renderBsMonthOptions();
   renderSidebarBsMonthOptions();
-  const last = getLastVerifiedBsMonth();
   document.querySelector("#converterRange").textContent = t("verifiedRangeShort");
   document.querySelector("#bsYearInput").min = String(converterStartYear);
-  document.querySelector("#bsYearInput").max = String(last.year);
+  document.querySelector("#bsYearInput").max = String(converterEndYear);
   document.querySelector("#sidebarBsYearInput").min = String(converterStartYear);
-  document.querySelector("#sidebarBsYearInput").max = String(last.year);
-  document.querySelector("#adDateInput").min = formatDateKey(converterAnchor.adDate);
+  document.querySelector("#sidebarBsYearInput").max = String(converterEndYear);
+  document.querySelector("#adDateInput").min = formatDateKey(converterMinAdDate);
   document.querySelector("#adDateInput").max = formatDateKey(getConverterMaxAdDate());
-  document.querySelector("#sidebarAdDateInput").min = formatDateKey(converterAnchor.adDate);
+  document.querySelector("#sidebarAdDateInput").min = formatDateKey(converterMinAdDate);
   document.querySelector("#sidebarAdDateInput").max = formatDateKey(getConverterMaxAdDate());
 }
 

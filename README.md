@@ -11,7 +11,7 @@ A modern Nepali calendar, panchang, forex, bullion, market-rate, and date-conver
 - Loan EMI calculator with monthly EMI, total interest, payoff date, installment comparison, and loan-amendment impact.
 - NRB-focused forex rates with buy and sell prices for USD, CNY, EUR, GBP, JPY, AUD, and CAD.
 - Gold and silver price page with last updated date and clean table layout.
-- BS to AD and AD to BS date converter.
+- BS to AD and AD to BS date converter for BS 1975-2099 using a vendored MIT-licensed converter library.
 - Clear confidence notes for advisory panchang, shubha sait, horoscope, and supported converter range.
 - Source-health checks that mark stale or parser-fallback data instead of silently presenting it as live.
 - Daily data refresh through a Vercel serverless endpoint with local cache fallback.
@@ -47,7 +47,7 @@ The first macOS package target is an unsigned DMG for personal use and testing.
 npm run check:all
 ```
 
-The guardrail script validates daily data shape, required forex ordering, parser validators, CSP presence, Electron hardening flags, and converter-range claims.
+The guardrail script validates daily data shape, required forex ordering, parser validators, CSP presence, Electron hardening flags, vendored converter presence, and converter-range claims.
 
 ## Deploy
 
@@ -59,4 +59,8 @@ Built and maintained by BugWhisperer.
 
 ## Data Confidence
 
-Forex uses NRB as the preferred source. Gold/silver, fuel, and Kalimati market data are fetched from named public pages and cached daily. If a public source cannot be fetched or parsed safely, the app uses bundled fallback data and marks the source as needing review. Panchang, shubha sait, and horoscope guidance are advisory unless connected to an official patro/ephemeris source. The BS/AD converter is limited to the verified bundled months, BS 2083 through Baisakh 2084, until a verified multi-year BS date table is added.
+Forex uses NRB as the preferred source. Gold/silver, fuel, and Kalimati market data are fetched from named public pages and cached daily. If a public source cannot be fetched or parsed safely, the app uses bundled fallback data and marks the source as needing review. Panchang and rashifal show live source status when Hamro Patro is reachable, but in-app guidance remains advisory unless a licensed content feed is configured. Shubha sait is advisory. The BS/AD converter uses the vendored MIT-licensed `@remotemerge/nepali-date-converter` browser build for BS 1975-2099; confirm official records for legal documents.
+
+## Third-Party Notices
+
+- `@remotemerge/nepali-date-converter` by Madan Sapkota, MIT License. Vendored at `vendor/remotemerge-nepali-date-converter/`.

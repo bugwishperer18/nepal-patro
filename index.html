@@ -161,12 +161,12 @@
                   <button type="button" data-sidebar-converter-mode="ad" data-i18n="englishDate">English date</button>
                 </div>
                 <div class="sidebar-date-grid" id="sidebarBsInputs">
-                  <input id="sidebarBsYearInput" type="number" min="2083" max="2084" value="2083" aria-label="BS year">
+                  <input id="sidebarBsYearInput" type="number" min="1975" max="2099" value="2083" aria-label="BS year">
                   <select id="sidebarBsMonthInput" aria-label="BS month"></select>
                   <input id="sidebarBsDayInput" type="number" min="1" max="32" value="26" aria-label="BS day">
                 </div>
                 <div class="sidebar-date-grid single" id="sidebarAdInputs" hidden>
-                  <input id="sidebarAdDateInput" type="date" min="2026-04-14" max="2027-05-14" value="2026-05-09" aria-label="AD date">
+                  <input id="sidebarAdDateInput" type="date" min="1918-04-13" max="2043-04-13" value="2026-05-09" aria-label="AD date">
                 </div>
                 <button class="primary-button converter-wide-button" id="convertButton" type="button" data-i18n="preview">Preview</button>
                 <p class="converter-result" id="converterResult">वैशाख २२, २०८३ ≈ May 5, 2026</p>
@@ -320,14 +320,14 @@
               <p class="eyebrow" data-i18n="dateConverter">Date converter</p>
               <h1 data-i18n="convertDates">BS ⇄ AD Converter</h1>
             </div>
-            <span class="section-badge" id="converterRange">Verified: BS 2083 - Baisakh 2084</span>
+            <span class="section-badge" id="converterRange">Verified: BS 1975 - 2099</span>
           </div>
-          <p class="notice-banner visible" data-i18n="converterNotice">Converter is verified only for the bundled calendar range. More years should be added from an official BS date table before relying on older or future dates.</p>
+          <p class="notice-banner visible" data-i18n="converterNotice">Converter uses the MIT-licensed @remotemerge/nepali-date-converter table for BS 1975-2099. Confirm official records for legal documents.</p>
           <div class="converter-page-grid">
             <section class="converter-panel" aria-labelledby="bsToAdTitle">
               <h2 id="bsToAdTitle" data-i18n="bsToAd">Nepali to English</h2>
               <div class="date-input-grid">
-                <input id="bsYearInput" type="number" min="2083" max="2084" value="2083" aria-label="BS year">
+                <input id="bsYearInput" type="number" min="1975" max="2099" value="2083" aria-label="BS year">
                 <select id="bsMonthInput" aria-label="BS month"></select>
                 <input id="bsDayInput" type="number" min="1" max="32" value="22" aria-label="BS day">
               </div>
@@ -337,7 +337,7 @@
             <section class="converter-panel" aria-labelledby="adToBsTitle">
               <h2 id="adToBsTitle" data-i18n="adToBs">English to Nepali</h2>
               <div class="date-input-grid">
-                <input id="adDateInput" type="date" min="2026-04-14" max="2027-05-14" value="2026-05-05" aria-label="AD date">
+                <input id="adDateInput" type="date" min="1918-04-13" max="2043-04-13" value="2026-05-05" aria-label="AD date">
               </div>
               <button class="primary-button" id="convertAdToBs" type="button" data-i18n="convert">Convert</button>
               <p class="converter-result large" id="adToBsResult">May 5, 2026 = Baisakh 22, 2083</p>
@@ -655,6 +655,7 @@
     </div>
 
     <script src="data/daily-data.js?v=26"></script>
+    <script src="vendor/remotemerge-nepali-date-converter/ndc-browser.js"></script>
     <script src="app.js?v=28"></script>
   </body>
 </html>
