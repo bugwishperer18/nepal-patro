@@ -5,6 +5,7 @@ const dailyApi = require("../api/daily-data.js");
 
 const root = path.resolve(__dirname, "..");
 const requiredCurrencies = ["USD", "CNY", "EUR", "GBP", "JPY", "AUD", "CAD"];
+const packageJson = require("../package.json");
 
 function fail(message) {
   throw new Error(message);
@@ -29,6 +30,8 @@ function validateDailyData() {
   assert(dailyApi._internal.validateFuel(dailyData.fuel), "fuel data failed validation");
   assert(dailyApi._internal.validateMarket(dailyData.market), "market data failed validation");
   assert(dailyApi._internal.validatePanchang(dailyData.panchang), "panchang data failed validation");
+  assert(packageJson.dependencies?.["panchang-ts"], "panchang-ts dependency is required for calculated Panchang");
+  assert(/panchang-ts/.test(read("api/daily-data.js")), "daily data API must use panchang-ts for Panchang");
   assert(dailyData.horoscope?.sourceUrl, "horoscope sourceUrl is required");
   assert(dailyData.sourceHealth, "sourceHealth is required for honest data confidence");
   assert(dailyData.sourceHealth.panchang, "panchang sourceHealth is required");

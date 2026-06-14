@@ -12,7 +12,8 @@ A modern Nepali calendar, panchang, forex, bullion, market-rate, and date-conver
 - NRB-focused forex rates with buy and sell prices for USD, CNY, EUR, GBP, JPY, AUD, and CAD.
 - Gold and silver price page with last updated date and clean table layout.
 - BS to AD and AD to BS date converter for BS 1975-2099 using a vendored MIT-licensed converter library.
-- Clear confidence notes for advisory panchang, shubha sait, horoscope, and supported converter range.
+- Panchang source integration using the MIT-licensed `panchang-ts` calculation library for Kathmandu, Nepal.
+- Clear confidence notes for shubha sait, horoscope, and supported converter range.
 - Source-health checks that mark stale or parser-fallback data instead of silently presenting it as live.
 - Daily data refresh through a Vercel serverless endpoint with local cache fallback.
 - Optional Electron desktop shell for macOS.
@@ -59,8 +60,9 @@ Built and maintained by BugWhisperer.
 
 ## Data Confidence
 
-Forex uses NRB as the preferred source. Gold/silver, fuel, and Kalimati market data are fetched from named public pages and cached daily. If a public source cannot be fetched or parsed safely, the app uses bundled fallback data and marks the source as needing review. Panchang and rashifal show live source status when Hamro Patro is reachable, but in-app guidance remains advisory unless a licensed content feed is configured. Shubha sait is advisory. The BS/AD converter uses the vendored MIT-licensed `@remotemerge/nepali-date-converter` browser build for BS 1975-2099; confirm official records for legal documents.
+Forex uses NRB as the preferred source. Gold/silver, fuel, and Kalimati market data are fetched from named public pages and cached daily. If a public source cannot be fetched or parsed safely, the app uses bundled fallback data and marks the source as needing review. Panchang is calculated with the MIT-licensed `panchang-ts` library for Kathmandu, Nepal, with Hamro Patro retained as a Rashifal reference source. In-app Rashifal guidance remains advisory/original unless a licensed content feed is configured. Shubha sait is advisory. The BS/AD converter uses the vendored MIT-licensed `@remotemerge/nepali-date-converter` browser build for BS 1975-2099; confirm official records for legal documents.
 
 ## Third-Party Notices
 
 - `@remotemerge/nepali-date-converter` by Madan Sapkota, MIT License. Vendored at `vendor/remotemerge-nepali-date-converter/`.
+- `panchang-ts` by Ishank, MIT License. Used as the free offline Panchang calculation source.

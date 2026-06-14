@@ -17,6 +17,8 @@ const currencyLabels = {
   AUD: "Australian Dollar",
   CAD: "Canadian Dollar"
 };
+const kathmanduLocation = { latitude: 27.7172, longitude: 85.3240 };
+const nepalTimezoneMinutes = 345;
 
 function todayInNepal() {
   return new Intl.DateTimeFormat("en-CA", {
@@ -202,6 +204,70 @@ function validateMarket(data) {
     && data.preview[0]?.[0] === "Published";
 }
 
+function formatPanchangTime(date) {
+  if (!date) {
+    return "";
+  }
+  return `${String(date.getUTCHours()).padStart(2, "0")}:${String(date.getUTCMinutes()).padStart(2, "0")}`;
+}
+
+function formatPanchangWindow(window) {
+  if (!window?.start || !window?.end) {
+    return "";
+  }
+  return `${formatPanchangTime(window.start)} - ${formatPanchangTime(window.end)}`;
+}
+
+async function calculatePanchangReference() {
+  const { getDailyPanchang } = await import("panchang-ts");
+  const date = new Date(`${todayInNepal()}T00:00:00+05:45`);
+  const result = getDailyPanchang(date, kathmanduLocation, { timezone: nepalTimezoneMinutes });
+  if (!result) {
+    throw new Error("Panchang calculation unavailable for location");
+  }
+
+  const tithi = result.tithis?.find((item) => item.isActiveAtSunrise) || result.tithis?.[0];
+  const nakshatra = result.nakshatras?.find((item) => item.isActiveAtSunrise) || result.nakshatras?.[0];
+  const yoga = result.yogas?.find((item) => item.isActiveAtSunrise) || result.yogas?.[0];
+  const karana = result.karanas?.find((item) => item.isActiveAtSunrise) || result.karanas?.[0];
+  const tithiLine = [result.chandramasa?.name, tithi?.name].filter(Boolean).join(" ");
+  const panchangText = [yoga?.name, karana?.name, nakshatra?.name].filter(Boolean).join(" ");
+
+  return {
+    updatedAt: todayInNepal(),
+    date: todayInNepal(),
+    tithiLine,
+    panchangText,
+    source: "panchang-ts offline calculation",
+    sourceUrl: "https://www.npmjs.com/package/panchang-ts",
+    authority: "Nepal Panchang Nirnayak Bikas Samiti approved patro should be treated as final for religious decisions.",
+    location: "Kathmandu, Nepal",
+    components: {
+      yoga: yoga?.name || "",
+      karana: karana?.name || "",
+      nakshatra: nakshatra?.name || "",
+      vara: result.vara?.englishName || result.vara?.name || "",
+      paksha: tithi?.paksha || ""
+    },
+    timings: {
+      sunrise: formatPanchangTime(result.sunrise),
+      sunset: formatPanchangTime(result.sunset),
+      moonrise: formatPanchangTime(result.moonrise),
+      moonset: formatPanchangTime(result.moonset),
+      rahuKalam: formatPanchangWindow(result.rahuKalam),
+      gulikaKalam: formatPanchangWindow(result.gulikaKalam),
+      yamaganda: formatPanchangWindow(result.yamaganda),
+      abhijitMuhurta: formatPanchangWindow(result.abhijitMuhurta),
+      brahmaMuhurta: formatPanchangWindow(result.brahmaMuhurta),
+      vijayaMuhurta: formatPanchangWindow(result.vijayaMuhurta),
+      godhuliMuhurta: formatPanchangWindow(result.godhuliMuhurta),
+      amritKala: formatPanchangWindow(result.amritKala)
+    },
+    festivals: (result.festivals || []).slice(0, 8).map((festival) => festival.name || festival.englishName || String(festival)),
+    note: "Calculated offline with the MIT-licensed panchang-ts library for Kathmandu, Nepal. Confirm sanskar-level decisions with an official patro or priest."
+  };
+}
+
 function parsePanchangReference(text) {
   const normalized = cleanText(text);
   const date = normalized.match(/([०-९\d]{1,2}\s+\S+\s+[०-९\d]{4},\s*\S+)/)?.[1] || todayInNepal();
@@ -322,7 +388,20 @@ async function buildDailyData() {
   const gold = useParsedSource(goldHtml, parseGold, validateGold, fallback.gold, "Hamro Patro gold");
   const fuel = useParsedSource(fuelHtml, parseFuel, validateFuel, fallback.fuel, "NOC fuel");
   const market = useParsedSource(marketHtml, parseMarket, validateMarket, fallback.market, "Kalimati market");
-  const panchang = useParsedSource(rashifalHtml, parsePanchangReference, validatePanchang, fallback.panchang, "Hamro Patro panchang");
+  let panchang;
+  try {
+    const calculated = await calculatePanchangReference();
+    panchang = {
+      value: calculated,
+      health: healthOk("panchang-ts calculation", {
+        updatedAt: calculated.updatedAt,
+        location: calculated.location
+      })
+    };
+  } catch (error) {
+    panchang = useParsedSource(rashifalHtml, parsePanchangReference, validatePanchang, fallback.panchang, "Hamro Patro panchang");
+    panchang.health.reason = `Calculated panchang unavailable: ${error.message}`;
+  }
   const horoscope = useParsedSource(rashifalHtml, parseHoroscopeReference, validateHoroscopeReference, fallback.horoscope, "Hamro Patro rashifal");
 
   return {
@@ -380,7 +459,7 @@ module.exports = async function handler(request, response) {
         gold: healthFallback("Hamro Patro gold", "API-level fallback"),
         fuel: healthFallback("NOC fuel", "API-level fallback"),
         market: healthFallback("Kalimati market", "API-level fallback"),
-        panchang: healthFallback("Hamro Patro panchang", "API-level fallback"),
+        panchang: healthFallback("panchang-ts calculation", "API-level fallback"),
         horoscope: healthFallback("Hamro Patro rashifal", "API-level fallback")
       }
     });
@@ -393,6 +472,7 @@ module.exports._internal = {
   parseFuel,
   parseMarket,
   parsePanchangReference,
+  calculatePanchangReference,
   parseHoroscopeReference,
   validateForex,
   validateGold,

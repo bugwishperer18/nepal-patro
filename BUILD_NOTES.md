@@ -79,13 +79,19 @@ Nepal Patro is a modern Nepali calendar and daily utility app built as a static 
 
 ### Panchang and Rashifal
 
-- Source reference: Hamro Patro Rashifal page.
-- The app parses live panchang reference fields when available:
+- Panchang source: `panchang-ts`, MIT License.
+- Panchang is calculated offline for Kathmandu, Nepal.
+- The app calculates:
   - Nepali date
   - Tithi line
   - Yoga
   - Karana
   - Nakshatra
+  - Sunrise/sunset
+  - Moonrise/moonset
+  - Abhijit Muhurta
+  - Rahu Kalam
+- Hamro Patro remains a Rashifal reference/status source.
 - Rashifal page shows live source availability/status.
 - In-app rashifal text remains advisory/original guidance unless a licensed content feed is configured.
 - Panchang and Shubha Sait include clear advice to confirm high-stakes religious decisions with an official patro or priest.
@@ -167,8 +173,9 @@ Implemented protections:
 - Forex, gold/silver, fuel, and Kalimati market data are fetched from named public pages and cached daily.
 - If a source cannot be fetched or parsed safely, bundled fallback data is used and the UI marks the source as needing review.
 - Panchang/rashifal status is transparent:
-  - live reference when Hamro Patro is reachable
-  - advisory in-app guidance unless licensed content is configured
+  - Panchang is calculated with `panchang-ts` for Kathmandu, Nepal.
+  - Rashifal uses original in-app advisory guidance and live reference/status from Hamro Patro when reachable.
+  - No free, reliable, license-clear monthly Nepali Rashifal feed suitable for republishing was found during research.
 - BS/AD converter uses a vendored MIT-licensed conversion table, but official records should be used for legal documents.
 
 ## Run Locally
@@ -263,6 +270,7 @@ Latest completed release work:
 
 - Expanded BS/AD conversion to BS 1975-2099.
 - Vendored `@remotemerge/nepali-date-converter` browser build and MIT license.
+- Added `panchang-ts` as the free MIT-licensed Panchang calculation source.
 - Added package assets to Electron build config.
 - Built macOS arm64 DMG locally.
 - Pushed latest converter/package changes to GitHub.

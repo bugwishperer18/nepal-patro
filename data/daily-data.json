@@ -500,15 +500,25 @@
     "date": "२२ वैशाख २०८३",
     "tithiLine": "जेठ कृष्ण चतुर्थी",
     "panchangText": "परिधि वणिज अनुराधा",
-    "source": "Bundled advisory panchang snapshot",
-    "sourceUrl": "https://www.hamropatro.com/rashifal",
+    "source": "Bundled advisory panchang snapshot with panchang-ts refresh support",
+    "sourceUrl": "https://www.npmjs.com/package/panchang-ts",
     "authority": "Nepal Panchang Nirnayak Bikas Samiti approved patro should be treated as final for religious decisions.",
     "components": {
       "yoga": "परिधि",
       "karana": "वणिज",
-      "nakshatra": "अनुराधा"
+      "nakshatra": "अनुराधा",
+      "vara": "Tuesday",
+      "paksha": "Krishna"
     },
-    "note": "Offline fallback. Refresh online for a live Hamro Patro panchang reference."
+    "timings": {
+      "sunrise": "05:16",
+      "sunset": "18:45",
+      "moonrise": "22:42",
+      "moonset": "08:58",
+      "abhijitMuhurta": "11:42 - 12:34",
+      "rahuKalam": "10:21 - 12:02"
+    },
+    "note": "Offline fallback. Refresh online for a calculated panchang-ts Kathmandu reference."
   },
   "horoscope": {
     "updatedAt": "2083 Baisakh",
@@ -543,7 +553,7 @@
       "reason": "Bundled offline snapshot"
     },
     "panchang": {
-      "source": "Hamro Patro panchang",
+      "source": "panchang-ts calculation",
       "status": "fallback",
       "checkedAt": "2026-05-09",
       "reason": "Bundled offline snapshot"

@@ -2491,6 +2491,19 @@ function renderPanchangDetails() {
   if (components.yoga) {
     document.querySelector("#todayYoga").textContent = appLanguage === "ne" ? components.yoga : localizeTerm(components.yoga);
   }
+  const timings = panchangReference?.timings || {};
+  if (timings.abhijitMuhurta) {
+    document.querySelector("#todayGoodTime").textContent = timings.abhijitMuhurta;
+  }
+  if (timings.sunrise) {
+    document.querySelector("#todaySunrise").textContent = timings.sunrise;
+  }
+  if (timings.sunset) {
+    document.querySelector("#todaySunset").textContent = timings.sunset;
+  }
+  if (timings.moonrise || timings.moonset) {
+    document.querySelector("#todayMoonTimes").textContent = `${timings.moonrise || "-"} / ${timings.moonset || "-"}`;
+  }
   renderSourcePanel("#panchangSourcePanel", [
     {
       label: t("liveReference"),
