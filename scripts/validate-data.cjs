@@ -1,5 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const vm = require("node:vm");
 const dailyData = require("../data/daily-data.json");
 const dailyApi = require("../api/daily-data.js");
 
@@ -72,7 +73,54 @@ function validateConverterClaims() {
   assert(!/const variant = base\.slice/.test(app), "converter must not use synthetic BS month patterns");
 }
 
+function loadBrowserDateConverter() {
+  const source = `${read("vendor/remotemerge-nepali-date-converter/ndc-browser.js")}\nthis.DateConverter = DateConverter;`;
+  const context = {};
+  vm.createContext(context);
+  vm.runInContext(source, context);
+  return context.DateConverter;
+}
+
+function extractMonthSeed() {
+  const app = read("app.js");
+  const match = app.match(/const monthSeed = (\[[\s\S]*?\]);\n\nfunction addDays/);
+  assert(match, "monthSeed could not be extracted for calendar validation");
+  const context = {};
+  vm.createContext(context);
+  vm.runInContext(`this.monthSeed = ${match[1]};`, context);
+  return context.monthSeed;
+}
+
+function validateCalendarEvents() {
+  const DateConverter = loadBrowserDateConverter();
+  const weekdayRules = [
+    { pattern: /सोमबार|Somwar|Monday/i, weekday: "Monday" },
+    { pattern: /मंगलबार|Tuesday/i, weekday: "Tuesday" },
+    { pattern: /बुधबार|Wednesday/i, weekday: "Wednesday" },
+    { pattern: /बिहीबार|Thursday/i, weekday: "Thursday" },
+    { pattern: /शुक्रबार|Friday/i, weekday: "Friday" },
+    { pattern: /शनिबार|Saturday/i, weekday: "Saturday" },
+    { pattern: /आइतबार|Sunday/i, weekday: "Sunday" }
+  ];
+  extractMonthSeed().forEach((month) => {
+    Object.entries(month.events || {}).forEach(([day, title]) => {
+      const rule = weekdayRules.find((item) => item.pattern.test(title));
+      if (!rule) return;
+      const converted = new DateConverter(`${month.year}-${monthSeedMonthNumber(month.name)}-${day}`).toAd();
+      assert(converted.day === rule.weekday, `${title} on ${month.name} ${day}, ${month.year} resolves to ${converted.day}, not ${rule.weekday}`);
+    });
+  });
+}
+
+function monthSeedMonthNumber(name) {
+  const months = ["वैशाख", "जेठ", "असार", "साउन", "भदौ", "आश्विन", "कार्तिक", "मंसिर", "पुष", "माघ", "फागुन", "चैत"];
+  const index = months.indexOf(name);
+  assert(index >= 0, `unknown BS month in monthSeed: ${name}`);
+  return index + 1;
+}
+
 validateDailyData();
 validateSecuritySurface();
 validateConverterClaims();
+validateCalendarEvents();
 console.log("World-class guardrails passed");

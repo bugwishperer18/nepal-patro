@@ -87,10 +87,10 @@ const monthSeed = [
     days: 31,
     events: {
       1: "साउने संक्रान्ति",
-      6: "साउन सोमबार",
-      13: "साउन सोमबार",
-      20: "साउन सोमबार",
-      27: "साउन सोमबार"
+      4: "साउन सोमबार",
+      11: "साउन सोमबार",
+      18: "साउन सोमबार",
+      25: "साउन सोमबार"
     }
   },
   {
@@ -891,7 +891,8 @@ const translations = {
     sourceNeedsReview: "Source needs review",
     verifiedRangeShort: "Verified: BS 1975 - 2099",
     advisory: "Advisory",
-    panchangNotice: "Indicative daily panchang values are shown for planning context. Use an official patro or priest for muhurat, samskar, fasting, and religious decisions.",
+    calendarReliabilityNotice: "Festival dates are a curated public-planning calendar, not a complete official patro. Weekday-dependent labels are validated, but lunar festivals and religious decisions should be confirmed with an official patro.",
+    panchangNotice: "Panchang values are calculated for Kathmandu and include tithi, nakshatra, yoga, karana, vara, paksha and muhurat windows for planning context. Use an official patro or priest for muhurat, samskar, fasting, and religious decisions.",
     horoscopeNotice: "Advisory Vedic guide. Verify personal decisions with a qualified astrologer.",
     sourceStatus: "Source status",
     liveReference: "Live reference",
@@ -1046,6 +1047,7 @@ const translations = {
     nakshatra: "Nakshatra",
     yoga: "Yoga",
     karana: "Karana",
+    vara: "Vara",
     goodTime: "Good time",
     sunrise: "Sunrise",
     sunset: "Sunset",
@@ -1132,7 +1134,8 @@ const translations = {
     sourceNeedsReview: "स्रोत जाँच आवश्यक",
     verifiedRangeShort: "प्रमाणित: वि.सं. १९७५ - २०९९",
     advisory: "सल्लाह",
-    panchangNotice: "दैनिक पञ्चाङ्ग संकेत योजना सन्दर्भका लागि मात्र हो। मुहूर्त, संस्कार, व्रत र धार्मिक निर्णयका लागि आधिकारिक पात्रो वा पुरोहितसँग पुष्टि गर्नुहोस्।",
+    calendarReliabilityNotice: "चाडपर्व मिति सार्वजनिक योजना सन्दर्भका लागि curated सूची हो, पूर्ण आधिकारिक पात्रो होइन। बारसँग जोडिएका नामहरू जाँचिन्छन्, तर चन्द्रमास/धार्मिक निर्णय आधिकारिक पात्रोसँग पुष्टि गर्नुहोस्।",
+    panchangNotice: "पञ्चाङ्ग संकेत काठमाडौंका लागि गणना गरिन्छ र तिथि, नक्षत्र, योग, करण, वार, पक्ष र मुहूर्त झ्याल समेट्छ। मुहूर्त, संस्कार, व्रत र धार्मिक निर्णयका लागि आधिकारिक पात्रो वा पुरोहितसँग पुष्टि गर्नुहोस्।",
     horoscopeNotice: "यो वैदिक ज्योतिष मार्गदर्शन सल्लाह मात्र हो। व्यक्तिगत निर्णयका लागि योग्य ज्योतिषीसँग पुष्टि गर्नुहोस्।",
     sourceStatus: "स्रोत अवस्था",
     liveReference: "लाइभ सन्दर्भ",
@@ -1287,6 +1290,7 @@ const translations = {
     nakshatra: "नक्षत्र",
     yoga: "योग",
     karana: "करण",
+    vara: "वार",
     goodTime: "शुभ समय",
     sunrise: "सूर्योदय",
     sunset: "सूर्यास्त",
@@ -1493,6 +1497,18 @@ const termTranslations = {
   "मीन": "Pisces"
 };
 
+const panchangNepaliTerms = {
+  Monday: "सोमबार",
+  Tuesday: "मंगलबार",
+  Wednesday: "बुधबार",
+  Thursday: "बिहीबार",
+  Friday: "शुक्रबार",
+  Saturday: "शनिबार",
+  Sunday: "आइतबार",
+  Krishna: "कृष्ण पक्ष",
+  Shukla: "शुक्ल पक्ष"
+};
+
 const toolTranslations = {
   "Nepali <> English Date Converter": "नेपाली <> अंग्रेजी मिति परिवर्तन",
   "Quickly convert BS and AD dates": "वि.सं. र ई.सं. मिति छिटो परिवर्तन",
@@ -1688,6 +1704,10 @@ function formatBsMonthYear(month) {
 
 function localizeTerm(value) {
   return appLanguage === "en" ? termTranslations[value] || value : value;
+}
+
+function localizePanchangTerm(value) {
+  return appLanguage === "ne" ? panchangNepaliTerms[value] || value : termTranslations[value] || value;
 }
 
 function localizeToolText(value) {
@@ -2334,12 +2354,12 @@ function renderCalendar() {
   monthSubLabel.textContent = "";
   const calendarNotice = document.querySelector("#calendarNotice");
   const showNotice = month.year >= 2084;
-  calendarNotice.hidden = !showNotice;
+  calendarNotice.hidden = false;
   calendarNotice.textContent = showNotice
     ? appLanguage === "ne"
       ? "वि.सं. २०८४ का चन्द्रमास, तिथि र चाडपर्व सम्बन्धी विवरण आधिकारिक नयाँ पात्रो सार्वजनिक भएपछि अद्यावधिक गरिनेछ।"
       : "Lunar-calendar festivals, tithi and moon-phase dependent details for BS 2084 will be updated when the official new patro is announced."
-    : "";
+    : t("calendarReliabilityNotice");
   monthSelect.value = String(activeMonthIndex);
   monthSelect.setAttribute("aria-label", t("chooseMonth"));
   clearNode(calendarGrid);
@@ -3075,6 +3095,15 @@ function renderPanchangDetails() {
   if (components.yoga) {
     document.querySelector("#todayYoga").textContent = appLanguage === "ne" ? components.yoga : localizeTerm(components.yoga);
   }
+  if (components.karana) {
+    document.querySelector("#todayKarana").textContent = appLanguage === "ne" ? components.karana : localizeTerm(components.karana);
+  }
+  if (components.vara) {
+    document.querySelector("#todayVara").textContent = localizePanchangTerm(components.vara);
+  }
+  if (components.paksha) {
+    document.querySelector("#todayPaksha").textContent = localizePanchangTerm(components.paksha);
+  }
   const timings = panchangReference?.timings || {};
   if (timings.abhijitMuhurta) {
     document.querySelector("#todayGoodTime").textContent = timings.abhijitMuhurta;
@@ -3102,8 +3131,21 @@ function renderPanchangDetails() {
       note: t("panchangAuthorityNote")
     }
   ]);
-  renderMiniList("#inauspiciousTimes", inauspiciousTimes);
-  renderMiniList("#dailyGuidance", panchangGuidance);
+  const avoidRows = [
+    ["Rahu Kaal", timings.rahuKalam, "Avoid new starts and major commitments"],
+    ["Yamaganda", timings.yamaganda, "Avoid departure and sensitive conversations"],
+    ["Gulika Kaal", timings.gulikaKalam, "Use caution for new financial or legal work"],
+    ["Dur Muhurat", timings.durMuhurta, "Avoid ceremony-level starts"]
+  ].filter((row) => row[1]);
+  const guidanceRows = [
+    ["Brahma Muhurta", timings.brahmaMuhurta, "Prayer, mantra, study"],
+    ["Abhijit Muhurat", timings.abhijitMuhurta, "Important starts"],
+    ["Vijaya Muhurat", timings.vijayaMuhurta, "Travel, official work"],
+    ["Godhuli Muhurat", timings.godhuliMuhurta, "Puja, family rituals"],
+    ["Amrit Kaal", timings.amritKala, "Spiritual work"]
+  ].filter((row) => row[1]);
+  renderMiniList("#inauspiciousTimes", avoidRows.length ? avoidRows : inauspiciousTimes);
+  renderMiniList("#dailyGuidance", guidanceRows.length ? guidanceRows : panchangGuidance);
 }
 
 function addDays(date, days) {
