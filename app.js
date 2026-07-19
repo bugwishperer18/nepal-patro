@@ -955,6 +955,9 @@ const translations = {
     avoidThis: "Avoid this",
     bestDays: "Best days",
     yearlyStrategy: "Yearly strategy",
+    whatItMeans: "What it means",
+    howToUseThis: "How to use this",
+    remedySteps: "Remedy steps",
     careerMove: "Career move",
     moneyMove: "Money move",
     wellnessMove: "Wellness move",
@@ -1193,6 +1196,9 @@ const translations = {
     avoidThis: "यसबाट बच्नुहोस्",
     bestDays: "उत्तम दिन",
     yearlyStrategy: "वार्षिक रणनीति",
+    whatItMeans: "यसको अर्थ",
+    howToUseThis: "कसरी प्रयोग गर्ने",
+    remedySteps: "उपायका चरण",
     careerMove: "करियर कदम",
     moneyMove: "आर्थिक कदम",
     wellnessMove: "स्वास्थ्य कदम",
@@ -2731,6 +2737,18 @@ function getHoroscopeActionPlan(data, period) {
   const color = localizeToolText(data.color);
   const dasha = appLanguage === "ne" ? localizeToolText(data.dasha) : data.dasha;
   if (appLanguage === "ne") {
+    const dailyPlan = [
+      [t("doNext"), `${focus}सँग जोडिएको एउटा सानो काम आजै पूरा गर्नुहोस्। धेरै कुरा सुरु नगरी एउटा काम सफा गर्नु राम्रो।`],
+      [t("avoidThis"), "अचानक रिस, भावनामा गरिएको खर्च, र अस्पष्ट वाचा आज रोक्नुहोस्।"],
+      [t("bestDays"), "आज बिहान ८:३०-१०:३० वा अभिजित मुहूर्तमा मुख्य काम राख्नुहोस्।"],
+      [t("practicalRemedy"), `${data.remedyNe} मन्त्र ११ पटक जपेर दिनको प्राथमिकता लेख्नुहोस्।`]
+    ];
+    const weeklyPlan = [
+      [t("doNext"), `${focus}लाई यो हप्ताको शीर्ष प्राथमिकता बनाउनुहोस् र तीनवटा मात्र काममा ध्यान दिनुहोस्।`],
+      [t("avoidThis"), "हरेक अनुरोध स्वीकार गर्ने, अनावश्यक खर्च गर्ने, र अधुरा संवाद छोड्ने बानीबाट बच्नुहोस्।"],
+      [t("bestDays"), "बुधबार/बिहीबार वार्ता, योजना, अध्ययन वा कागजपत्रका लागि राम्रो प्रयोग गर्नुहोस्।"],
+      [t("practicalRemedy"), `${data.remedyNe} हप्तामा एक दिन शान्त समीक्षा राखेर गल्ती सच्याउनुहोस्।`]
+    ];
     const monthlyPlan = [
       [t("doNext"), `${focus}सँग जोडिएको एउटा मुख्य लक्ष्य लेख्नुहोस् र त्यसका लागि ३ वटा काम मात्र राख्नुहोस्।`],
       [t("avoidThis"), "हतारो वाचा, अस्पष्ट खर्च, र अरूको दबाबमा गरिएको निर्णयबाट बच्नुहोस्।"],
@@ -2745,10 +2763,24 @@ function getHoroscopeActionPlan(data, period) {
       [t("moneyMove"), "आपतकालीन बचत, ऋण घटाउने योजना र कर/बीमा कागजलाई पहिलो छ महिनामा व्यवस्थित गर्नुहोस्।"],
       [t("relationshipMove"), "परिवार र साझेदारीमा सीमा, समय र अपेक्षा सुरुमै स्पष्ट राख्नुहोस्।"],
       [t("avoidThis"), "एकै वर्ष धेरै ठूलो जोखिम, भावनात्मक खरिद र बिना लिखित सहमति भएका सम्झौताबाट बच्नुहोस्।"],
-      [t("practicalRemedy"), data.remedyNe]
+      [t("practicalRemedy"), `${data.remedyNe} बिहान वा बिहीबार शान्त समयमा मन्त्र "${data.mantra}" ११ पटक जप्नुहोस्, त्यसपछि यो वर्ष सुधार्नुपर्ने एउटा बानी लेख्नुहोस्। उपायले ध्यान स्थिर बनाउने हो।`]
     ];
+    if (period === "daily") return dailyPlan;
+    if (period === "weekly") return weeklyPlan;
     return period === "yearly" ? yearlyPlan : monthlyPlan;
   }
+  const dailyPlan = [
+    [t("doNext"), `Finish one small task connected to ${focus.toLowerCase()} today. Completion is better than starting too many things.`],
+    [t("avoidThis"), "Avoid reactive anger, emotional spending, and promises that are not written or clearly understood."],
+    [t("bestDays"), "Use 8:30-10:30 AM or Abhijit Muhurat for the most important action."],
+    [t("practicalRemedy"), `${data.remedyEn} Chant the mantra 11 times and write the day's single priority.`]
+  ];
+  const weeklyPlan = [
+    [t("doNext"), `Make ${focus.toLowerCase()} the week's main priority and keep only three meaningful tasks active.`],
+    [t("avoidThis"), "Avoid saying yes to every request, spending casually, or leaving sensitive conversations unfinished."],
+    [t("bestDays"), "Use Wednesday or Thursday for negotiation, planning, study, or paperwork."],
+    [t("practicalRemedy"), `${data.remedyEn} Keep one quiet weekly review to correct mistakes before they grow.`]
+  ];
   const monthlyPlan = [
     [t("doNext"), `Write one priority connected to ${focus.toLowerCase()} and keep only three supporting tasks for the period.`],
     [t("avoidThis"), "Avoid rushed promises, vague spending, and decisions made mainly to satisfy pressure from others."],
@@ -2763,8 +2795,10 @@ function getHoroscopeActionPlan(data, period) {
     [t("moneyMove"), "Organize emergency savings, debt reduction, tax, and insurance documents in the first half of the year."],
     [t("relationshipMove"), "Set expectations early around time, family responsibility, and partnership boundaries."],
     [t("avoidThis"), "Avoid stacking too many big risks in the same year, emotional purchases, and informal agreements."],
-    [t("practicalRemedy"), data.remedyEn]
+    [t("practicalRemedy"), `${data.remedyEn} In a quiet morning window, or on Thursday, chant "${data.mantra}" 11 times and write one habit you will improve this year. The remedy is meant to steady attention and behavior.`]
   ];
+  if (period === "daily") return dailyPlan;
+  if (period === "weekly") return weeklyPlan;
   return period === "yearly" ? yearlyPlan : monthlyPlan;
 }
 
@@ -2794,48 +2828,60 @@ function getHoroscopeCardInsights(data, period) {
   return [`Today: ${focus}`, `Number ${data.number}`, data.color];
 }
 
-function getHoroscopeDetailBlocks(data) {
+function getHoroscopeDetailBlocks(data, period) {
   const focus = appLanguage === "ne" ? data.focusNe : data.focusEn;
   const remedy = appLanguage === "ne" ? data.remedyNe : data.remedyEn;
   const monthly = appLanguage === "ne" ? data.monthlyNe : data.monthlyEn;
   const yearly = appLanguage === "ne" ? data.yearlyNe : data.yearlyEn;
   const dasha = appLanguage === "ne" ? localizeToolText(data.dasha) : data.dasha;
-  return [
-    {
+  const selectedForecasts = {
+    daily: {
       title: t("todayForecast"),
       body: appLanguage === "ne"
-        ? `आजको मुख्य ऊर्जा ${focus}तर्फ छ। नयाँ सुरुवातभन्दा सुरु भइसकेको कामलाई सफा, समयमै र लिखित रूपमा अगाडि बढाउनुहोस्। भावनात्मक वा आवेगपूर्ण निर्णय साँझसम्म रोक्नु बुद्धिमानी हुन्छ।`
-        : `Today's energy leans toward ${focus.toLowerCase()}. Favor clean follow-through over brand-new starts, keep decisions written, and delay emotional commitments until the evening.`
+        ? `आजको मुख्य ऊर्जा ${focus}तर्फ छ। यसको अर्थ नयाँ ठूलो काम सुरु गर्नुभन्दा सुरु भइसकेको कामलाई सफा, समयमै र लिखित रूपमा अगाडि बढाउनु हो। भावनात्मक वा आवेगपूर्ण निर्णय साँझसम्म रोक्नु बुद्धिमानी हुन्छ।`
+        : `Today's energy leans toward ${focus.toLowerCase()}. In plain terms, this is better for clean follow-through than a major new start. Keep decisions written and delay emotional commitments until the evening.`
     },
-    {
+    weekly: {
       title: t("weekForecast"),
       body: appLanguage === "ne"
-        ? "यो हप्ता सम्बन्ध, पैसा र काममा सानो अनुशासनले ठूलो फरक पार्छ। तीन प्राथमिकता मात्र राख्नुहोस्, अनावश्यक खर्च रोक्नुहोस्, र बुधबार/बिहीबार योजना वा वार्ताका लागि राम्रो प्रयोग गर्नुहोस्।"
-        : "This week, small discipline changes the outcome in relationships, money, and work. Keep only three priorities, pause unnecessary spending, and use Wednesday or Thursday for planning and negotiations."
+        ? `यो हप्ता ${focus}सँग सम्बन्धित विषयमा सानो अनुशासनले ठूलो फरक पार्छ। तीन प्राथमिकता मात्र राख्नुहोस्, अनावश्यक खर्च रोक्नुहोस्, र बुधबार/बिहीबार योजना वा वार्ताका लागि राम्रो प्रयोग गर्नुहोस्।`
+        : `This week, small discipline around ${focus.toLowerCase()} changes the outcome. Keep only three priorities, pause unnecessary spending, and use Wednesday or Thursday for planning and negotiations.`
     },
-    { title: t("monthForecast"), body: monthly },
-    { title: t("yearForecast"), body: yearly },
+    monthly: { title: t("monthForecast"), body: monthly },
+    yearly: { title: t("yearForecast"), body: yearly }
+  };
+  const meaning = appLanguage === "ne"
+    ? `${focus} मुख्य विषय हुनु भनेको यही क्षेत्रमा निर्णय, समय र ऊर्जा बढी लाग्ने संकेत हो। यसलाई भाग्यको ग्यारेन्टी होइन, प्राथमिकता मिलाउने संकेतका रूपमा प्रयोग गर्नुहोस्।`
+    : `${focus} as the main theme means this area is likely to ask for more decisions, time, and energy. Treat it as a prioritization cue, not a guarantee of fate.`;
+  return [
+    selectedForecasts[period] || selectedForecasts.daily,
+    {
+      title: t("whatItMeans"),
+      body: meaning
+    },
     {
       title: t("moneyCareer"),
       body: appLanguage === "ne"
-        ? `${focus}सँग जोडिएका काममा लाभ छ। कागजपत्र, किस्ता, बजेट, कर वा सम्झौता जाँचेर मात्र ठूलो निर्णय गर्नुहोस्। छिटो लाभभन्दा स्थिर लाभ राम्रो।`
-        : `Money and career improve through ${focus.toLowerCase()}. Review documents, installments, budgets, tax, or contracts before major commitments. Prefer durable gains over quick wins.`
+        ? `${focus}सँग जोडिएका काममा लाभको सम्भावना छ, तर त्यसलाई काममा बदल्न हिसाब, कागजपत्र र समयसीमा स्पष्ट चाहिन्छ। कागजपत्र, किस्ता, बजेट, कर वा सम्झौता जाँचेर मात्र ठूलो निर्णय गर्नुहोस्।`
+        : `Money and career can improve through ${focus.toLowerCase()}, but only when numbers, documents, and deadlines are clear. Review installments, budgets, tax, or contracts before major commitments.`
     },
     {
       title: t("relationshipsHealth"),
       body: appLanguage === "ne"
-        ? "सम्बन्धमा कम शब्द, बढी स्पष्टता उपयोगी हुन्छ। स्वास्थ्यमा निद्रा, पानी, पाचन र नियमित हिँडाइलाई आधार बनाउनुहोस्। शरीरले दिएको संकेतलाई बेवास्ता नगर्नुहोस्।"
-        : "In relationships, fewer words with more clarity will help. For health, anchor the period around sleep, hydration, digestion, and regular walking. Do not ignore body signals."
+        ? "सम्बन्धमा कम शब्द तर स्पष्ट आशय उपयोगी हुन्छ। कुरा लुकाएर राख्नुभन्दा शान्त समयमा भन्नु राम्रो। स्वास्थ्यमा निद्रा, पानी, पाचन र नियमित हिँडाइलाई आधार बनाउनुहोस्।"
+        : "In relationships, fewer words with clearer intent will help. Say the important thing calmly instead of storing resentment. For health, anchor the period around sleep, hydration, digestion, and walking."
     },
     {
       title: t("timingAndLuck"),
       body: appLanguage === "ne"
-        ? `शुभ रङ: ${localizeToolText(data.color)}। शुभ अंक: ${data.number}। ${t("luckyWindow")}: बिहान ८:३०-१०:३० वा अभिजित मुहूर्त। ग्रह संकेत: ${dasha}।`
-        : `Lucky color: ${data.color}. Lucky number: ${data.number}. ${t("luckyWindow")}: 8:30-10:30 AM or Abhijit Muhurat. Planetary cue: ${dasha}.`
+        ? `शुभ रङ ${localizeToolText(data.color)}लाई कपडा, नोटबुक वा काम गर्ने ठाउँमा सानो संकेतका रूपमा प्रयोग गर्न सकिन्छ। शुभ अंक ${data.number}लाई प्राथमिकता वा रिमाइन्डर नम्बरका रूपमा राख्नुहोस्। ग्रह संकेत ${dasha} भएकाले अनुशासन र स्पष्टता बढाउनु राम्रो।`
+        : `Use ${data.color} as a small support cue in clothing, notes, or workspace, not as a superstition. Lucky number ${data.number} can be used as a reminder or priority marker. Planetary cue ${dasha} points toward discipline and clarity.`
     },
     {
       title: t("practicalRemedy"),
-      body: `${remedy} ${appLanguage === "ne" ? `मन्त्र: ${data.mantra}` : `Mantra: ${data.mantra}`}`
+      body: appLanguage === "ne"
+        ? `${remedy} यसलाई व्यवहारमा ल्याउन बिहान २ मिनेट शान्त बस्नुहोस्, मन्त्र "${data.mantra}" ११ पटक जप्नुहोस्, र आज/यो अवधिको एउटा मुख्य काम लेख्नुहोस्। उपायको उद्देश्य मन स्थिर पार्नु हो, डर बढाउनु होइन।`
+        : `${remedy} To make this practical, sit quietly for two minutes in the morning, chant "${data.mantra}" 11 times, and write one main action for the period. The purpose of the remedy is to steady attention, not create fear.`
     }
   ];
 }
@@ -2961,9 +3007,23 @@ function renderHoroscope() {
 function renderHoroscopeDetail() {
   const data = horoscopeData[activeRashi] || horoscopeData.meen;
   document.querySelector("#horoscopeDetailTitle").textContent = getLocalizedRashi(data);
-  document.querySelector("#horoscopeDetailSubtitle").textContent = appLanguage === "ne" ? "दैनिक, साप्ताहिक, मासिक र वार्षिक मार्गदर्शन" : "Daily, weekly, monthly and yearly guidance";
+  const periodLabel = t(activeHoroscopePeriod === "yearly" ? "yearlyHoroscope" : activeHoroscopePeriod === "monthly" ? "monthlyHoroscope" : activeHoroscopePeriod === "weekly" ? "weeklyHoroscope" : "dailyHoroscope");
+  document.querySelector("#horoscopeDetailSubtitle").textContent = appLanguage === "ne" ? `${periodLabel} मार्गदर्शन` : `${periodLabel} guidance`;
   const detail = document.querySelector("#horoscopeDetail");
   clearNode(detail);
+  const detailToolbar = makeElement("div", "horoscope-toolbar horoscope-detail-toolbar");
+  [["daily", t("dailyHoroscope")], ["weekly", t("weeklyHoroscope")], ["monthly", t("monthlyHoroscope")], ["yearly", t("yearlyHoroscope")]].forEach(([period, label]) => {
+    const button = makeElement("button", activeHoroscopePeriod === period ? "active" : "", label);
+    button.type = "button";
+    button.setAttribute("aria-pressed", String(activeHoroscopePeriod === period));
+    button.addEventListener("click", () => {
+      activeHoroscopePeriod = period;
+      renderHoroscope();
+      renderHoroscopeDetail();
+    });
+    detailToolbar.append(button);
+  });
+  detail.append(detailToolbar);
   const plan = makeElement("article", "horoscope-card horoscope-plan-card");
   plan.append(makeElement("span", "eyebrow", t(activeHoroscopePeriod === "yearly" ? "yearlyStrategy" : "actionPlan")));
   const planList = makeElement("div", "horoscope-action-list");
@@ -2974,12 +3034,6 @@ function renderHoroscopeDetail() {
     planList.append(item);
   });
   plan.append(planList);
-  getHoroscopeDetailBlocks(data).forEach(({ title, body }) => {
-    const card = makeElement("article", "horoscope-card");
-    card.append(makeElement("span", "eyebrow", title));
-    card.append(makeElement("p", "", body));
-    detail.append(card);
-  });
   const meta = makeElement("article", "horoscope-card horoscope-meta-card");
   [[t("luckyColor"), localizeToolText(data.color)], [appLanguage === "ne" ? "शुभ अंक" : "Lucky number", data.number], [t("recommendation"), appLanguage === "ne" ? data.focusNe : data.focusEn]].forEach(([label, value]) => {
     const item = makeElement("span", "");
@@ -2987,8 +3041,14 @@ function renderHoroscopeDetail() {
     item.append(makeElement("strong", "", value));
     meta.append(item);
   });
-  detail.prepend(meta);
-  detail.insertBefore(plan, meta.nextSibling);
+  detail.append(meta);
+  detail.append(plan);
+  getHoroscopeDetailBlocks(data, activeHoroscopePeriod).forEach(({ title, body }) => {
+    const card = makeElement("article", "horoscope-card");
+    card.append(makeElement("span", "eyebrow", title));
+    card.append(makeElement("p", "", body));
+    detail.append(card);
+  });
 }
 
 function renderMiniList(targetId, rows) {

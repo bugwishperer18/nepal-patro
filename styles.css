@@ -2182,6 +2182,7 @@ html[data-theme="dark"] .nav-more-menu a:hover {
 }
 
 html[data-theme="dark"] .rashi-insights small,
+html[data-theme="dark"] .horoscope-meta-card span,
 html[data-theme="dark"] .horoscope-action-item {
   background: rgba(255, 255, 255, 0.06);
 }
@@ -2372,6 +2373,42 @@ html[data-theme="dark"] td {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   grid-column: 1 / -1;
+  padding: 14px;
+}
+
+.horoscope-detail-toolbar {
+  grid-column: 1 / -1;
+  margin: 0 0 4px;
+}
+
+.horoscope-meta-card span {
+  min-height: 82px;
+  display: grid;
+  align-content: center;
+  gap: 7px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(118, 118, 128, 0.055);
+}
+
+.horoscope-meta-card small,
+.horoscope-meta-card strong {
+  display: block;
+}
+
+.horoscope-meta-card small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 720;
+  line-height: 1.2;
+}
+
+.horoscope-meta-card strong {
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 760;
+  line-height: 1.32;
 }
 
 .horoscope-plan-card {
@@ -2389,8 +2426,8 @@ html[data-theme="dark"] td {
 }
 
 .horoscope-action-item {
-  min-height: 104px;
-  padding: 13px;
+  min-height: 126px;
+  padding: 15px;
   border: 1px solid var(--line);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.62);
@@ -2411,9 +2448,9 @@ html[data-theme="dark"] td {
 .horoscope-action-item strong {
   margin-top: 7px;
   color: var(--ink);
-  font-size: 0.9rem;
+  font-size: 0.93rem;
   font-weight: 680;
-  line-height: 1.46;
+  line-height: 1.52;
 }
 
 .horoscope-meta {
@@ -3266,6 +3303,7 @@ textarea {
   .horoscope-grid,
   .horoscope-detail-grid,
   .horoscope-meta,
+  .horoscope-meta-card,
   .gold-layout,
   .converter-page-grid,
   .land-converter-grid,
