@@ -181,7 +181,7 @@ Implemented protections:
 ## Run Locally
 
 ```sh
-cd /Users/sudee/Documents/Codex/2026-05-03/build-a-web-app-electron-app
+cd /path/to/nepal-patro
 npm install
 npm run serve
 ```
@@ -195,7 +195,7 @@ http://localhost:5173
 ## Run Electron App
 
 ```sh
-cd /Users/sudee/Documents/Codex/2026-05-03/build-a-web-app-electron-app
+cd /path/to/nepal-patro
 npm run electron
 ```
 
@@ -204,7 +204,7 @@ npm run electron
 Use a workspace-local Electron Builder cache:
 
 ```sh
-cd /Users/sudee/Documents/Codex/2026-05-03/build-a-web-app-electron-app
+cd /path/to/nepal-patro
 env ELECTRON_BUILDER_CACHE="$PWD/.cache/electron-builder" npm run dist:mac
 ```
 
@@ -219,7 +219,7 @@ The current package is unsigned and not notarized. Apple Developer signing and n
 ## Quality Checks
 
 ```sh
-cd /Users/sudee/Documents/Codex/2026-05-03/build-a-web-app-electron-app
+cd /path/to/nepal-patro
 npm run check:all
 npm audit --audit-level=moderate
 ```
@@ -238,7 +238,7 @@ The repo is linked to the Vercel project `nepal-patro`.
 Run from the project directory:
 
 ```sh
-cd /Users/sudee/Documents/Codex/2026-05-03/build-a-web-app-electron-app
+cd /path/to/nepal-patro
 vercel deploy --prod --yes
 ```
 
@@ -249,7 +249,7 @@ Important: do not run Vercel from `~`, because it will try to deploy the home di
 Run from the project directory:
 
 ```sh
-cd /Users/sudee/Documents/Codex/2026-05-03/build-a-web-app-electron-app
+cd /path/to/nepal-patro
 git status
 git add .
 git commit -m "Your release message"

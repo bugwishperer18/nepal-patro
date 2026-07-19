@@ -33,16 +33,27 @@
           <a href="#events" data-section-link="events" data-i18n="navEvents">Events</a>
           <a href="#tools" data-section-link="tools" data-i18n="navTools">Tools</a>
           <a href="#rates" data-section-link="rates" data-i18n="navRates">Rates</a>
-          <a href="#gold-silver" data-section-link="gold-silver" data-i18n="navGoldSilver">Gold/Silver</a>
-          <a href="#market" data-section-link="market" data-i18n="navMarket">Market</a>
-          <a href="#fuel" data-section-link="fuel" data-i18n="navFuel">Fuel</a>
           <a href="#horoscope" data-section-link="horoscope" data-i18n="navHoroscope">Horoscope</a>
-          <a href="#date-converter" data-section-link="date-converter" data-i18n="navDateConverter">Date Converter</a>
-          <a href="#panchang" data-section-link="panchang" data-i18n="navPanchang">Panchang</a>
-          <a href="#shubha-sait" data-section-link="shubha-sait" data-i18n="navShubhaSait">Shubha Sait</a>
+          <div class="nav-more">
+            <button class="nav-more-button" id="moreNavButton" type="button" aria-expanded="false" aria-controls="moreNavMenu" data-i18n="more">More</button>
+            <div class="nav-more-menu" id="moreNavMenu" hidden>
+              <a href="#gold-silver" data-section-link="gold-silver" data-i18n="navGoldSilver">Gold/Silver</a>
+              <a href="#market" data-section-link="market" data-i18n="navMarket">Market</a>
+              <a href="#fuel" data-section-link="fuel" data-i18n="navFuel">Fuel</a>
+              <a href="#date-converter" data-section-link="date-converter" data-i18n="navDateConverter">Date Converter</a>
+              <a href="#land-converter" data-section-link="land-converter" data-i18n="landConverterTitle">Land Converter</a>
+              <a href="#loan-calculator" data-section-link="loan-calculator" data-i18n="loanCalculatorTitle">Loan EMI Calculator</a>
+              <a href="#panchang" data-section-link="panchang" data-i18n="navPanchang">Panchang</a>
+              <a href="#shubha-sait" data-section-link="shubha-sait" data-i18n="navShubhaSait">Shubha Sait</a>
+            </div>
+          </div>
         </nav>
 
         <div class="header-controls" aria-label="Display settings">
+          <button class="command-button" id="openCommandPalette" type="button" aria-label="Open command palette">
+            <span data-i18n="searchShort">Search</span>
+            <kbd>⌘K</kbd>
+          </button>
           <div class="segmented-control" aria-label="Website language">
             <button class="segment active" type="button" data-language="en" aria-pressed="true">EN</button>
             <button class="segment" type="button" data-language="ne" aria-pressed="false">ने</button>
@@ -51,6 +62,9 @@
             <button class="segment active" type="button" data-calendar-mode="bs" aria-pressed="true">BS</button>
             <button class="segment" type="button" data-calendar-mode="ad" aria-pressed="false">AD</button>
           </div>
+          <button class="icon-button theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <span aria-hidden="true">◐</span>
+          </button>
           <button class="icon-button" id="todayButton" type="button" aria-label="Jump to today" title="Jump to today">
             <span aria-hidden="true">⌖</span>
           </button>
@@ -299,6 +313,12 @@
             <span class="section-badge" data-i18n="advisory">Advisory</span>
           </div>
           <div class="source-panel" id="horoscopeSourcePanel" aria-label="Horoscope source status"></div>
+          <div class="horoscope-toolbar" aria-label="Horoscope view">
+            <button class="active" type="button" data-horoscope-period="daily" data-i18n="dailyHoroscope">Daily</button>
+            <button type="button" data-horoscope-period="weekly" data-i18n="weeklyHoroscope">Weekly</button>
+            <button type="button" data-horoscope-period="monthly" data-i18n="monthlyHoroscope">Monthly</button>
+            <button type="button" data-horoscope-period="yearly" data-i18n="yearlyHoroscope">Yearly</button>
+          </div>
           <div class="horoscope-grid" id="horoscopeGrid"></div>
         </section>
 
@@ -569,6 +589,50 @@
             </div>
             <span class="section-badge">Kathmandu</span>
           </div>
+          <section class="sait-planner-panel" aria-labelledby="saitPlannerTitle">
+            <div class="planner-panel-head">
+              <div>
+                <h2 id="saitPlannerTitle" data-i18n="findAuspiciousDays">Find auspicious days</h2>
+                <p data-i18n="saitPlannerIntro">Choose a start date, event type, and avoid filters to see the strongest upcoming planning windows.</p>
+              </div>
+              <span class="source-pill" data-i18n="advisory">Advisory</span>
+            </div>
+            <div class="sait-controls">
+              <label>
+                <span data-i18n="fromDate">From date</span>
+                <input id="saitStartDate" type="date">
+              </label>
+              <label>
+                <span data-i18n="eventType">Event type</span>
+                <select id="saitEventType">
+                  <option value="purchase" data-i18n="eventPurchase">Purchase</option>
+                  <option value="investment" data-i18n="eventInvestment">Investment</option>
+                  <option value="study" data-i18n="eventStudy">Study</option>
+                  <option value="travel" data-i18n="eventTravel">Travel</option>
+                  <option value="grihaPuja" data-i18n="eventGrihaPuja">Griha puja</option>
+                </select>
+              </label>
+              <label>
+                <span data-i18n="planningHorizon">Planning horizon</span>
+                <select id="saitHorizon">
+                  <option value="30" data-i18n="next30Days">Next 30 days</option>
+                  <option value="60" data-i18n="next60Days">Next 60 days</option>
+                  <option value="120" data-i18n="next120Days">Next 4 months</option>
+                </select>
+              </label>
+            </div>
+            <fieldset class="avoid-options">
+              <legend data-i18n="avoidWindows">Avoid options</legend>
+              <label><input type="checkbox" data-sait-avoid="rahu" checked> <span data-i18n="avoidRahu">Rahu Kaal</span></label>
+              <label><input type="checkbox" data-sait-avoid="yamaganda" checked> <span data-i18n="avoidYamaganda">Yamaganda</span></label>
+              <label><input type="checkbox" data-sait-avoid="gulika"> <span data-i18n="avoidGulika">Gulika Kaal</span></label>
+              <label><input type="checkbox" data-sait-avoid="rikta" checked> <span data-i18n="avoidRikta">Rikta tithi</span></label>
+              <label><input type="checkbox" data-sait-avoid="saturday"> <span data-i18n="avoidSaturday">Saturday starts</span></label>
+            </fieldset>
+            <div class="sait-result-summary" id="saitResultSummary"></div>
+            <div class="sait-result-grid" id="saitPlannerResults"></div>
+            <div class="sait-month-grid" id="saitMonthOutlook"></div>
+          </section>
           <div class="sait-grid" id="saitRows"></div>
           <p class="notice-banner visible" data-i18n="saitNotice">For marriage, bratabandha, griha prabesh and other sanskar-level decisions, confirm with a family priest or official patro before finalizing.</p>
         </section>
@@ -585,6 +649,20 @@
         <p id="toolDescription">Tithi, nakshatra, yoga and karana.</p>
         <div class="tool-preview-grid" id="toolPreviewGrid"></div>
       </article>
+    </div>
+
+    <div class="modal-backdrop command-backdrop" id="commandBackdrop" hidden>
+      <section class="command-palette" role="dialog" aria-modal="true" aria-labelledby="commandTitle">
+        <div class="command-head">
+          <h2 id="commandTitle" data-i18n="quickJump">Quick jump</h2>
+          <button class="icon-button close-button" id="closeCommandPalette" type="button" aria-label="Close command palette" title="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <label class="visually-hidden" for="commandSearch" data-i18n="searchNepalPatro">Search Nepal Patro</label>
+        <input id="commandSearch" type="search" autocomplete="off" placeholder="Search pages, tools, rashi..." data-i18n-placeholder="commandPlaceholder">
+        <div class="command-list" id="commandList"></div>
+      </section>
     </div>
 
     <div class="modal-backdrop" id="modalBackdrop" hidden>

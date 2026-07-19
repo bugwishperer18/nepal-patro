@@ -13,6 +13,10 @@ A modern Nepali calendar, panchang, forex, bullion, market-rate, and date-conver
 - Gold and silver price page with last updated date and clean table layout.
 - BS to AD and AD to BS date converter for BS 1975-2099 using a vendored MIT-licensed converter library.
 - Panchang source integration using the MIT-licensed `panchang-ts` calculation library for Kathmandu, Nepal.
+- Auspicious time planner for purchase, investment, study, travel, and griha puja windows with configurable avoid filters.
+- Daily, weekly, monthly, and yearly advisory Rashifal views for every rashi, with timing, focus, and remedy guidance.
+- Quick jump command palette for pages, tools, and rashi detail pages.
+- Accessible light/dark appearance with remembered theme preference.
 - Clear confidence notes for shubha sait, horoscope, and supported converter range.
 - Source-health checks that mark stale or parser-fallback data instead of silently presenting it as live.
 - Daily data refresh through a Vercel serverless endpoint with local cache fallback.

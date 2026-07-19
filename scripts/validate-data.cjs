@@ -69,7 +69,7 @@ function validateConverterClaims() {
   assert(/converterStartYear = 1975/.test(app), "converter start year must stay at 1975");
   assert(/converterEndYear = 2099/.test(app), "converter end year must stay at 2099");
   assert(!/BS 2000-2090|2000-2090/.test(app + read("index.html")), "overbroad converter range claim found");
-  assert(!/const variant = base\.slice/.test(app), "converter must not use generated BS month patterns");
+  assert(!/const variant = base\.slice/.test(app), "converter must not use synthetic BS month patterns");
 }
 
 validateDailyData();

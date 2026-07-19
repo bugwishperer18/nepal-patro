@@ -623,6 +623,161 @@ const saitRows = [
   ["Avoid", "Rahu Kaal", "10:21 AM - 12:02 PM", "Avoid starting new ventures unless unavoidable."]
 ];
 
+const saitEventProfiles = {
+  purchase: {
+    icon: "bag",
+    labelEn: "Purchase",
+    labelNe: "खरिद",
+    window: "Abhijit Muhurat",
+    windowNe: "अभिजित मुहूर्त",
+    preferredWeekdays: [1, 3, 4, 5],
+    preferredTithi: [2, 3, 5, 7, 10, 11, 13],
+    preferredNakshatra: [1, 4, 5, 8, 12, 13, 15, 21],
+    focusEn: "Durable goods, vehicles, electronics, household items",
+    focusNe: "दिगो सामान, सवारी, इलेक्ट्रोनिक्स र घरायसी सामग्री"
+  },
+  investment: {
+    icon: "chart",
+    labelEn: "Investment",
+    labelNe: "लगानी",
+    window: "Abhijit Muhurat",
+    windowNe: "अभिजित मुहूर्त",
+    preferredWeekdays: [1, 3, 4, 5],
+    preferredTithi: [2, 5, 7, 10, 11, 13],
+    preferredNakshatra: [4, 5, 8, 12, 13, 15, 21, 22],
+    focusEn: "Banking, long-term saving, documents, business starts",
+    focusNe: "बैंकिङ, दीर्घकालीन बचत, कागजात र व्यवसाय सुरु"
+  },
+  study: {
+    icon: "book",
+    labelEn: "Study",
+    labelNe: "अध्ययन",
+    window: "Brahma Muhurta",
+    windowNe: "ब्रह्म मुहूर्त",
+    preferredWeekdays: [0, 1, 3, 4, 5],
+    preferredTithi: [2, 3, 5, 7, 10, 11, 13],
+    preferredNakshatra: [1, 5, 7, 12, 13, 17, 20, 22],
+    focusEn: "Exams, new courses, reading plans, mantra practice",
+    focusNe: "परीक्षा, नयाँ कोर्स, पढाइ योजना र मन्त्र अभ्यास"
+  },
+  travel: {
+    icon: "route",
+    labelEn: "Travel",
+    labelNe: "यात्रा",
+    window: "Vijaya Muhurat",
+    windowNe: "विजय मुहूर्त",
+    preferredWeekdays: [1, 3, 4, 5, 0],
+    preferredTithi: [2, 3, 5, 7, 10, 11, 13],
+    preferredNakshatra: [1, 4, 6, 7, 12, 15, 20, 22],
+    focusEn: "Departures, visa work, formal visits, pilgrimages",
+    focusNe: "प्रस्थान, भिसा काम, औपचारिक भेट र तीर्थयात्रा"
+  },
+  grihaPuja: {
+    icon: "home",
+    labelEn: "Griha puja",
+    labelNe: "गृह पूजा",
+    window: "Godhuli Muhurat",
+    windowNe: "गोधूलि मुहूर्त",
+    preferredWeekdays: [1, 3, 4, 5],
+    preferredTithi: [2, 3, 5, 7, 10, 11, 13, 15],
+    preferredNakshatra: [1, 4, 5, 8, 12, 13, 15, 21],
+    focusEn: "Household worship, vastu sankalpa, family rituals",
+    focusNe: "घर पूजा, वास्तु संकल्प र पारिवारिक अनुष्ठान"
+  }
+};
+
+const tithiCycle = [
+  "Shukla Pratipada", "Shukla Dwitiya", "Shukla Tritiya", "Shukla Chaturthi", "Shukla Panchami",
+  "Shukla Shasthi", "Shukla Saptami", "Shukla Ashtami", "Shukla Nawami", "Shukla Dashami",
+  "Shukla Ekadashi", "Shukla Dwadashi", "Shukla Trayodashi", "Shukla Chaturdashi", "Purnima",
+  "Krishna Pratipada", "Krishna Dwitiya", "Krishna Tritiya", "Krishna Chaturthi", "Krishna Panchami",
+  "Krishna Shasthi", "Krishna Saptami", "Krishna Ashtami", "Krishna Nawami", "Krishna Dashami",
+  "Krishna Ekadashi", "Krishna Dwadashi", "Krishna Trayodashi", "Krishna Chaturdashi", "Aunsi"
+];
+
+const nakshatraCycle = [
+  "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", "Punarvasu", "Pushya", "Ashlesha",
+  "Magha", "Purva Phalguni", "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha",
+  "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+  "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+];
+
+const yogaCycle = ["Vishkambha", "Priti", "Ayushman", "Saubhagya", "Shobhana", "Atiganda", "Sukarma", "Dhriti", "Shula", "Ganda", "Vriddhi", "Dhruva", "Vyaghata", "Harshana", "Vajra", "Siddhi", "Vyatipata", "Variyana", "Parigha", "Shiva", "Siddha", "Sadhya", "Shubha", "Shukla", "Brahma", "Indra", "Vaidhriti"];
+
+const avoidLabels = {
+  rahu: { en: "Rahu Kaal", ne: "राहु काल" },
+  yamaganda: { en: "Yamaganda", ne: "यमगण्ड" },
+  gulika: { en: "Gulika Kaal", ne: "गुलिक काल" },
+  rikta: { en: "Rikta tithi", ne: "रिक्ता तिथि" },
+  saturday: { en: "Saturday starts", ne: "शनिबार सुरु" }
+};
+
+const saitSignalTranslations = {
+  "Shukla Pratipada": "शुक्ल प्रतिपदा",
+  "Shukla Dwitiya": "शुक्ल द्वितीया",
+  "Shukla Tritiya": "शुक्ल तृतीया",
+  "Shukla Chaturthi": "शुक्ल चतुर्थी",
+  "Shukla Panchami": "शुक्ल पञ्चमी",
+  "Shukla Shasthi": "शुक्ल षष्ठी",
+  "Shukla Saptami": "शुक्ल सप्तमी",
+  "Shukla Ashtami": "शुक्ल अष्टमी",
+  "Shukla Nawami": "शुक्ल नवमी",
+  "Shukla Dashami": "शुक्ल दशमी",
+  "Shukla Ekadashi": "शुक्ल एकादशी",
+  "Shukla Dwadashi": "शुक्ल द्वादशी",
+  "Shukla Trayodashi": "शुक्ल त्रयोदशी",
+  "Shukla Chaturdashi": "शुक्ल चतुर्दशी",
+  Purnima: "पूर्णिमा",
+  "Krishna Pratipada": "कृष्ण प्रतिपदा",
+  "Krishna Dwitiya": "कृष्ण द्वितीया",
+  "Krishna Tritiya": "कृष्ण तृतीया",
+  "Krishna Chaturthi": "कृष्ण चतुर्थी",
+  "Krishna Panchami": "कृष्ण पञ्चमी",
+  "Krishna Shasthi": "कृष्ण षष्ठी",
+  "Krishna Saptami": "कृष्ण सप्तमी",
+  "Krishna Ashtami": "कृष्ण अष्टमी",
+  "Krishna Nawami": "कृष्ण नवमी",
+  "Krishna Dashami": "कृष्ण दशमी",
+  "Krishna Ekadashi": "कृष्ण एकादशी",
+  "Krishna Dwadashi": "कृष्ण द्वादशी",
+  "Krishna Trayodashi": "कृष्ण त्रयोदशी",
+  "Krishna Chaturdashi": "कृष्ण चतुर्दशी",
+  Aunsi: "औंसी",
+  Ashwini: "अश्विनी",
+  Bharani: "भरणी",
+  Krittika: "कृत्तिका",
+  Rohini: "रोहिणी",
+  Mrigashira: "मृगशिरा",
+  Ardra: "आर्द्रा",
+  Punarvasu: "पुनर्वसु",
+  Pushya: "पुष्य",
+  Ashlesha: "आश्लेषा",
+  Magha: "मघा",
+  "Purva Phalguni": "पूर्वाफाल्गुनी",
+  "Uttara Phalguni": "उत्तराफाल्गुनी",
+  Hasta: "हस्त",
+  Chitra: "चित्रा",
+  Swati: "स्वाती",
+  Vishakha: "विशाखा",
+  Anuradha: "अनुराधा",
+  Jyeshtha: "ज्येष्ठा",
+  Mula: "मूल",
+  "Purva Ashadha": "पूर्वाषाढा",
+  "Uttara Ashadha": "उत्तराषाढा",
+  Shravana: "श्रवण",
+  Dhanishta: "धनिष्ठा",
+  Shatabhisha: "शतभिषा",
+  "Purva Bhadrapada": "पूर्वभाद्रपदा",
+  "Uttara Bhadrapada": "उत्तराभाद्रपदा",
+  Revati: "रेवती",
+  Saubhagya: "सौभाग्य",
+  Sukarma: "सुकर्मा",
+  Siddhi: "सिद्धि",
+  Shubha: "शुभ",
+  Shukla: "शुक्ल",
+  Brahma: "ब्रह्म"
+};
+
 const nakshatras = ["अनुराधा", "ज्येष्ठा", "मूल", "पूर्वाषाढा", "उत्तराषाढा", "श्रवण", "धनिष्ठा"];
 const yogas = ["परिधि", "शिव", "सिद्ध", "साध्य", "शुभ", "शुक्ल", "ब्रह्म"];
 const karanas = ["वणिज", "विष्टि", "बव", "बालव", "कौलव", "तैतिल", "गर"];
@@ -646,6 +801,7 @@ if ("scrollRestoration" in history) {
 
 const storedLanguage = localStorage.getItem("nepalPatro:language");
 const storedCalendarMode = localStorage.getItem("nepalPatro:calendarMode");
+const storedTheme = localStorage.getItem("nepalPatro:theme");
 
 let activeMonthIndex = 0;
 let activeDay = null;
@@ -653,7 +809,9 @@ let activeRashi = "meen";
 let marketSearchQuery = "";
 let appLanguage = ["en", "ne"].includes(storedLanguage) ? storedLanguage : "en";
 let calendarMode = ["bs", "ad"].includes(storedCalendarMode) ? storedCalendarMode : "bs";
+let appTheme = ["light", "dark"].includes(storedTheme) ? storedTheme : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 let sidebarConverterMode = "bs";
+let activeHoroscopePeriod = "daily";
 
 const calendarGrid = document.querySelector("#calendarGrid");
 const monthLabel = document.querySelector("#monthLabel");
@@ -664,9 +822,16 @@ const toolBackdrop = document.querySelector("#toolBackdrop");
 const noteBox = document.querySelector("#personalNote");
 const navLinks = document.querySelectorAll(".nav-pills a");
 const sectionLinks = document.querySelectorAll("[data-section-link]");
+const moreNavButton = document.querySelector("#moreNavButton");
+const moreNavMenu = document.querySelector("#moreNavMenu");
 const appSections = document.querySelectorAll(".page");
 const languageButtons = document.querySelectorAll("[data-language]");
 const calendarModeButtons = document.querySelectorAll("[data-calendar-mode]");
+const themeToggle = document.querySelector("#themeToggle");
+const horoscopePeriodButtons = document.querySelectorAll("[data-horoscope-period]");
+const commandBackdrop = document.querySelector("#commandBackdrop");
+const commandSearch = document.querySelector("#commandSearch");
+const commandList = document.querySelector("#commandList");
 const validSections = ["calendar", "events", "tools", "rates", "gold-silver", "market", "fuel", "horoscope", "horoscope-detail", "date-converter", "land-converter", "loan-calculator", "panchang", "shubha-sait"];
 const dailyDataKey = "nepalPatro:dailyDataCheckedAt:v2";
 const dailyDataVersionKey = "nepalPatro:dailyDataVersion:v2";
@@ -701,6 +866,12 @@ const translations = {
     navDateConverter: "Date Converter",
     navPanchang: "Panchang",
     navShubhaSait: "Shubha Sait",
+    more: "More",
+    searchShort: "Search",
+    quickJump: "Quick jump",
+    searchNepalPatro: "Search Nepal Patro",
+    commandPlaceholder: "Search pages, tools, rashi...",
+    noCommandMatches: "No matching destination",
     allRashi: "All rashi",
     todayInNepal: "Today in Nepal",
     nepalTime: "Nepal Standard Time",
@@ -729,6 +900,8 @@ const translations = {
     licensedContent: "Licensed content",
     openSource: "Open source",
     advisoryOnly: "Advisory only",
+    switchToDark: "Switch to dark mode",
+    switchToLight: "Switch to light mode",
     sourceLive: "Live source checked",
     sourceFallback: "Offline fallback",
     noLicensedHoroscope: "Full third-party rashifal text needs publisher permission. This app shows original advisory guidance and links to the source.",
@@ -772,6 +945,35 @@ const translations = {
     monthlyRashifal: "Monthly Rashifal",
     nepaliHoroscope: "Nepali Horoscope for the month",
     selectRashi: "Select rashi",
+    dailyHoroscope: "Daily",
+    weeklyHoroscope: "Weekly",
+    monthlyHoroscope: "Monthly",
+    yearlyHoroscope: "Yearly",
+    periodSummary: "Period summary",
+    actionPlan: "Action plan",
+    doNext: "Do next",
+    avoidThis: "Avoid this",
+    bestDays: "Best days",
+    yearlyStrategy: "Yearly strategy",
+    careerMove: "Career move",
+    moneyMove: "Money move",
+    wellnessMove: "Wellness move",
+    relationshipMove: "Relationship move",
+    todayForecast: "Today",
+    weekForecast: "This week",
+    monthForecast: "This month",
+    yearForecast: "This year",
+    timingAndLuck: "Timing and luck",
+    practicalRemedy: "Practical remedy",
+    moneyCareer: "Money and career",
+    relationshipsHealth: "Relationships and health",
+    recommendation: "Recommendation",
+    bestUse: "Best use",
+    luckyWindow: "Lucky window",
+    openRashi: "Open rashi",
+    jumpTo: "Jump to",
+    page: "Page",
+    tool: "Tool",
     convertDates: "BS ⇄ AD Converter",
     bsToAd: "Nepali to English",
     adToBs: "English to Nepali",
@@ -850,6 +1052,35 @@ const translations = {
     inauspiciousTimes: "Avoid starting new work",
     dailyGuidance: "Daily guidance",
     auspiciousPlanner: "Auspicious time planner",
+    findAuspiciousDays: "Find auspicious days",
+    saitPlannerIntro: "Choose a start date, event type, and avoid filters to see the strongest upcoming planning windows.",
+    fromDate: "From date",
+    eventType: "Event type",
+    planningHorizon: "Planning horizon",
+    next30Days: "Next 30 days",
+    next60Days: "Next 60 days",
+    next120Days: "Next 4 months",
+    avoidWindows: "Avoid options",
+    avoidRahu: "Rahu Kaal",
+    avoidYamaganda: "Yamaganda",
+    avoidGulika: "Gulika Kaal",
+    avoidRikta: "Rikta tithi",
+    avoidSaturday: "Saturday starts",
+    eventPurchase: "Purchase",
+    eventInvestment: "Investment",
+    eventStudy: "Study",
+    eventTravel: "Travel",
+    eventGrihaPuja: "Griha puja",
+    strongestUpcoming: "Strongest upcoming days",
+    monthOutlook: "Month outlook",
+    noSaitMatches: "No strong matches with the current filters. Try a longer horizon or fewer avoid options.",
+    excellent: "Excellent",
+    good: "Good",
+    usable: "Usable",
+    recommendedWindow: "Recommended window",
+    matchedSignals: "Matched signals",
+    avoidedSignals: "Avoided signals",
+    topMonth: "Top month",
     saitNotice: "For marriage, bratabandha, griha prabesh and other sanskar-level decisions, confirm with a family priest or official patro before finalizing.",
     toolPreview: "Tool preview",
     overview: "Overview",
@@ -873,6 +1104,12 @@ const translations = {
     navDateConverter: "मिति परिवर्तन",
     navPanchang: "पञ्चाङ्ग",
     navShubhaSait: "शुभ साइत",
+    more: "थप",
+    searchShort: "खोज",
+    quickJump: "छिटो जानुहोस्",
+    searchNepalPatro: "नेपाल पात्रो खोज्नुहोस्",
+    commandPlaceholder: "पेज, टुल, राशि खोज्नुहोस्...",
+    noCommandMatches: "मिल्दो गन्तव्य भेटिएन",
     allRashi: "सबै राशि",
     todayInNepal: "आज नेपालमा",
     nepalTime: "नेपाल मानक समय",
@@ -901,6 +1138,8 @@ const translations = {
     licensedContent: "लाइसेन्स सामग्री",
     openSource: "स्रोत खोल्नुहोस्",
     advisoryOnly: "सल्लाह मात्र",
+    switchToDark: "डार्क मोड खोल्नुहोस्",
+    switchToLight: "लाइट मोड खोल्नुहोस्",
     sourceLive: "लाइभ स्रोत जाँच भयो",
     sourceFallback: "अफलाइन वैकल्पिक",
     noLicensedHoroscope: "तेस्रो पक्षको पूरा राशिफल पुनःप्रकाशन गर्न प्रकाशकको अनुमति चाहिन्छ। यो एपले आफ्नै सल्लाहात्मक मार्गदर्शन र स्रोत लिङ्क देखाउँछ।",
@@ -944,6 +1183,35 @@ const translations = {
     monthlyRashifal: "मासिक राशिफल",
     nepaliHoroscope: "मासिक नेपाली राशिफल",
     selectRashi: "राशि छान्नुहोस्",
+    dailyHoroscope: "दैनिक",
+    weeklyHoroscope: "साप्ताहिक",
+    monthlyHoroscope: "मासिक",
+    yearlyHoroscope: "वार्षिक",
+    periodSummary: "अवधि सारांश",
+    actionPlan: "कार्य योजना",
+    doNext: "अब गर्नुहोस्",
+    avoidThis: "यसबाट बच्नुहोस्",
+    bestDays: "उत्तम दिन",
+    yearlyStrategy: "वार्षिक रणनीति",
+    careerMove: "करियर कदम",
+    moneyMove: "आर्थिक कदम",
+    wellnessMove: "स्वास्थ्य कदम",
+    relationshipMove: "सम्बन्ध कदम",
+    todayForecast: "आज",
+    weekForecast: "यो हप्ता",
+    monthForecast: "यो महिना",
+    yearForecast: "यो वर्ष",
+    timingAndLuck: "समय र शुभ संकेत",
+    practicalRemedy: "व्यावहारिक उपाय",
+    moneyCareer: "धन र करियर",
+    relationshipsHealth: "सम्बन्ध र स्वास्थ्य",
+    recommendation: "सिफारिस",
+    bestUse: "उत्तम उपयोग",
+    luckyWindow: "शुभ समय",
+    openRashi: "राशि खोल्नुहोस्",
+    jumpTo: "जानुहोस्",
+    page: "पेज",
+    tool: "टुल",
     convertDates: "वि.सं. ⇄ ई.सं. परिवर्तन",
     bsToAd: "नेपालीबाट अंग्रेजी",
     adToBs: "अंग्रेजीबाट नेपाली",
@@ -1022,6 +1290,35 @@ const translations = {
     inauspiciousTimes: "नयाँ काम सुरु नगर्ने समय",
     dailyGuidance: "दैनिक मार्गदर्शन",
     auspiciousPlanner: "शुभ समय योजना",
+    findAuspiciousDays: "शुभ दिन खोज्नुहोस्",
+    saitPlannerIntro: "सुरु मिति, कामको प्रकार र नकार्ने समय छानेर आउँदा शुभ योजना झ्यालहरू हेर्नुहोस्।",
+    fromDate: "सुरु मिति",
+    eventType: "कामको प्रकार",
+    planningHorizon: "योजना अवधि",
+    next30Days: "आउँदा ३० दिन",
+    next60Days: "आउँदा ६० दिन",
+    next120Days: "आउँदा ४ महिना",
+    avoidWindows: "नगर्ने विकल्प",
+    avoidRahu: "राहु काल",
+    avoidYamaganda: "यमगण्ड",
+    avoidGulika: "गुलिक काल",
+    avoidRikta: "रिक्ता तिथि",
+    avoidSaturday: "शनिबार सुरु",
+    eventPurchase: "खरिद",
+    eventInvestment: "लगानी",
+    eventStudy: "अध्ययन",
+    eventTravel: "यात्रा",
+    eventGrihaPuja: "गृह पूजा",
+    strongestUpcoming: "उत्तम आउँदा दिनहरू",
+    monthOutlook: "महिना दृष्टि",
+    noSaitMatches: "हालका फिल्टरसँग बलियो दिन भेटिएन। लामो अवधि वा कम नकार्ने विकल्प प्रयोग गर्नुहोस्।",
+    excellent: "उत्कृष्ट",
+    good: "राम्रो",
+    usable: "प्रयोगयोग्य",
+    recommendedWindow: "सिफारिस समय",
+    matchedSignals: "मिलेका संकेत",
+    avoidedSignals: "नगर्ने संकेत",
+    topMonth: "उत्तम महिना",
     saitNotice: "विवाह, ब्रतबन्ध, गृह प्रवेश र अन्य संस्कारका लागि अन्तिम निर्णय गर्नुअघि पारिवारिक पुरोहित वा आधिकारिक पात्रो पुष्टि गर्नुहोस्।",
     toolPreview: "टुल पूर्वावलोकन",
     overview: "सारांश",
@@ -2404,6 +2701,216 @@ function renderSourcePanel(targetId, rows) {
   });
 }
 
+function getLocalizedRashi(data) {
+  return appLanguage === "ne" ? `${data.ne} राशि` : `${data.en} Rashi`;
+}
+
+function getHoroscopePeriodText(data, period) {
+  const focus = appLanguage === "ne" ? data.focusNe : data.focusEn;
+  const monthly = appLanguage === "ne" ? data.monthlyNe : data.monthlyEn;
+  const yearly = appLanguage === "ne" ? data.yearlyNe : data.yearlyEn;
+  const remedy = appLanguage === "ne" ? data.remedyNe : data.remedyEn;
+  if (period === "weekly") {
+    return appLanguage === "ne"
+      ? `${focus}लाई प्राथमिकता दिनुहोस्। यो हप्ता अधुरा काम टुंग्याउने, संवाद स्पष्ट गर्ने र स्वास्थ्य लय मिलाउने समय हो।`
+      : `Prioritize ${focus.toLowerCase()}. This week favors closing loose ends, clarifying conversations, and resetting health rhythm.`;
+  }
+  if (period === "monthly") {
+    return monthly;
+  }
+  if (period === "yearly") {
+    return yearly;
+  }
+  return appLanguage === "ne"
+    ? `आज ${focus}मा सानो तर ठोस कदम राम्रो। हतारो प्रतिक्रिया घटाउनुहोस्। ${remedy}`
+    : `Today rewards one small, concrete move around ${focus.toLowerCase()}. Reduce reactive choices. ${remedy}`;
+}
+
+function getHoroscopeActionPlan(data, period) {
+  const focus = appLanguage === "ne" ? data.focusNe : data.focusEn;
+  const color = localizeToolText(data.color);
+  const dasha = appLanguage === "ne" ? localizeToolText(data.dasha) : data.dasha;
+  if (appLanguage === "ne") {
+    const monthlyPlan = [
+      [t("doNext"), `${focus}सँग जोडिएको एउटा मुख्य लक्ष्य लेख्नुहोस् र त्यसका लागि ३ वटा काम मात्र राख्नुहोस्।`],
+      [t("avoidThis"), "हतारो वाचा, अस्पष्ट खर्च, र अरूको दबाबमा गरिएको निर्णयबाट बच्नुहोस्।"],
+      [t("bestDays"), "बुधबार/बिहीबार योजना, वार्ता र अध्ययनका लागि; आइतबार बिहान आत्मविश्वास चाहिने कामका लागि।"],
+      [t("careerMove"), "वरिष्ठ, ग्राहक वा साझेदारसँग लिखित अपडेट पठाउनुहोस्; अधुरा कागजपत्र सफा गर्नुहोस्।"],
+      [t("moneyMove"), "किस्ता, बचत र ठूला खरिदलाई छुट्टै नोटमा राखेर महिनाको सीमा तय गर्नुहोस्।"],
+      [t("wellnessMove"), `शुभ रङ ${color} प्रयोग गर्नुहोस्, निद्रा र पानीलाई प्राथमिकता दिनुहोस्, र ${dasha} अनुसार अनुशासन बढाउनुहोस्।`]
+    ];
+    const yearlyPlan = [
+      [t("yearlyStrategy"), `${focus}लाई वर्षको मुख्य विषय बनाउनुहोस्। ९०-दिने लक्ष्य बनाएर प्रत्येक महिनाको अन्त्यमा समीक्षा गर्नुहोस्।`],
+      [t("careerMove"), "सीप, प्रमाणपत्र, पोर्टफोलियो वा व्यवसाय प्रणालीमा लगानी गर्दा वर्षभरि लाभ बलियो हुन्छ।"],
+      [t("moneyMove"), "आपतकालीन बचत, ऋण घटाउने योजना र कर/बीमा कागजलाई पहिलो छ महिनामा व्यवस्थित गर्नुहोस्।"],
+      [t("relationshipMove"), "परिवार र साझेदारीमा सीमा, समय र अपेक्षा सुरुमै स्पष्ट राख्नुहोस्।"],
+      [t("avoidThis"), "एकै वर्ष धेरै ठूलो जोखिम, भावनात्मक खरिद र बिना लिखित सहमति भएका सम्झौताबाट बच्नुहोस्।"],
+      [t("practicalRemedy"), data.remedyNe]
+    ];
+    return period === "yearly" ? yearlyPlan : monthlyPlan;
+  }
+  const monthlyPlan = [
+    [t("doNext"), `Write one priority connected to ${focus.toLowerCase()} and keep only three supporting tasks for the period.`],
+    [t("avoidThis"), "Avoid rushed promises, vague spending, and decisions made mainly to satisfy pressure from others."],
+    [t("bestDays"), "Use Wednesday or Thursday for planning, negotiation, and study; use Sunday morning for confidence-heavy work."],
+    [t("careerMove"), "Send a written update to a senior, client, or partner, then clear one pending document trail."],
+    [t("moneyMove"), "Separate installments, savings, and major purchases into one note before setting the month limit."],
+    [t("wellnessMove"), `Use ${color} as a subtle support color, protect sleep and hydration, and work with the discipline of ${dasha}.`]
+  ];
+  const yearlyPlan = [
+    [t("yearlyStrategy"), `Make ${focus.toLowerCase()} the annual theme. Break it into 90-day goals and review at the end of each month.`],
+    [t("careerMove"), "Invest in a skill, credential, portfolio, or operating system that can keep paying you back all year."],
+    [t("moneyMove"), "Organize emergency savings, debt reduction, tax, and insurance documents in the first half of the year."],
+    [t("relationshipMove"), "Set expectations early around time, family responsibility, and partnership boundaries."],
+    [t("avoidThis"), "Avoid stacking too many big risks in the same year, emotional purchases, and informal agreements."],
+    [t("practicalRemedy"), data.remedyEn]
+  ];
+  return period === "yearly" ? yearlyPlan : monthlyPlan;
+}
+
+function getHoroscopeCardInsights(data, period) {
+  const focus = appLanguage === "ne" ? data.focusNe : data.focusEn;
+  if (appLanguage === "ne") {
+    if (period === "yearly") {
+      return [`वार्षिक विषय: ${focus}`, "९०-दिने समीक्षा", `शुभ अंक: ${data.number}`];
+    }
+    if (period === "monthly") {
+      return [`मुख्य फोकस: ${focus}`, "बजेट र सीमा", `शुभ रङ: ${localizeToolText(data.color)}`];
+    }
+    if (period === "weekly") {
+      return [`फोकस: ${focus}`, "३ प्राथमिकता", "बुध/बिही राम्रो"];
+    }
+    return [`आज: ${focus}`, `अंक ${data.number}`, localizeToolText(data.color)];
+  }
+  if (period === "yearly") {
+    return [`Annual theme: ${focus}`, "90-day reviews", `Lucky number: ${data.number}`];
+  }
+  if (period === "monthly") {
+    return [`Main focus: ${focus}`, "Budget and boundaries", `Lucky color: ${data.color}`];
+  }
+  if (period === "weekly") {
+    return [`Focus: ${focus}`, "3 priorities", "Wed/Thu favored"];
+  }
+  return [`Today: ${focus}`, `Number ${data.number}`, data.color];
+}
+
+function getHoroscopeDetailBlocks(data) {
+  const focus = appLanguage === "ne" ? data.focusNe : data.focusEn;
+  const remedy = appLanguage === "ne" ? data.remedyNe : data.remedyEn;
+  const monthly = appLanguage === "ne" ? data.monthlyNe : data.monthlyEn;
+  const yearly = appLanguage === "ne" ? data.yearlyNe : data.yearlyEn;
+  const dasha = appLanguage === "ne" ? localizeToolText(data.dasha) : data.dasha;
+  return [
+    {
+      title: t("todayForecast"),
+      body: appLanguage === "ne"
+        ? `आजको मुख्य ऊर्जा ${focus}तर्फ छ। नयाँ सुरुवातभन्दा सुरु भइसकेको कामलाई सफा, समयमै र लिखित रूपमा अगाडि बढाउनुहोस्। भावनात्मक वा आवेगपूर्ण निर्णय साँझसम्म रोक्नु बुद्धिमानी हुन्छ।`
+        : `Today's energy leans toward ${focus.toLowerCase()}. Favor clean follow-through over brand-new starts, keep decisions written, and delay emotional commitments until the evening.`
+    },
+    {
+      title: t("weekForecast"),
+      body: appLanguage === "ne"
+        ? "यो हप्ता सम्बन्ध, पैसा र काममा सानो अनुशासनले ठूलो फरक पार्छ। तीन प्राथमिकता मात्र राख्नुहोस्, अनावश्यक खर्च रोक्नुहोस्, र बुधबार/बिहीबार योजना वा वार्ताका लागि राम्रो प्रयोग गर्नुहोस्।"
+        : "This week, small discipline changes the outcome in relationships, money, and work. Keep only three priorities, pause unnecessary spending, and use Wednesday or Thursday for planning and negotiations."
+    },
+    { title: t("monthForecast"), body: monthly },
+    { title: t("yearForecast"), body: yearly },
+    {
+      title: t("moneyCareer"),
+      body: appLanguage === "ne"
+        ? `${focus}सँग जोडिएका काममा लाभ छ। कागजपत्र, किस्ता, बजेट, कर वा सम्झौता जाँचेर मात्र ठूलो निर्णय गर्नुहोस्। छिटो लाभभन्दा स्थिर लाभ राम्रो।`
+        : `Money and career improve through ${focus.toLowerCase()}. Review documents, installments, budgets, tax, or contracts before major commitments. Prefer durable gains over quick wins.`
+    },
+    {
+      title: t("relationshipsHealth"),
+      body: appLanguage === "ne"
+        ? "सम्बन्धमा कम शब्द, बढी स्पष्टता उपयोगी हुन्छ। स्वास्थ्यमा निद्रा, पानी, पाचन र नियमित हिँडाइलाई आधार बनाउनुहोस्। शरीरले दिएको संकेतलाई बेवास्ता नगर्नुहोस्।"
+        : "In relationships, fewer words with more clarity will help. For health, anchor the period around sleep, hydration, digestion, and regular walking. Do not ignore body signals."
+    },
+    {
+      title: t("timingAndLuck"),
+      body: appLanguage === "ne"
+        ? `शुभ रङ: ${localizeToolText(data.color)}। शुभ अंक: ${data.number}। ${t("luckyWindow")}: बिहान ८:३०-१०:३० वा अभिजित मुहूर्त। ग्रह संकेत: ${dasha}।`
+        : `Lucky color: ${data.color}. Lucky number: ${data.number}. ${t("luckyWindow")}: 8:30-10:30 AM or Abhijit Muhurat. Planetary cue: ${dasha}.`
+    },
+    {
+      title: t("practicalRemedy"),
+      body: `${remedy} ${appLanguage === "ne" ? `मन्त्र: ${data.mantra}` : `Mantra: ${data.mantra}`}`
+    }
+  ];
+}
+
+function getCommandItems() {
+  const pageItems = [
+    ["calendar", t("navCalendar")],
+    ["events", t("navEvents")],
+    ["tools", t("navTools")],
+    ["rates", t("navRates")],
+    ["gold-silver", t("navGoldSilver")],
+    ["market", t("navMarket")],
+    ["fuel", t("navFuel")],
+    ["horoscope", t("navHoroscope")],
+    ["date-converter", t("navDateConverter")],
+    ["land-converter", t("landConverterTitle")],
+    ["loan-calculator", t("loanCalculatorTitle")],
+    ["panchang", t("navPanchang")],
+    ["shubha-sait", t("navShubhaSait")]
+  ].map(([section, title]) => ({ type: t("page"), title, section, keywords: `${section} ${title}` }));
+  const rashiItems = Object.entries(horoscopeData).map(([key, data]) => ({
+    type: t("rashi"),
+    title: getLocalizedRashi(data),
+    section: "horoscope-detail",
+    rashi: key,
+    keywords: `${key} ${data.en} ${data.ne} ${data.icon}`
+  }));
+  return [...pageItems, ...rashiItems];
+}
+
+function renderCommandList() {
+  const query = commandSearch.value.trim().toLowerCase();
+  const items = getCommandItems()
+    .filter((item) => !query || `${item.title} ${item.type} ${item.keywords}`.toLowerCase().includes(query))
+    .slice(0, 10);
+  clearNode(commandList);
+  if (!items.length) {
+    commandList.append(makeElement("div", "wide-empty", t("noCommandMatches")));
+    return;
+  }
+  items.forEach((item) => {
+    const button = makeElement("button", "command-item");
+    button.type = "button";
+    const text = makeElement("span", "");
+    text.append(makeElement("strong", "", item.title));
+    text.append(makeElement("small", "", `${item.type} · ${t("jumpTo")}`));
+    button.append(text);
+    button.append(makeElement("kbd", "", "↵"));
+    button.addEventListener("click", () => {
+      if (item.rashi) {
+        activeRashi = item.rashi;
+      }
+      closeCommandPalette();
+      navigateToSection(item.section);
+      if (item.rashi) {
+        renderHoroscopeDetail();
+      }
+    });
+    commandList.append(button);
+  });
+}
+
+function openCommandPalette() {
+  commandBackdrop.hidden = false;
+  document.body.style.overflow = "hidden";
+  commandSearch.value = "";
+  renderCommandList();
+  requestAnimationFrame(() => commandSearch.focus());
+}
+
+function closeCommandPalette() {
+  commandBackdrop.hidden = true;
+  document.body.style.overflow = "";
+}
+
 function renderHoroscope() {
   const grid = document.querySelector("#horoscopeGrid");
   clearNode(grid);
@@ -2422,13 +2929,26 @@ function renderHoroscope() {
       note: t("noLicensedHoroscope")
     }
   ]);
+  horoscopePeriodButtons.forEach((button) => {
+    const active = button.dataset.horoscopePeriod === activeHoroscopePeriod;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
   Object.entries(horoscopeData).forEach(([key, data]) => {
     const card = makeElement("button", "rashi-card");
     card.type = "button";
     card.dataset.rashi = key;
     card.append(makeElement("span", "rashi-icon", data.icon));
-    card.append(makeElement("strong", "", appLanguage === "ne" ? `${data.ne} राशि` : `${data.en} Rashi`));
-    card.append(makeElement("p", "", appLanguage === "ne" ? data.briefNe : data.briefEn));
+    card.append(makeElement("strong", "", getLocalizedRashi(data)));
+    card.append(makeElement("p", "", getHoroscopePeriodText(data, activeHoroscopePeriod)));
+    const insights = makeElement("span", "rashi-insights");
+    getHoroscopeCardInsights(data, activeHoroscopePeriod).forEach((insight) => {
+      insights.append(makeElement("small", "", insight));
+    });
+    card.append(insights);
+    const footer = makeElement("span", "rashi-card-footer");
+    footer.append(makeElement("small", "", `${t("openRashi")} · ${t(activeHoroscopePeriod === "yearly" ? "yearForecast" : activeHoroscopePeriod === "monthly" ? "monthForecast" : activeHoroscopePeriod === "weekly" ? "weekForecast" : "todayForecast")}`));
+    card.append(footer);
     card.addEventListener("click", () => {
       activeRashi = key;
       navigateToSection("horoscope-detail");
@@ -2440,31 +2960,35 @@ function renderHoroscope() {
 
 function renderHoroscopeDetail() {
   const data = horoscopeData[activeRashi] || horoscopeData.meen;
-  document.querySelector("#horoscopeDetailTitle").textContent = appLanguage === "ne" ? `${data.ne} राशि` : `${data.en} Rashi`;
-  document.querySelector("#horoscopeDetailSubtitle").textContent = appLanguage === "ne" ? "मासिक र वार्षिक मार्गदर्शन" : "Monthly and yearly guidance";
+  document.querySelector("#horoscopeDetailTitle").textContent = getLocalizedRashi(data);
+  document.querySelector("#horoscopeDetailSubtitle").textContent = appLanguage === "ne" ? "दैनिक, साप्ताहिक, मासिक र वार्षिक मार्गदर्शन" : "Daily, weekly, monthly and yearly guidance";
   const detail = document.querySelector("#horoscopeDetail");
   clearNode(detail);
-  [
-    [appLanguage === "ne" ? "मासिक फल" : "Monthly outlook", appLanguage === "ne" ? data.monthlyNe : data.monthlyEn],
-    [appLanguage === "ne" ? "वार्षिक फल" : "Yearly outlook", appLanguage === "ne" ? data.yearlyNe : data.yearlyEn],
-    [appLanguage === "ne" ? "दशा / ग्रह संकेत" : "Dasha / planetary cue", data.dasha],
-    [appLanguage === "ne" ? "अधिक लाभका लागि फोकस" : "Focus for maximum benefit", appLanguage === "ne" ? data.focusNe : data.focusEn],
-    [appLanguage === "ne" ? "उपाय र सिफारिस" : "Remedy and recommendation", appLanguage === "ne" ? data.remedyNe : data.remedyEn],
-    [appLanguage === "ne" ? "मन्त्र" : "Mantra", data.mantra]
-  ].forEach(([title, body]) => {
+  const plan = makeElement("article", "horoscope-card horoscope-plan-card");
+  plan.append(makeElement("span", "eyebrow", t(activeHoroscopePeriod === "yearly" ? "yearlyStrategy" : "actionPlan")));
+  const planList = makeElement("div", "horoscope-action-list");
+  getHoroscopeActionPlan(data, activeHoroscopePeriod).forEach(([label, value]) => {
+    const item = makeElement("div", "horoscope-action-item");
+    item.append(makeElement("small", "", label));
+    item.append(makeElement("strong", "", value));
+    planList.append(item);
+  });
+  plan.append(planList);
+  getHoroscopeDetailBlocks(data).forEach(({ title, body }) => {
     const card = makeElement("article", "horoscope-card");
     card.append(makeElement("span", "eyebrow", title));
     card.append(makeElement("p", "", body));
     detail.append(card);
   });
   const meta = makeElement("article", "horoscope-card horoscope-meta-card");
-  [["Lucky color", data.color], ["Lucky number", data.number], [appLanguage === "ne" ? "चिन्ह" : "Icon", data.icon]].forEach(([label, value]) => {
+  [[t("luckyColor"), localizeToolText(data.color)], [appLanguage === "ne" ? "शुभ अंक" : "Lucky number", data.number], [t("recommendation"), appLanguage === "ne" ? data.focusNe : data.focusEn]].forEach(([label, value]) => {
     const item = makeElement("span", "");
-    item.append(makeElement("small", "", localizeToolText(label)));
+    item.append(makeElement("small", "", label));
     item.append(makeElement("strong", "", value));
     meta.append(item);
   });
   detail.prepend(meta);
+  detail.insertBefore(plan, meta.nextSibling);
 }
 
 function renderMiniList(targetId, rows) {
@@ -2522,9 +3046,192 @@ function renderPanchangDetails() {
   renderMiniList("#dailyGuidance", panchangGuidance);
 }
 
+function addDays(date, days) {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function getSaitAvoidOptions() {
+  return Array.from(document.querySelectorAll("[data-sait-avoid]:checked")).map((input) => input.dataset.saitAvoid);
+}
+
+function getCycleIndex(date, cycleLength, offset = 0) {
+  const diff = Math.floor((date - converterAnchor.adDate) / 86400000);
+  return ((diff + offset) % cycleLength + cycleLength) % cycleLength;
+}
+
+function getSaitSignalForDate(date) {
+  const tithiIndex = getCycleIndex(date, tithiCycle.length, 3);
+  const nakshatraIndex = getCycleIndex(date, nakshatraCycle.length, 11);
+  const yogaIndex = getCycleIndex(date, yogaCycle.length, 7);
+  return {
+    weekday: date.getDay(),
+    tithiNumber: (tithiIndex % 15) + 1,
+    tithiName: tithiCycle[tithiIndex],
+    nakshatraNumber: nakshatraIndex + 1,
+    nakshatraName: nakshatraCycle[nakshatraIndex],
+    yogaName: yogaCycle[yogaIndex]
+  };
+}
+
+function localizeSaitLabel(value) {
+  if (appLanguage === "ne") {
+    return saitSignalTranslations[value] || value;
+  }
+  return termTranslations[value] || value;
+}
+
+function getSaitBsDate(date) {
+  const converted = convertAdToBs(date);
+  return formatConverterBsDate(converted.year, converted.month, converted.day);
+}
+
+function formatSaitAdDate(date) {
+  return date.toLocaleDateString(appLanguage === "ne" ? "ne-NP" : "en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
+}
+
+function scoreSaitDate(date, profile, avoidOptions) {
+  const signal = getSaitSignalForDate(date);
+  const matched = [];
+  const avoided = [];
+  let score = 48;
+
+  if (profile.preferredWeekdays.includes(signal.weekday)) {
+    score += 16;
+    matched.push(appLanguage === "ne" ? "बार मिलेको" : "Favorable weekday");
+  }
+  if (profile.preferredTithi.includes(signal.tithiNumber)) {
+    score += 18;
+    matched.push(localizeSaitLabel(signal.tithiName));
+  }
+  if (profile.preferredNakshatra.includes(signal.nakshatraNumber)) {
+    score += 18;
+    matched.push(localizeSaitLabel(signal.nakshatraName));
+  }
+  if (["Siddhi", "Shubha", "Shukla", "Brahma", "Saubhagya", "Sukarma"].includes(signal.yogaName)) {
+    score += 10;
+    matched.push(localizeSaitLabel(signal.yogaName));
+  }
+  if (avoidOptions.includes("rikta") && [4, 9, 14].includes(signal.tithiNumber)) {
+    score -= 34;
+    avoided.push(avoidLabels.rikta[appLanguage]);
+  }
+  if (avoidOptions.includes("saturday") && signal.weekday === 6) {
+    score -= 22;
+    avoided.push(avoidLabels.saturday[appLanguage]);
+  }
+  ["rahu", "yamaganda", "gulika"].forEach((key) => {
+    if (avoidOptions.includes(key)) {
+      avoided.push(avoidLabels[key][appLanguage]);
+    }
+  });
+
+  return {
+    date,
+    score: Math.max(0, Math.min(100, score)),
+    signal,
+    matched,
+    avoided
+  };
+}
+
+function getSaitRating(score) {
+  if (score >= 86) return t("excellent");
+  if (score >= 72) return t("good");
+  return t("usable");
+}
+
+function getSaitRecommendations() {
+  const startInput = document.querySelector("#saitStartDate");
+  const typeInput = document.querySelector("#saitEventType");
+  const horizonInput = document.querySelector("#saitHorizon");
+  const start = startInput.value ? new Date(`${startInput.value}T00:00:00`) : new Date();
+  const profile = saitEventProfiles[typeInput.value] || saitEventProfiles.purchase;
+  const horizon = Number(horizonInput.value || 60);
+  const avoidOptions = getSaitAvoidOptions();
+  return Array.from({ length: horizon }, (_, index) => scoreSaitDate(addDays(start, index), profile, avoidOptions))
+    .filter((item) => item.score >= 66)
+    .sort((a, b) => b.score - a.score || a.date - b.date)
+    .slice(0, 12);
+}
+
+function renderSaitPlanner() {
+  const startInput = document.querySelector("#saitStartDate");
+  const typeInput = document.querySelector("#saitEventType");
+  const horizonInput = document.querySelector("#saitHorizon");
+  const results = document.querySelector("#saitPlannerResults");
+  const summary = document.querySelector("#saitResultSummary");
+  const outlook = document.querySelector("#saitMonthOutlook");
+  if (!startInput.value) {
+    startInput.value = getTodayKey();
+  }
+
+  const profile = saitEventProfiles[typeInput.value] || saitEventProfiles.purchase;
+  const recommendations = getSaitRecommendations();
+  clearNode(results);
+  clearNode(summary);
+  clearNode(outlook);
+
+  const profileName = appLanguage === "ne" ? profile.labelNe : profile.labelEn;
+  summary.append(makeElement("strong", "", t("strongestUpcoming")));
+  summary.append(makeElement("span", "", `${profileName} · ${t("recommendedWindow")}: ${appLanguage === "ne" ? profile.windowNe : profile.window}`));
+
+  if (!recommendations.length) {
+    results.append(makeElement("div", "wide-empty", t("noSaitMatches")));
+    return;
+  }
+
+  recommendations.slice(0, 6).forEach((item, index) => {
+    const card = makeElement("article", "sait-result-card");
+    const meta = makeElement("div", "sait-result-meta");
+    meta.append(makeElement("span", `sait-icon sait-${profile.icon}`));
+    const text = makeElement("div");
+    text.append(makeElement("strong", "", formatSaitAdDate(item.date)));
+    text.append(makeElement("small", "", getSaitBsDate(item.date)));
+    meta.append(text);
+    card.append(meta);
+    card.append(makeElement("p", "sait-score", `${getSaitRating(item.score)} · ${item.score}/100`));
+    card.append(makeElement("small", "", `${t("recommendedWindow")}: ${appLanguage === "ne" ? profile.windowNe : profile.window}`));
+    const matched = item.matched.slice(0, 3).join(" · ") || (appLanguage === "ne" ? profile.focusNe : profile.focusEn);
+    card.append(makeElement("small", "", `${t("matchedSignals")}: ${matched}`));
+    if (item.avoided.length) {
+      card.append(makeElement("small", "", `${t("avoidedSignals")}: ${[...new Set(item.avoided)].join(" · ")}`));
+    }
+    if (index === 0) {
+      card.classList.add("best");
+    }
+    results.append(card);
+  });
+
+  const monthScores = new Map();
+  recommendations.forEach((item) => {
+    const key = item.date.toLocaleDateString(appLanguage === "ne" ? "ne-NP" : "en-US", { month: "short", year: "numeric" });
+    const entry = monthScores.get(key) || { total: 0, count: 0, best: 0 };
+    entry.total += item.score;
+    entry.count += 1;
+    entry.best = Math.max(entry.best, item.score);
+    monthScores.set(key, entry);
+  });
+  outlook.append(makeElement("h2", "", t("monthOutlook")));
+  monthScores.forEach((entry, month) => {
+    const card = makeElement("article", "sait-month-card");
+    card.append(makeElement("span", "eyebrow", entry.best >= 86 ? t("topMonth") : t("monthOutlook")));
+    card.append(makeElement("strong", "", month));
+    card.append(makeElement("p", "", `${entry.count} ${appLanguage === "ne" ? "दिन" : "days"} · ${Math.round(entry.total / entry.count)}/100`));
+    outlook.append(card);
+  });
+}
+
 function renderShubhaSait() {
   const container = document.querySelector("#saitRows");
   clearNode(container);
+  renderSaitPlanner();
   saitRows.forEach(([category, title, time, note]) => {
     const card = makeElement("article", "sait-card");
     card.append(makeElement("span", "eyebrow", category));
@@ -2765,10 +3472,16 @@ function updateLanguage() {
   document.querySelector("#nextEventTitle").textContent = localizeEvent("किराँत समाज सुधार दिवस");
   document.querySelector("#saveNote").textContent = t("saveNote");
   renderDateConverterPage();
+  if (!commandBackdrop.hidden) {
+    renderCommandList();
+  }
 }
 
 function updateControlStates() {
   document.body.dataset.calendarMode = calendarMode;
+  document.documentElement.dataset.theme = appTheme;
+  document.body.dataset.theme = appTheme;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", appTheme === "dark" ? "#101114" : "#f7f5f1");
   languageButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.language === appLanguage);
     button.setAttribute("aria-pressed", String(button.dataset.language === appLanguage));
@@ -2777,6 +3490,11 @@ function updateControlStates() {
     button.classList.toggle("active", button.dataset.calendarMode === calendarMode);
     button.setAttribute("aria-pressed", String(button.dataset.calendarMode === calendarMode));
   });
+  const nextThemeLabel = appTheme === "dark" ? t("switchToLight") : t("switchToDark");
+  themeToggle.setAttribute("aria-label", nextThemeLabel);
+  themeToggle.setAttribute("title", nextThemeLabel);
+  themeToggle.querySelector("span").textContent = appTheme === "dark" ? "◑" : "◐";
+  document.querySelector("#openCommandPalette")?.setAttribute("aria-label", t("quickJump"));
 }
 
 function renderAll() {
@@ -2810,13 +3528,19 @@ function renderAll() {
 
 function updateActiveNav() {
   const sectionId = getCurrentSectionId();
+  let activeInMoreMenu = false;
   navLinks.forEach((link) => {
     if (link.dataset.sectionLink === sectionId) {
       link.setAttribute("aria-current", "page");
+      if (moreNavMenu?.contains(link)) {
+        activeInMoreMenu = true;
+      }
     } else {
       link.removeAttribute("aria-current");
     }
   });
+  moreNavButton?.classList.toggle("active", activeInMoreMenu);
+  moreNavButton?.setAttribute("aria-current", activeInMoreMenu ? "page" : "false");
 }
 
 function getCurrentSectionId() {
@@ -2860,8 +3584,42 @@ monthSelect.addEventListener("change", () => {
 sectionLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
     event.preventDefault();
+    closeMoreNav();
     navigateToSection(link.dataset.sectionLink);
   });
+});
+
+function openMoreNav() {
+  if (!moreNavMenu || !moreNavButton) {
+    return;
+  }
+  moreNavMenu.hidden = false;
+  moreNavButton.setAttribute("aria-expanded", "true");
+}
+
+function closeMoreNav() {
+  if (!moreNavMenu || !moreNavButton) {
+    return;
+  }
+  moreNavMenu.hidden = true;
+  moreNavButton.setAttribute("aria-expanded", "false");
+}
+
+moreNavButton?.addEventListener("click", () => {
+  if (moreNavMenu?.hidden) {
+    openMoreNav();
+  } else {
+    closeMoreNav();
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (!moreNavMenu || !moreNavButton || moreNavMenu.hidden) {
+    return;
+  }
+  if (!moreNavMenu.contains(event.target) && !moreNavButton.contains(event.target)) {
+    closeMoreNav();
+  }
 });
 
 languageButtons.forEach((button) => {
@@ -2877,6 +3635,32 @@ calendarModeButtons.forEach((button) => {
     calendarMode = button.dataset.calendarMode;
     localStorage.setItem("nepalPatro:calendarMode", calendarMode);
     renderAll();
+  });
+});
+
+themeToggle.addEventListener("click", () => {
+  appTheme = appTheme === "dark" ? "light" : "dark";
+  localStorage.setItem("nepalPatro:theme", appTheme);
+  renderAll();
+});
+
+document.querySelector("#openCommandPalette").addEventListener("click", openCommandPalette);
+document.querySelector("#closeCommandPalette").addEventListener("click", closeCommandPalette);
+commandSearch.addEventListener("input", renderCommandList);
+commandSearch.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    commandList.querySelector(".command-item")?.click();
+  }
+});
+commandBackdrop.addEventListener("click", (event) => {
+  if (event.target === commandBackdrop) {
+    closeCommandPalette();
+  }
+});
+horoscopePeriodButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    activeHoroscopePeriod = button.dataset.horoscopePeriod;
+    renderHoroscope();
   });
 });
 
@@ -2901,11 +3685,21 @@ toolBackdrop.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+    event.preventDefault();
+    openCommandPalette();
+  }
   if (event.key === "Escape" && !modalBackdrop.hidden) {
     closeModal();
   }
   if (event.key === "Escape" && !toolBackdrop.hidden) {
     closeToolModal();
+  }
+  if (event.key === "Escape" && !commandBackdrop.hidden) {
+    closeCommandPalette();
+  }
+  if (event.key === "Escape" && moreNavMenu && !moreNavMenu.hidden) {
+    closeMoreNav();
   }
 });
 
@@ -2960,6 +3754,10 @@ document.querySelectorAll("#loan-calculator input").forEach((input) => {
   input.addEventListener("focus", () => {
     if (input.type !== "date") input.select();
   });
+});
+document.querySelectorAll("#saitStartDate, #saitEventType, #saitHorizon, [data-sait-avoid]").forEach((input) => {
+  input.addEventListener("input", renderSaitPlanner);
+  input.addEventListener("change", renderSaitPlanner);
 });
 document.querySelector("#backToHoroscope").addEventListener("click", () => navigateToSection("horoscope"));
 document.querySelector("#marketSearch").addEventListener("input", (event) => {
