@@ -63,6 +63,22 @@ function validateSecuritySurface() {
   assert(/parsed\.protocol !== "https:"/.test(api), "API safeFetch must enforce HTTPS sources");
 }
 
+function validateShareAssets() {
+  const html = read("index.html");
+  const manifest = read("manifest.webmanifest");
+  assert(/rel="icon" href="favicon\.ico"/.test(html), "index.html must link favicon.ico");
+  assert(/rel="apple-touch-icon" href="build\/icon\.png"/.test(html), "index.html must link the Apple touch icon");
+  assert(/property="og:image" content="https:\/\/nepal-patro\.vercel\.app\/build\/social-preview\.png"/.test(html), "Open Graph image is missing or not absolute");
+  assert(/name="twitter:card" content="summary_large_image"/.test(html), "Twitter large image card is missing");
+  assert(/property="og:image:width" content="1200"/.test(html), "Open Graph image width must be 1200");
+  assert(/property="og:image:height" content="630"/.test(html), "Open Graph image height must be 630");
+  assert(/"sizes": "1024x1024"/.test(manifest), "manifest icon size must match build/icon.png");
+  assert(fs.existsSync(path.join(root, "favicon.ico")), "favicon.ico is missing");
+  assert(fs.existsSync(path.join(root, "build/icon.png")), "build/icon.png is missing");
+  assert(fs.existsSync(path.join(root, "build/social-preview.png")), "build/social-preview.png is missing");
+  assert(fs.statSync(path.join(root, "build/social-preview.png")).size > 10000, "social preview image looks too small");
+}
+
 function validateConverterClaims() {
   const app = read("app.js");
   const html = read("index.html");
@@ -177,6 +193,7 @@ function monthSeedMonthNumber(name) {
 
 validateDailyData();
 validateSecuritySurface();
+validateShareAssets();
 validateConverterClaims();
 validateCalendarEvents();
 console.log("World-class guardrails passed");
