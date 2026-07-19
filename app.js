@@ -40,9 +40,8 @@ const monthSeed = [
     englishStart: "2026-04-14",
     events: {
       1: "नयाँ वर्ष",
-      5: "लोकतन्त्र दिवस",
       11: "मातातीर्थ औंसी",
-      18: "मजदुर दिवस",
+      18: "मजदुर दिवस / बुद्ध जयन्ती / उभौली पर्व",
       22: "मंगलचौथी व्रत",
       24: "किराँत समाज सुधार दिवस",
       25: "विश्व रेडक्रस दिवस",
@@ -54,13 +53,13 @@ const monthSeed = [
   {
     name: "जेठ",
     year: 2083,
-    days: 32,
+    days: 31,
     events: {
       1: "वृष संक्रान्ति",
       2: "बटसावित्री व्रत",
       3: "गोसाइकुण्ड स्नान आरम्भ",
       8: "जैविक विविधता दिवस",
-      12: "गङ्गादशहरा व्रत",
+      14: "बकर ईद",
       15: "गणतन्त्र दिवस",
       21: "विश्व वातावरण दिवस",
       29: "प्रदोष व्रत",
@@ -70,7 +69,7 @@ const monthSeed = [
   {
     name: "असार",
     year: 2083,
-    days: 31,
+    days: 32,
     events: {
       1: "मिथुन संक्रान्ति",
       5: "योग दिवस",
@@ -99,9 +98,11 @@ const monthSeed = [
     days: 31,
     events: {
       3: "विश्व फोटोग्राफी दिवस",
-      14: "जनै पूर्णिमा",
-      15: "गाईजात्रा",
-      23: "विश्व साक्षरता दिवस"
+      12: "जनै पूर्णिमा / रक्षा बन्धन",
+      13: "गाईजात्रा",
+      19: "श्रीकृष्ण जन्माष्टमी / गौरा पर्व",
+      23: "विश्व साक्षरता दिवस",
+      29: "हरितालिका तीज"
     }
   },
   {
@@ -109,37 +110,36 @@ const monthSeed = [
     year: 2083,
     days: 31,
     events: {
+      3: "संविधान दिवस",
       5: "विश्व शान्ति दिवस",
       9: "विश्व फार्मासिस्ट दिवस",
       11: "विश्व पर्यटन दिवस",
-      17: "घटस्थापना",
-      24: "फूलपाती",
-      25: "महाअष्टमी",
-      26: "महानवमी",
-      27: "विजया दशमी"
+      25: "घटस्थापना",
+      31: "फूलपाती"
     }
   },
   {
     name: "कार्तिक",
     year: 2083,
-    days: 29,
+    days: 30,
     events: {
-      1: "कोजाग्रत पूर्णिमा",
-      10: "कुकुर तिहार",
-      11: "लक्ष्मी पूजा",
-      12: "गोवर्धन पूजा",
-      13: "भाइटीका",
-      25: "फाल्गुनन्द जयन्ती",
+      1: "महाअष्टमी",
+      3: "महानवमी",
+      4: "विजया दशमी",
+      22: "लक्ष्मी पूजा",
+      23: "गाई तिहार",
+      24: "गोवर्धन पूजा",
+      25: "भाइटीका / फाल्गुनन्द जयन्ती",
       29: "छठ पर्व"
     }
   },
   {
     name: "मंसिर",
     year: 2083,
-    days: 30,
+    days: 29,
     events: {
       1: "मंसिर संक्रान्ति",
-      8: "पूर्णिमा",
+      8: "पूर्णिमा / गुरु नानक जयन्ती",
       18: "अन्तर्राष्ट्रिय अपाङ्गता दिवस",
       24: "मानव अधिकार दिवस"
     }
@@ -147,9 +147,10 @@ const monthSeed = [
   {
     name: "पुष",
     year: 2083,
-    days: 29,
+    days: 30,
     events: {
       1: "पुष संक्रान्ति",
+      9: "उधौली पर्व / योमरी पुन्हि",
       10: "क्रिसमस डे",
       15: "तमु ल्होसार",
       27: "पृथ्वी जयन्ती"
@@ -158,13 +159,16 @@ const monthSeed = [
   {
     name: "माघ",
     year: 2083,
-    days: 30,
+    days: 29,
     events: {
       1: "माघे संक्रान्ति",
       11: "अन्तर्राष्ट्रिय शिक्षा दिवस",
       12: "विश्व कुष्ठरोग दिवस",
+      16: "शहीद दिवस",
       20: "विश्व सिमसार दिवस",
-      22: "विश्व क्यान्सर दिवस"
+      22: "विश्व क्यान्सर दिवस",
+      24: "सोनाम ल्होसार",
+      28: "श्रीपञ्चमी"
     }
   },
   {
@@ -173,9 +177,9 @@ const monthSeed = [
     days: 30,
     events: {
       7: "प्रजातन्त्र दिवस",
-      14: "महाशिवरात्रि",
-      17: "ग्याल्पो ल्होसार",
-      22: "फागु पूर्णिमा"
+      22: "महाशिवरात्रि",
+      24: "नारी दिवस",
+      25: "ग्याल्पो ल्होसार"
     }
   },
   {
@@ -184,8 +188,9 @@ const monthSeed = [
     days: 30,
     events: {
       1: "चैत संक्रान्ति",
-      8: "नारी दिवस",
-      15: "राम नवमी",
+      7: "फागु पूर्णिमा",
+      8: "तराई होली",
+      23: "घोडे जात्रा",
       30: "वर्ष अन्त्य"
     }
   },
@@ -252,6 +257,194 @@ function buildMonths(seed) {
 }
 
 const months = buildMonths(monthSeed);
+
+const holidayDetails = {
+  "नयाँ वर्ष": {
+    type: "public",
+    en: "National new year holiday and the first day of the Bikram Sambat calendar year.",
+    ne: "विक्रम संवत् पात्रो वर्षको पहिलो दिन र राष्ट्रिय सार्वजनिक बिदा।"
+  },
+  "मजदुर दिवस / बुद्ध जयन्ती / उभौली पर्व": {
+    type: "public",
+    en: "A combined national holiday for Labour Day, Buddha Jayanti and Ubhauli Parva in BS 2083.",
+    ne: "वि.सं. २०८३ मा मजदुर दिवस, बुद्ध जयन्ती र उभौली पर्वसँग जोडिएको राष्ट्रिय बिदा।"
+  },
+  "मातातीर्थ औंसी": {
+    type: "special",
+    en: "Mother-honouring day, traditionally marked by blessings, remembrance and family visits.",
+    ne: "आमाप्रति सम्मान, आशीर्वाद, सम्झना र पारिवारिक भेटघाटसँग जोडिएको दिन।"
+  },
+  "बकर ईद": {
+    type: "public",
+    en: "Muslim community festival and listed public holiday where applicable.",
+    ne: "मुस्लिम समुदायको पर्व र लागू हुने ठाउँमा सार्वजनिक बिदा।"
+  },
+  "गणतन्त्र दिवस": {
+    type: "public",
+    en: "National Republic Day public holiday.",
+    ne: "राष्ट्रिय गणतन्त्र दिवसको सार्वजनिक बिदा।"
+  },
+  "धान दिवस / दहीचिउरा": {
+    type: "special",
+    en: "National Paddy Day, widely marked with rice planting and dahi-chiura.",
+    ne: "रोपाइँ र दही-चिउरासँग जोडिएको राष्ट्रिय धान दिवस।"
+  },
+  "गुरु पूर्णिमा": {
+    type: "festival",
+    en: "A day to honor teachers, gurus and spiritual lineages.",
+    ne: "गुरु, शिक्षक र आध्यात्मिक परम्पराप्रति सम्मान गर्ने दिन।"
+  },
+  "साउने संक्रान्ति": {
+    type: "festival",
+    en: "Start of Shrawan, a month associated with Shiva worship, fasting and seasonal rituals.",
+    ne: "शिव आराधना, व्रत र मौसमी संस्कारसँग जोडिएको साउन महिनाको सुरुवात।"
+  },
+  "साउन सोमबार": {
+    type: "fasting",
+    en: "Monday vrata in Shrawan, commonly observed with Shiva worship and fasting.",
+    ne: "साउन महिनाको सोमबार व्रत, शिव आराधना र उपवाससँग जोडिएको दिन।"
+  },
+  "जनै पूर्णिमा / रक्षा बन्धन": {
+    type: "public",
+    en: "Sacred-thread renewal and Raksha Bandhan observance; listed as a public holiday in BS 2083.",
+    ne: "जनै फेर्ने र रक्षा बन्धन मनाउने दिन; वि.सं. २०८३ मा सार्वजनिक बिदा।"
+  },
+  "गाईजात्रा": {
+    type: "public",
+    en: "Newar community festival, especially observed in Kathmandu Valley.",
+    ne: "काठमाडौं उपत्यका केन्द्रित नेवार समुदायको महत्वपूर्ण पर्व।"
+  },
+  "श्रीकृष्ण जन्माष्टमी / गौरा पर्व": {
+    type: "public",
+    en: "Krishna Janmashtami and Gaura observance; marked as a major religious festival period.",
+    ne: "श्रीकृष्ण जन्माष्टमी र गौरा पर्वसँग जोडिएको महत्वपूर्ण धार्मिक पर्व।"
+  },
+  "हरितालिका तीज": {
+    type: "public",
+    en: "Women’s fasting festival dedicated to Shiva-Parvati worship.",
+    ne: "शिव-पार्वती आराधना र व्रतसँग जोडिएको महिलाहरूको प्रमुख पर्व।"
+  },
+  "संविधान दिवस": {
+    type: "public",
+    en: "National Constitution Day.",
+    ne: "राष्ट्रिय संविधान दिवस।"
+  },
+  "घटस्थापना": {
+    type: "public",
+    en: "Beginning of Dashain rituals with Jamara sowing.",
+    ne: "जमरा राख्ने र दशैं पूजा सुरु गर्ने दिन।"
+  },
+  "फूलपाती": {
+    type: "public",
+    en: "Dashain festival day associated with bringing Fulpati into the home or temple.",
+    ne: "घर वा मन्दिरमा फूलपाती भित्र्याउने दशैंको विशेष दिन।"
+  },
+  "महाअष्टमी": {
+    type: "public",
+    en: "Major Dashain worship day dedicated to Durga.",
+    ne: "दुर्गा आराधनासँग जोडिएको दशैंको प्रमुख पूजा दिन।"
+  },
+  "महानवमी": {
+    type: "public",
+    en: "Ninth day of Dashain, associated with Durga and vehicle/tool worship.",
+    ne: "दुर्गा पूजा, सवारी तथा औजार पूजासँग जोडिएको दशैंको नवौं दिन।"
+  },
+  "विजया दशमी": {
+    type: "public",
+    en: "Main Dashain tika day for blessings from elders.",
+    ne: "अग्रजबाट टीका-जमरा र आशीर्वाद लिने दशैंको मुख्य दिन।"
+  },
+  "लक्ष्मी पूजा": {
+    type: "public",
+    en: "Tihar evening dedicated to worship of Goddess Lakshmi.",
+    ne: "देवी लक्ष्मीको आराधनासँग जोडिएको तिहारको विशेष साँझ।"
+  },
+  "गाई तिहार": {
+    type: "public",
+    en: "Tihar day honoring cows.",
+    ne: "गाईको पूजा र सम्मान गर्ने तिहारको दिन।"
+  },
+  "गोवर्धन पूजा": {
+    type: "public",
+    en: "Tihar day associated with Govardhan, Mha Puja and community traditions.",
+    ne: "गोवर्धन, म्हपूजा र समुदायगत परम्परासँग जोडिएको तिहारको दिन।"
+  },
+  "भाइटीका / फाल्गुनन्द जयन्ती": {
+    type: "public",
+    en: "Bhai Tika, the sibling blessing day of Tihar, alongside Falgunanda Jayanti.",
+    ne: "दिदीबहिनी-दाजुभाइको आशीर्वादसँग जोडिएको भाइटीका र फाल्गुनन्द जयन्ती।"
+  },
+  "छठ पर्व": {
+    type: "public",
+    en: "Sun worship festival, especially important in the Terai and Mithila communities.",
+    ne: "सूर्य उपासनासँग जोडिएको तराई तथा मिथिला समुदायको प्रमुख पर्व।"
+  },
+  "उधौली पर्व / योमरी पुन्हि": {
+    type: "festival",
+    en: "Udhauli and Yomari Punhi observances, tied to seasonal and Newar traditions.",
+    ne: "मौसमी परम्परा र नेवार संस्कृतिसँग जोडिएका उधौली र योमरी पुन्हि।"
+  },
+  "तमु ल्होसार": {
+    type: "public",
+    en: "Gurung community new year festival.",
+    ne: "गुरुङ समुदायको नयाँ वर्ष पर्व।"
+  },
+  "पृथ्वी जयन्ती": {
+    type: "public",
+    en: "National Unity Day and Prithvi Jayanti.",
+    ne: "राष्ट्रिय एकता दिवस तथा पृथ्वी जयन्ती।"
+  },
+  "माघे संक्रान्ति": {
+    type: "public",
+    en: "Winter seasonal festival marked with til, chaku, yam and family rituals.",
+    ne: "तिल, चाकु, तरुल र पारिवारिक संस्कारसँग जोडिएको मौसमी पर्व।"
+  },
+  "शहीद दिवस": {
+    type: "public",
+    en: "Martyrs’ Day, honoring those who sacrificed for the country.",
+    ne: "देशका लागि बलिदान दिने शहीदहरूको सम्झना गर्ने दिन।"
+  },
+  "सोनाम ल्होसार": {
+    type: "public",
+    en: "Tamang community new year festival.",
+    ne: "तामाङ समुदायको नयाँ वर्ष पर्व।"
+  },
+  "श्रीपञ्चमी": {
+    type: "special",
+    en: "Saraswati Puja, especially important for students, learning and arts.",
+    ne: "विद्यार्थी, विद्या र कलासँग जोडिएको सरस्वती पूजा।"
+  },
+  "प्रजातन्त्र दिवस": {
+    type: "public",
+    en: "National Democracy Day.",
+    ne: "राष्ट्रिय प्रजातन्त्र दिवस।"
+  },
+  "महाशिवरात्रि": {
+    type: "public",
+    en: "Major Shiva worship night, observed with fasting and temple visits.",
+    ne: "शिव आराधना, व्रत र मन्दिर दर्शनसँग जोडिएको प्रमुख पर्व।"
+  },
+  "ग्याल्पो ल्होसार": {
+    type: "public",
+    en: "Himalayan Buddhist community new year festival.",
+    ne: "हिमाली बौद्ध समुदायको नयाँ वर्ष पर्व।"
+  },
+  "फागु पूर्णिमा": {
+    type: "public",
+    en: "Holi festival in hill regions.",
+    ne: "पहाडी क्षेत्रमा मनाइने होली पर्व।"
+  },
+  "तराई होली": {
+    type: "public",
+    en: "Holi festival observed in the Terai region.",
+    ne: "तराई क्षेत्रमा मनाइने होली पर्व।"
+  },
+  "घोडे जात्रा": {
+    type: "public",
+    en: "Kathmandu Valley festival and public holiday.",
+    ne: "काठमाडौं उपत्यकाको जात्रा र सार्वजनिक बिदा।"
+  }
+};
 
 const tools = [
   {
@@ -877,6 +1070,16 @@ const translations = {
     nepalTime: "Nepal Standard Time",
     nextEvent: "Next event",
     quickView: "Quick view",
+    thisMonth: "This month",
+    monthlyPublicHolidays: "Public holidays and special days",
+    monthlyHolidayIntro: "A quick list of this month’s public holidays, festivals, fasting days, and observances with short context.",
+    monthlyHolidayEmpty: "No major public holiday is listed for this month yet. Check the Events page for smaller observances.",
+    publicHoliday: "Public holiday",
+    specialDay: "Special day",
+    festivalDay: "Festival",
+    fastingDay: "Fasting day",
+    observanceDay: "Observance",
+    openDayDetails: "Open day details",
     bsAdShort: "BS ⇄ AD",
     twoDaysAway: "2 days away",
     shubhaSait: "Shubha sait",
@@ -891,7 +1094,7 @@ const translations = {
     sourceNeedsReview: "Source needs review",
     verifiedRangeShort: "Verified: BS 1975 - 2099",
     advisory: "Advisory",
-    calendarReliabilityNotice: "Festival dates are a curated public-planning calendar, not a complete official patro. Weekday-dependent labels are validated, but lunar festivals and religious decisions should be confirmed with an official patro.",
+    calendarReliabilityNotice: "Major 2083 public holidays are aligned with Nepal's Ministry of Home Affairs notice where available. Panchanga and lunar-festival detail is still advisory and should be confirmed with an official patro for religious decisions.",
     panchangNotice: "Panchang values are calculated for Kathmandu and include tithi, nakshatra, yoga, karana, vara, paksha and muhurat windows for planning context. Use an official patro or priest for muhurat, samskar, fasting, and religious decisions.",
     horoscopeNotice: "Advisory Vedic guide. Verify personal decisions with a qualified astrologer.",
     sourceStatus: "Source status",
@@ -1056,6 +1259,13 @@ const translations = {
     krishnaPaksha: "Krishna Paksha",
     inauspiciousTimes: "Avoid starting new work",
     dailyGuidance: "Daily guidance",
+    panchangCoverage: "Panchanga coverage",
+    panchangFiveLimbs: "Five limbs",
+    panchangFiveLimbsNote: "Tithi, vara, nakshatra, yoga and karana are shown for Kathmandu.",
+    panchangTimeWindows: "Time windows",
+    panchangTimeWindowsNote: "Sunrise, sunset, moonrise, moonset, Rahu Kaal, Yamaganda, Gulika, Dur Muhurat and shubha windows appear when calculated.",
+    calendarEventsCoverage: "Calendar events",
+    calendarEventsCoverageNote: "Major 2083 public holidays are MoHA-aligned where available; full lunar festival authority requires an official patro.",
     auspiciousPlanner: "Auspicious time planner",
     findAuspiciousDays: "Find auspicious days",
     saitPlannerIntro: "Choose a start date, event type, and avoid filters to see the strongest upcoming planning windows.",
@@ -1120,6 +1330,16 @@ const translations = {
     nepalTime: "नेपाल मानक समय",
     nextEvent: "आउँदो दिन",
     quickView: "छिटो दृश्य",
+    thisMonth: "यो महिना",
+    monthlyPublicHolidays: "सार्वजनिक बिदा र विशेष दिन",
+    monthlyHolidayIntro: "यो महिनाका सार्वजनिक बिदा, चाडपर्व, व्रत र विशेष दिनहरूको छोटो विवरण।",
+    monthlyHolidayEmpty: "यो महिनाका लागि प्रमुख सार्वजनिक बिदा सूचीकृत छैन। साना अवसरका लागि Events पेज हेर्नुहोस्।",
+    publicHoliday: "सार्वजनिक बिदा",
+    specialDay: "विशेष दिन",
+    festivalDay: "पर्व",
+    fastingDay: "व्रत",
+    observanceDay: "अवसर",
+    openDayDetails: "दिनको विवरण खोल्नुहोस्",
     bsAdShort: "वि.सं. ⇄ ई.सं.",
     twoDaysAway: "२ दिन बाँकी",
     shubhaSait: "शुभ साइत",
@@ -1134,7 +1354,7 @@ const translations = {
     sourceNeedsReview: "स्रोत जाँच आवश्यक",
     verifiedRangeShort: "प्रमाणित: वि.सं. १९७५ - २०९९",
     advisory: "सल्लाह",
-    calendarReliabilityNotice: "चाडपर्व मिति सार्वजनिक योजना सन्दर्भका लागि curated सूची हो, पूर्ण आधिकारिक पात्रो होइन। बारसँग जोडिएका नामहरू जाँचिन्छन्, तर चन्द्रमास/धार्मिक निर्णय आधिकारिक पात्रोसँग पुष्टि गर्नुहोस्।",
+    calendarReliabilityNotice: "उपलब्ध ठाउँमा प्रमुख २०८३ सार्वजनिक बिदा नेपाल सरकार गृह मन्त्रालयको सूचनासँग मिलाइएको छ। पञ्चाङ्ग र चन्द्रमाससँग जोडिएका चाडपर्व विवरण सल्लाहात्मक छन्; धार्मिक निर्णयका लागि आधिकारिक पात्रोसँग पुष्टि गर्नुहोस्।",
     panchangNotice: "पञ्चाङ्ग संकेत काठमाडौंका लागि गणना गरिन्छ र तिथि, नक्षत्र, योग, करण, वार, पक्ष र मुहूर्त झ्याल समेट्छ। मुहूर्त, संस्कार, व्रत र धार्मिक निर्णयका लागि आधिकारिक पात्रो वा पुरोहितसँग पुष्टि गर्नुहोस्।",
     horoscopeNotice: "यो वैदिक ज्योतिष मार्गदर्शन सल्लाह मात्र हो। व्यक्तिगत निर्णयका लागि योग्य ज्योतिषीसँग पुष्टि गर्नुहोस्।",
     sourceStatus: "स्रोत अवस्था",
@@ -1299,6 +1519,13 @@ const translations = {
     krishnaPaksha: "कृष्ण पक्ष",
     inauspiciousTimes: "नयाँ काम सुरु नगर्ने समय",
     dailyGuidance: "दैनिक मार्गदर्शन",
+    panchangCoverage: "पञ्चाङ्ग समेटिएको विवरण",
+    panchangFiveLimbs: "पाँच अङ्ग",
+    panchangFiveLimbsNote: "काठमाडौंका लागि तिथि, वार, नक्षत्र, योग र करण देखाइन्छ।",
+    panchangTimeWindows: "समय झ्याल",
+    panchangTimeWindowsNote: "गणना उपलब्ध हुँदा सूर्योदय, सूर्यास्त, चन्द्रोदय, चन्द्रास्त, राहु काल, यमगण्ड, गुलिक, दुर मुहूर्त र शुभ समय देखिन्छ।",
+    calendarEventsCoverage: "क्यालेन्डर घटना",
+    calendarEventsCoverageNote: "प्रमुख २०८३ सार्वजनिक बिदा उपलब्ध ठाउँमा गृह मन्त्रालयसँग मिलाइएको छ; पूर्ण चन्द्रमास चाडपर्व अधिकारका लागि आधिकारिक पात्रो आवश्यक हुन्छ।",
     auspiciousPlanner: "शुभ समय योजना",
     findAuspiciousDays: "शुभ दिन खोज्नुहोस्",
     saitPlannerIntro: "सुरु मिति, कामको प्रकार र नकार्ने समय छानेर आउँदा शुभ योजना झ्यालहरू हेर्नुहोस्।",
@@ -1347,6 +1574,9 @@ const eventTranslations = {
   "लोकतन्त्र दिवस": "Democracy Day",
   "मातातीर्थ औंसी": "Matatirtha Aunsi",
   "मजदुर दिवस": "Labour Day",
+  "मजदुर दिवस / बुद्ध जयन्ती / उभौली पर्व": "Labour Day / Buddha Jayanti / Ubhauli Parva",
+  "बुद्ध जयन्ती": "Buddha Jayanti",
+  "उभौली पर्व": "Ubhauli Parva",
   "मंगलचौथी व्रत": "Mangal Chauthi Brata",
   "किराँत समाज सुधार दिवस": "Kirat Social Reform Day",
   "विश्व रेडक्रस दिवस": "World Red Cross Day",
@@ -1358,6 +1588,7 @@ const eventTranslations = {
   "गोसाइकुण्ड स्नान आरम्भ": "Gosaikunda Bathing Begins",
   "जैविक विविधता दिवस": "Biodiversity Day",
   "गङ्गादशहरा व्रत": "Ganga Dashahara Brata",
+  "बकर ईद": "Bakar Eid",
   "गणतन्त्र दिवस": "Republic Day",
   "विश्व वातावरण दिवस": "World Environment Day",
   "विश्व रक्तदाता दिवस": "World Blood Donor Day",
@@ -1371,9 +1602,15 @@ const eventTranslations = {
   "साउने संक्रान्ति": "Saune Sankranti",
   "साउन सोमबार": "Sawan Somwar",
   "विश्व फोटोग्राफी दिवस": "World Photography Day",
+  "जनै पूर्णिमा / रक्षा बन्धन": "Janai Purnima / Raksha Bandhan",
   "जनै पूर्णिमा": "Janai Purnima",
   "गाईजात्रा": "Gaijatra",
+  "श्रीकृष्ण जन्माष्टमी / गौरा पर्व": "Shree Krishna Janmashtami / Gaura Parva",
+  "श्रीकृष्ण जन्माष्टमी": "Shree Krishna Janmashtami",
+  "गौरा पर्व": "Gaura Parva",
+  "हरितालिका तीज": "Haritalika Teej",
   "विश्व साक्षरता दिवस": "International Literacy Day",
+  "संविधान दिवस": "Constitution Day",
   "विश्व शान्ति दिवस": "World Peace Day",
   "विश्व फार्मासिस्ट दिवस": "World Pharmacists Day",
   "विश्व पर्यटन दिवस": "World Tourism Day",
@@ -1386,26 +1623,36 @@ const eventTranslations = {
   "कुकुर तिहार": "Kukur Tihar",
   "लक्ष्मी पूजा": "Laxmi Puja",
   "गोवर्धन पूजा": "Govardhan Puja",
+  "गाई तिहार": "Gai Tihar",
+  "भाइटीका / फाल्गुनन्द जयन्ती": "Bhai Tika / Falgunanda Jayanti",
   "भाइटीका": "Bhai Tika",
   "फाल्गुनन्द जयन्ती": "Falgunanda Jayanti",
   "छठ पर्व": "Chhath Parva",
   "मंसिर संक्रान्ति": "Mangsir Sankranti",
+  "पूर्णिमा / गुरु नानक जयन्ती": "Purnima / Guru Nanak Jayanti",
   "पूर्णिमा": "Purnima",
+  "गुरु नानक जयन्ती": "Guru Nanak Jayanti",
   "अन्तर्राष्ट्रिय अपाङ्गता दिवस": "International Day of Persons with Disabilities",
   "मानव अधिकार दिवस": "Human Rights Day",
   "पुष संक्रान्ति": "Poush Sankranti",
+  "उधौली पर्व / योमरी पुन्हि": "Udhauli Parva / Yomari Punhi",
   "क्रिसमस डे": "Christmas Day",
   "तमु ल्होसार": "Tamu Lhosar",
   "पृथ्वी जयन्ती": "Prithvi Jayanti",
   "माघे संक्रान्ति": "Maghe Sankranti",
   "अन्तर्राष्ट्रिय शिक्षा दिवस": "International Day of Education",
   "विश्व कुष्ठरोग दिवस": "World Leprosy Day",
+  "शहीद दिवस": "Martyrs' Day",
   "विश्व सिमसार दिवस": "World Wetlands Day",
   "विश्व क्यान्सर दिवस": "World Cancer Day",
+  "सोनाम ल्होसार": "Sonam Lhosar",
+  "श्रीपञ्चमी": "Shree Panchami",
   "प्रजातन्त्र दिवस": "Democracy Day",
   "महाशिवरात्रि": "Maha Shivaratri",
   "ग्याल्पो ल्होसार": "Gyalpo Lhosar",
   "फागु पूर्णिमा": "Fagu Purnima",
+  "तराई होली": "Terai Holi",
+  "घोडे जात्रा": "Ghode Jatra",
   "चैत संक्रान्ति": "Chaitra Sankranti",
   "नारी दिवस": "Women's Day",
   "राम नवमी": "Ram Nawami",
@@ -2345,6 +2592,97 @@ function getDayData(month, day) {
   };
 }
 
+function getBsMonthNumber(name) {
+  return bsMonthNames.indexOf(name) + 1;
+}
+
+function getAdjacentBsMonth(month, direction) {
+  let monthNumber = getBsMonthNumber(month.name) + direction;
+  let year = month.year;
+  if (monthNumber < 1) {
+    monthNumber = 12;
+    year -= 1;
+  }
+  if (monthNumber > 12) {
+    monthNumber = 1;
+    year += 1;
+  }
+  return { year, monthNumber };
+}
+
+function findMonthByBs(year, monthNumber) {
+  return months.find((item) => item.year === year && getBsMonthNumber(item.name) === monthNumber) || null;
+}
+
+function buildVirtualMonth(year, monthNumber) {
+  const name = bsMonthNames[monthNumber - 1];
+  const days = getBsMonthDays(year, monthNumber);
+  const englishStart = formatDateKey(convertBsToAd(year, monthNumber, 1).date);
+  const start = new Date(`${englishStart}T00:00:00`);
+  const end = addDays(start, days - 1);
+  return {
+    name,
+    year,
+    days,
+    englishStart,
+    englishRange: `${start.toLocaleDateString("en-US", { month: "long" })} - ${end.toLocaleDateString("en-US", { month: "long", year: "numeric" })}`,
+    startOffset: start.getDay(),
+    events: {}
+  };
+}
+
+function getDisplayAdjacentMonth(month, direction) {
+  const adjacent = getAdjacentBsMonth(month, direction);
+  return findMonthByBs(adjacent.year, adjacent.monthNumber) || buildVirtualMonth(adjacent.year, adjacent.monthNumber);
+}
+
+function renderCalendarDayCell(month, day, options = {}) {
+  const data = getDayData(month, day);
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "day-cell";
+  button.setAttribute("role", "gridcell");
+  button.setAttribute("aria-label", `${formatBsDate(month, day)}, ${data.englishDate}`);
+
+  if (options.outside) {
+    button.classList.add("outside-month", options.direction === "previous" ? "previous-month" : "next-month");
+  }
+
+  const current = getCurrentCalendarDay();
+  const currentMonth = months[current.monthIndex];
+  if (currentMonth && month.year === currentMonth.year && month.name === currentMonth.name && day === current.day) {
+    button.classList.add("today");
+  }
+
+  if (data.weekday === 6) {
+    button.classList.add("weekend");
+  }
+
+  if (localStorage.getItem(`note:${month.year}-${month.name}-${day}`)) {
+    button.classList.add("has-note");
+  }
+
+  const primaryDay = calendarMode === "ad" ? data.englishDay : formatBsNumber(day);
+  const secondaryDay = calendarMode === "ad" ? formatBsNumber(day) : data.englishDay;
+  const secondaryLabel = calendarMode === "ad" ? `${secondaryDay} BS` : secondaryDay;
+
+  const dayTop = makeElement("span", "day-top");
+  dayTop.append(makeElement("span", "nepali-day", primaryDay));
+  dayTop.append(makeElement("span", "english-day", secondaryLabel));
+  button.append(dayTop);
+
+  if (data.event) {
+    button.append(makeElement("span", "event-chip", localizeEvent(data.event)));
+  } else if (options.outside) {
+    button.append(makeElement("span", "event-chip muted-event", "--"));
+  }
+
+  button.append(makeElement("span", "tithi", data.tithi === "2084 lunar data pending" ? (appLanguage === "ne" ? "तिथि पछि अद्यावधिक" : "Tithi pending") : localizeTerm(data.tithi)));
+
+  button.addEventListener("click", () => openDayModal(month, data));
+  return button;
+}
+
 function renderCalendar() {
   const month = months[activeMonthIndex];
   const current = getCurrentCalendarDay();
@@ -2364,50 +2702,76 @@ function renderCalendar() {
   monthSelect.setAttribute("aria-label", t("chooseMonth"));
   clearNode(calendarGrid);
 
-  for (let i = 0; i < month.startOffset; i += 1) {
-    const empty = document.createElement("div");
-    empty.className = "day-cell empty";
-    calendarGrid.append(empty);
+  const previousMonth = getDisplayAdjacentMonth(month, -1);
+  const leadingStart = previousMonth.days - month.startOffset + 1;
+  for (let day = leadingStart; day <= previousMonth.days; day += 1) {
+    calendarGrid.append(renderCalendarDayCell(previousMonth, day, { outside: true, direction: "previous" }));
   }
 
   for (let day = 1; day <= month.days; day += 1) {
-    const data = getDayData(month, day);
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "day-cell";
-    button.setAttribute("role", "gridcell");
-    button.setAttribute("aria-label", `${formatBsDate(month, day)}, ${data.englishDate}`);
-
-    if (activeMonthIndex === current.monthIndex && day === current.day) {
-      button.classList.add("today");
-    }
-
-    if (data.weekday === 6) {
-      button.classList.add("weekend");
-    }
-
-    if (localStorage.getItem(`note:${month.year}-${month.name}-${day}`)) {
-      button.classList.add("has-note");
-    }
-
-    const primaryDay = calendarMode === "ad" ? data.englishDay : formatBsNumber(day);
-    const secondaryDay = calendarMode === "ad" ? formatBsNumber(day) : data.englishDay;
-    const secondaryLabel = calendarMode === "ad" ? `${secondaryDay} BS` : secondaryDay;
-
-    const dayTop = makeElement("span", "day-top");
-    dayTop.append(makeElement("span", "nepali-day", primaryDay));
-    dayTop.append(makeElement("span", "english-day", secondaryLabel));
-    button.append(dayTop);
-
-    if (data.event) {
-      button.append(makeElement("span", "event-chip", localizeEvent(data.event)));
-    }
-
-    button.append(makeElement("span", "tithi", data.tithi === "2084 lunar data pending" ? (appLanguage === "ne" ? "तिथि पछि अद्यावधिक" : "Tithi pending") : localizeTerm(data.tithi)));
-
-    button.addEventListener("click", () => openDayModal(month, data));
-    calendarGrid.append(button);
+    calendarGrid.append(renderCalendarDayCell(month, day));
   }
+
+  const trailingCount = (7 - ((month.startOffset + month.days) % 7)) % 7;
+  const nextMonth = getDisplayAdjacentMonth(month, 1);
+  for (let day = 1; day <= trailingCount; day += 1) {
+    calendarGrid.append(renderCalendarDayCell(nextMonth, day, { outside: true, direction: "next" }));
+  }
+  renderMonthlyHolidays(month);
+}
+
+function getHolidayTypeLabel(type) {
+  if (type === "public") return t("publicHoliday");
+  if (type === "festival") return t("festivalDay");
+  if (type === "fasting") return t("fastingDay");
+  if (type === "special") return t("specialDay");
+  return t("observanceDay");
+}
+
+function getHolidayDetail(title) {
+  return holidayDetails[title] || {
+    type: "observance",
+    en: "Calendar observance included for planning context. Confirm religious details with an official patro when needed.",
+    ne: "योजना सन्दर्भका लागि समावेश गरिएको पात्रो अवसर। आवश्यक परे धार्मिक विवरण आधिकारिक पात्रोसँग पुष्टि गर्नुहोस्।"
+  };
+}
+
+function renderMonthlyHolidays(month = months[activeMonthIndex]) {
+  const list = document.querySelector("#monthlyHolidayList");
+  const count = document.querySelector("#monthlyHolidayCount");
+  if (!list || !count || !month) return;
+  clearNode(list);
+  const rows = Object.entries(month.events || {})
+    .map(([day, title]) => ({
+      day: Number(day),
+      title,
+      detail: getHolidayDetail(title),
+      date: formatEnglishDate(month, Number(day))
+    }))
+    .sort((a, b) => a.day - b.day);
+  count.textContent = appLanguage === "ne" ? `${formatBsNumber(rows.length)} ${rows.length === 1 ? "दिन" : "दिन"}` : `${rows.length} ${rows.length === 1 ? "day" : "days"}`;
+  if (!rows.length) {
+    list.append(makeElement("p", "empty-state wide-empty", t("monthlyHolidayEmpty")));
+    return;
+  }
+  rows.forEach((item) => {
+    const card = makeElement("button", "monthly-holiday-card");
+    card.type = "button";
+    card.setAttribute("aria-label", `${t("openDayDetails")}: ${localizeEvent(item.title)}`);
+    const dateBadge = makeElement("span", "holiday-date-badge");
+    dateBadge.append(makeElement("strong", "", calendarMode === "ad" ? String(item.date.getDate()) : formatBsNumber(item.day)));
+    dateBadge.append(makeElement("small", "", calendarMode === "ad" ? localizeMonthName(month.name) : formatCompactAdDate(item.date)));
+    const body = makeElement("span", "holiday-card-body");
+    const top = makeElement("span", "holiday-card-top");
+    top.append(makeElement("strong", "", localizeEvent(item.title)));
+    top.append(makeElement("em", `holiday-type holiday-type-${item.detail.type || "observance"}`, getHolidayTypeLabel(item.detail.type)));
+    body.append(top);
+    body.append(makeElement("span", "holiday-card-meta", `${formatBsDate(month, item.day)} · ${formatReadableDate(item.date)}`));
+    body.append(makeElement("span", "holiday-card-detail", appLanguage === "ne" ? item.detail.ne : item.detail.en));
+    card.append(dateBadge, body);
+    card.addEventListener("click", () => openDayModal(month, getDayData(month, item.day)));
+    list.append(card);
+  });
 }
 
 function renderMonthPicker() {
@@ -3146,6 +3510,11 @@ function renderPanchangDetails() {
   ].filter((row) => row[1]);
   renderMiniList("#inauspiciousTimes", avoidRows.length ? avoidRows : inauspiciousTimes);
   renderMiniList("#dailyGuidance", guidanceRows.length ? guidanceRows : panchangGuidance);
+  renderMiniList("#panchangCoverageList", [
+    [t("panchangFiveLimbs"), t("panchang"), t("panchangFiveLimbsNote")],
+    [t("panchangTimeWindows"), t("dailyGuidance"), t("panchangTimeWindowsNote")],
+    [t("calendarEventsCoverage"), t("sourceReference"), t("calendarEventsCoverageNote")]
+  ]);
 }
 
 function addDays(date, days) {

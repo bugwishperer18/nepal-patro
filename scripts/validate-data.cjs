@@ -93,6 +93,8 @@ function extractMonthSeed() {
 
 function validateCalendarEvents() {
   const DateConverter = loadBrowserDateConverter();
+  const monthSeed = extractMonthSeed();
+  validateMonthLengths(monthSeed, DateConverter);
   const weekdayRules = [
     { pattern: /सोमबार|Somwar|Monday/i, weekday: "Monday" },
     { pattern: /मंगलबार|Tuesday/i, weekday: "Tuesday" },
@@ -102,13 +104,67 @@ function validateCalendarEvents() {
     { pattern: /शनिबार|Saturday/i, weekday: "Saturday" },
     { pattern: /आइतबार|Sunday/i, weekday: "Sunday" }
   ];
-  extractMonthSeed().forEach((month) => {
+  monthSeed.forEach((month) => {
     Object.entries(month.events || {}).forEach(([day, title]) => {
       const rule = weekdayRules.find((item) => item.pattern.test(title));
       if (!rule) return;
       const converted = new DateConverter(`${month.year}-${monthSeedMonthNumber(month.name)}-${day}`).toAd();
       assert(converted.day === rule.weekday, `${title} on ${month.name} ${day}, ${month.year} resolves to ${converted.day}, not ${rule.weekday}`);
     });
+  });
+  validateMajor2083Events(monthSeed);
+}
+
+function validateMonthLengths(monthSeed, DateConverter) {
+  monthSeed.forEach((month) => {
+    const monthNumber = monthSeedMonthNumber(month.name);
+    const start = convertBsStartToUtc(DateConverter, month.year, monthNumber);
+    const nextMonth = monthNumber === 12 ? 1 : monthNumber + 1;
+    const nextYear = monthNumber === 12 ? month.year + 1 : month.year;
+    const next = convertBsStartToUtc(DateConverter, nextYear, nextMonth);
+    const days = Math.round((next - start) / 86400000);
+    assert(month.days === days, `${month.year} ${month.name} should have ${days} days, found ${month.days}`);
+  });
+}
+
+function convertBsStartToUtc(DateConverter, year, month) {
+  const converted = new DateConverter(`${year}-${month}-1`).toAd();
+  return Date.UTC(converted.year, converted.month - 1, converted.date);
+}
+
+function validateMajor2083Events(monthSeed) {
+  const expected = [
+    ["वैशाख", 1, "नयाँ वर्ष"],
+    ["वैशाख", 18, "बुद्ध जयन्ती"],
+    ["जेठ", 15, "गणतन्त्र दिवस"],
+    ["भदौ", 12, "जनै पूर्णिमा"],
+    ["भदौ", 13, "गाईजात्रा"],
+    ["भदौ", 19, "श्रीकृष्ण जन्माष्टमी"],
+    ["भदौ", 29, "हरितालिका तीज"],
+    ["आश्विन", 3, "संविधान दिवस"],
+    ["आश्विन", 25, "घटस्थापना"],
+    ["आश्विन", 31, "फूलपाती"],
+    ["कार्तिक", 1, "महाअष्टमी"],
+    ["कार्तिक", 3, "महानवमी"],
+    ["कार्तिक", 4, "विजया दशमी"],
+    ["कार्तिक", 22, "लक्ष्मी पूजा"],
+    ["कार्तिक", 23, "गाई तिहार"],
+    ["कार्तिक", 24, "गोवर्धन पूजा"],
+    ["कार्तिक", 25, "भाइटीका"],
+    ["कार्तिक", 29, "छठ पर्व"],
+    ["पुष", 15, "तमु ल्होसार"],
+    ["माघ", 1, "माघे संक्रान्ति"],
+    ["माघ", 16, "शहीद दिवस"],
+    ["माघ", 24, "सोनाम ल्होसार"],
+    ["फागुन", 22, "महाशिवरात्रि"],
+    ["चैत", 7, "फागु पूर्णिमा"],
+    ["चैत", 23, "घोडे जात्रा"]
+  ];
+  expected.forEach(([monthName, day, title]) => {
+    const month = monthSeed.find((item) => item.year === 2083 && item.name === monthName);
+    assert(month, `2083 ${monthName} missing from monthSeed`);
+    const event = month.events?.[day] || "";
+    assert(event.includes(title), `Expected ${title} on 2083 ${monthName} ${day}, found "${event || "none"}"`);
   });
 }
 
